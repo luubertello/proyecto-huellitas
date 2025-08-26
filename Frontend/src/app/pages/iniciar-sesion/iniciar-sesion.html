@@ -1,1 +1,77 @@
-<p>iniciar-sesion works!</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Huellitas · Ingresar</title>
+
+  <!-- Fuente -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="iniciar-sesion.css" />
+</head>
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="container">
+      <a class="brand" href="#">
+        <img src="assets/logo completo.png" alt="Huellitas logo" class="logo" />
+        <span class="brand-text">HUELLITAS</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Principal">
+        <ul>
+          <li><a href="#">Adoptar <i class="bi bi-caret-down-fill" aria-hidden="true"></i></a></li>
+          <li><a href="#">Quiénes somos <i class="bi bi-caret-down-fill" aria-hidden="true"></i></a></li>
+          <li><a href="#">Historias felices <i class="bi bi-caret-down-fill" aria-hidden="true"></i></a></li>
+          <li><a href="#">Cómo ayudar <i class="bi bi-caret-down-fill" aria-hidden="true"></i></a></li>
+        </ul>
+      </nav>
+
+      <div class="user-area">
+        <img src="assets/logoInicioSesion.png" alt="Usuario" class="avatar" />
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido -->
+  <main class="page">
+    <section class="auth">
+      <div class="card">
+        <h1>Ingresa a tu cuenta</h1>
+
+        <form class="form" action="#" method="post" novalidate>
+          <label class="field">
+            <span>Email*</span>
+            <input type="email" name="email" placeholder="tu@email.com" required />
+          </label>
+
+          <label class="field">
+            <span>Contraseña*</span>
+            <input type="password" name="password" placeholder="••••••••" required />
+          </label>
+
+          <button type="submit" class="btn-primary">INGRESAR</button>
+
+          <div class="help-links">
+            <p class="muted">
+              ¿No tienes cuenta? <a href="#">Crea una</a>
+            </p>
+            <p class="muted">
+              ¿Olvidaste tu contraseña? <a href="#">Cambia tu contraseña</a>
+            </p>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" aria-hidden="true"></footer>
+</body>
+</html>
+
