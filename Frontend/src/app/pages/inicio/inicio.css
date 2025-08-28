@@ -66,6 +66,76 @@ body{
   gap: clamp(16px, 5vw, 100px);   
   flex-wrap: wrap;                
 }
+/* Opciones desplegables */
+.main-nav .submenu { 
+  display: none !important;          /* oculta siempre por defecto */
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 220px;
+  background: #f6d3bd;
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.12);
+  padding: 8px 0;
+  z-index: 50;
+}
+.main-nav .has-sub{ position: relative;}
+.main-nav .has-sub:hover > .submenu,
+.main-nav .has-sub:focus.within > .submenu {
+  display: block !important;
+}
+.menu-link{
+  display: inline-flex; align-items: center; gap: 6px;
+  font-weight: 700;
+  font-size: clamp(00.95rem, 1vw + 00.75rem, 1.25rem);
+  text-decoration: none; color: var(--text);
+  padding: 6px 4px;
+}
+.main-link:hover{ color:#5a4038 }
+/* caja del submenú */
+.submenu{
+  position:absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 220px;
+  background: #f6d3bd;               
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.12);
+  padding: 8px 0;
+  list-style: none;
+  display: none;                      
+  z-index: 20;
+}
+
+.has-sub:hover > .submenu,
+.has-sub:focus-within > .submenu{
+  display:block;
+}
+/* items del submenú */
+.submenu li a{
+  display:block;
+  padding: 8px 14px;
+  text-decoration:none;
+  color: #3f2f29;
+  font-weight: 600;
+  white-space: nowrap;                
+}
+.submenu li a:hover{
+  background: rgba(0,0,0,.05);
+}
+/* flechita*/
+.has-sub > .submenu::before{
+  content:"";
+  position:absolute;
+  top: -6px; left: 18px;
+  border: 6px solid transparent;
+  border-bottom-color: #f6d3bd;
+}
+
+/* asegura que nada tape el submenú */
+.topbar{ position: sticky; z-index: 50; }
 .main-nav a{
   position: relative;            
   font-weight: 800;

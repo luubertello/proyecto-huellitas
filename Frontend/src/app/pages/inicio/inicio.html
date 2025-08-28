@@ -24,12 +24,57 @@
       </a>
 
       <nav class="main-nav" aria-label="Principal">
-        <ul>
-          <li><a href="#">Adoptar <i class="bi bi-caret-down-fill" aria-hidden="true"></i></a></li>
-          <li><a href="#">Quiénes somos <i class="bi bi-caret-down-fill" aria-hidden="true"></i></a></li>
-          <li><a href="#">Historias felices <i class="bi bi-caret-down-fill" aria-hidden="true"></i></a></li>
-          <li><a href="#">Cómo ayudar <i class="bi bi-caret-down-fill" aria-hidden="true"></i></a></li>
-        </ul>
+         <ul>
+    <!-- Adoptar -->
+    <li class="has-sub">
+      <a class="menu-link" routerLink="/adoptar">
+        Adoptar <i class="bi bi-caret-down-fill"></i>
+      </a>
+      <ul class="submenu">
+        <li><a routerLink="/adoptar/gatos">Gatos en adopción</a></li>
+        <li><a routerLink="/adoptar/perros">Perros en adopción</a></li>
+        <li><a routerLink="/adoptar/formulario-gatos">Formulario pre-adopción (Gatos)</a></li>
+        <li><a routerLink="/adoptar/formulario-perros">Formulario pre-adopción (Perros)</a></li>
+        <li><a routerLink="/adoptar/como-adoptar">Cómo adoptar</a></li>
+      </ul>
+    </li>
+
+    <!-- Quiénes somos -->
+    <li class="has-sub">
+      <a class="menu-link" routerLink="/quienes-somos">
+        Quiénes somos <i class="bi bi-caret-down-fill"></i>
+      </a>
+      <ul class="submenu">
+        <li><a routerLink="/quienes-somos/historia">Nuestra historia</a></li>
+        <li><a routerLink="/quienes-somos/mision">Misión</a></li>
+        <li><a routerLink="/quienes-somos/noticias">Noticias y eventos</a></li>
+      </ul>
+    </li>
+
+    <!-- Historias felices -->
+    <li class="has-sub">
+      <a class="menu-link" routerLink="/historias-felices">
+        Historias felices <i class="bi bi-caret-down-fill"></i>
+      </a>
+      <ul class="submenu">
+        <li><a routerLink="/historias-felices/nuestra">Nuestra historia</a></li>
+        <li><a routerLink="/historias-felices/gatos">Gatos</a></li>
+        <li><a routerLink="/historias-felices/perros">Perros</a></li>
+      </ul>
+    </li>
+
+    <!-- Cómo ayudar -->
+    <li class="has-sub">
+      <a class="menu-link" routerLink="/como-ayudar">
+        Cómo ayudar <i class="bi bi-caret-down-fill"></i>
+      </a>
+      <ul class="submenu">
+        <li><a routerLink="/como-ayudar/apadrinar">Apadrinar</a></li>
+        <li><a routerLink="/como-ayudar/donar">Donar</a></li>
+        <li><a routerLink="/como-ayudar/como_funciona">¿Cómo funciona?</a></li>
+      </ul>
+    </li>
+  </ul>
       </nav>
 
       <div class="user-area">

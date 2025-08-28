@@ -5,5 +5,5 @@ import { Inicio } from './pages/inicio/inicio';
 export const routes: Routes = [
     { path: 'inicio-sesion', component: IniciarSesion },
     { path: 'inicio', component: Inicio },
-    {path: '', redirectTo: 'inicio-sesion', pathMatch: 'full'}
+    {path: '', redirectTo: 'inicio', pathMatch: 'full'}
 ];
