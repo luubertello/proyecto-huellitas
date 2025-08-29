@@ -11,15 +11,24 @@ import { FormularioAdopcion } from './pages/formulario-adopcion/formulario-adopc
 import { RequisitosAdopcion } from './pages/requisitos-adopcion/requisitos-adopcion';
 
 export const routes: Routes = [
-    { path: 'inicio', component: Inicio },
-    { path: 'adopta-gatos', component: AdoptaGatos },
-    { path: 'adopta-perros', component: AdoptaPerros },
-    { path: 'perfil-animal', component: PerfilAnimal },
-    { path: 'formulario-adopcion', component: FormularioAdopcion },
-    { path: 'requisitos-adopcion', component: RequisitosAdopcion },
-    { path: 'inicio-sesion', component: IniciarSesion },
-    { path: 'registro', component: Registro },
-    { path: 'donaciones', component: Donaciones },
-    { path: 'dona-insumos', component: DonaInsumos },
-    {path: '', redirectTo: 'inicio', pathMatch: 'full'}
+  { path: 'inicio', component: Inicio },
+
+  {
+    path: 'adopcion',
+    children: [
+      { path: 'gatos', component: AdoptaGatos },
+      { path: 'perros', component: AdoptaPerros },
+      { path: 'perfil-animal', component: PerfilAnimal },
+      { path: 'formulario', component: FormularioAdopcion },
+      { path: 'requisitos', component: RequisitosAdopcion },
+      { path: '', redirectTo: 'adopcion', pathMatch: 'full' } // redirección por defecto
+    ]
+  },
+
+  { path: 'donaciones', component: Donaciones },
+  { path: 'dona-insumos', component: DonaInsumos },
+  { path: 'inicio-sesion', component: IniciarSesion },
+  { path: 'registro', component: Registro },
+
+  { path: '', redirectTo: 'inicio', pathMatch: 'full' }
 ];
