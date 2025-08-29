@@ -84,12 +84,63 @@
   </header>
 
   <!-- Aquí empieza la parte principal -->
-  <main class="hero">
-    <div class="hero-overlay">
-      <h1>NUESTRA MISIÓN ES AYUDAR ANIMALES EN SITUACIÓN DE CALLE</h1>
-      <a href="#conoce" class="btn">CONOCE MÁS</a>
-    </div>
-  </main>
+<main class="hero-carousel css-only">
+  <!-- Radios (estado del carrusel) -->
+  <input type="radio" name="hero" id="hero-1" checked>
+  <input type="radio" name="hero" id="hero-2">
+  <input type="radio" name="hero" id="hero-3">
+
+  <!-- Slides -->
+  <section class="slides">
+    <!-- Slide 1 -->
+    <article class="slide s1">
+      <div class="overlay"></div>
+      <div class="content">
+        <h1>NUESTRA MISIÓN ES AYUDAR EN SITUACIÓN DE CALLE</h1>
+        <p class="subtitle">Rescatamos, cuidamos y buscamos un hogar para cada uno.</p>
+        <a class="btn btn-accion conoce" href="#conoce">CONOCE MÁS</a>
+      </div>
+    </article>
+
+    <!-- Slide 2 -->
+    <article class="slide s2">
+      <div class="overlay"></div>
+      <div class="content">
+        <h1>CADA DONACIÓN CAMBIA UNA VIDA</h1>
+        <p class="subtitle">Alimenta tratamientos, castraciones y traslados.</p>
+        <a class="btn btn-accion dona" routerLink="/como-ayudar/donar">DONA</a>
+      </div>
+    </article>
+
+    <!-- Slide 3 -->
+    <article class="slide s3">
+      <div class="overlay"></div>
+      <div class="content">
+        <h1>SOÑAMOS CON UN MUNDO SIN ANIMALES EN LAS CALLES</h1>
+        <p class="subtitle">.</p>
+        <a class="btn btn-accion adopta" routerLink="/adoptar">ADOPTA</a>
+      </div>
+    </article>
+  </section>
+
+  <!-- Flechas -->
+  <label class="nav prev prev-1" for="hero-3"><i class="bi bi-chevron-left"></i></label>
+  <label class="nav prev prev-2" for="hero-1"><i class="bi bi-chevron-left"></i></label>
+  <label class="nav prev prev-3" for="hero-2"><i class="bi bi-chevron-left"></i></label>
+
+  <label class="nav next next-1" for="hero-2"><i class="bi bi-chevron-right"></i></label>
+  <label class="nav next next-2" for="hero-3"><i class="bi bi-chevron-right"></i></label>
+  <label class="nav next next-3" for="hero-1"><i class="bi bi-chevron-right"></i></label>
+
+  <!-- Dots -->
+  <div class="dots">
+    <label class="dot" for="hero-1"></label>
+    <label class="dot" for="hero-2"></label>
+    <label class="dot" for="hero-3"></label>
+  </div>
+</main>
+
+
 </body>
 </html>
 
