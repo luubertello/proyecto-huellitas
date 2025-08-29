@@ -9,6 +9,7 @@ import { DonaInsumos } from './pages/dona-insumos/dona-insumos';
 import { PerfilAnimal } from './pages/perfil-animal/perfil-animal';
 import { FormularioAdopcion } from './pages/formulario-adopcion/formulario-adopcion';
 import { RequisitosAdopcion } from './pages/requisitos-adopcion/requisitos-adopcion';
+import { GestionarAnimales } from './pages/admin/gestionar-animales/gestionar-animales';
 
 export const routes: Routes = [
   { path: 'inicio', component: Inicio },
@@ -29,6 +30,7 @@ export const routes: Routes = [
   { path: 'dona-insumos', component: DonaInsumos },
   { path: 'inicio-sesion', component: IniciarSesion },
   { path: 'registro', component: Registro },
+  { path: 'gestion-animal', component: GestionarAnimales },
 
   { path: '', redirectTo: 'inicio', pathMatch: 'full' }
 ];

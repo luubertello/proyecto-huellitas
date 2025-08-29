@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Huellitas · Ingresar</title>
+
+  <!-- Fuente -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="inicio.css" />
+</head>
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="container">
+      <a class="brand" (click)="goInicio()">
+        <img src="assets/logo completo.png" alt="Huellitas logo" class="logo" />
+      </a>
+
+      <nav class="main-nav" aria-label="Principal">
+        <ul>
+          <!-- Adoptar -->
+          <li class="has-sub">
+            <a class="menu-link" (click)="goAdopcion()">
+              Adoptar <i class="bi bi-caret-down-fill"></i>
+            </a>
+            <ul class="submenu">
+              <li><a (click)="goAdopcionGatos()">Gatos en adopción</a></li>
+              <li><a (click)="goAdopcionPerros()">Perros en adopción</a></li>
+              <li><a (click)="goAdopcionFormulario()">Formulario pre-adopción</a></li>
+              <li><a (click)="goAdopcionRequisitos()">Cómo adoptar</a></li>
+            </ul>
+          </li>
+
+          <!-- Quiénes somos -->
+          <li class="has-sub">
+            <a class="menu-link">
+              Quiénes somos <i class="bi bi-caret-down-fill"></i>
+            </a>
+            <ul class="submenu">
+              <li><a >Nuestra historia</a></li>
+              <li><a>Misión</a></li>
+              <li><a >Noticias y eventos</a></li>
+            </ul>
+          </li>
+
+          <!-- Historias felices -->
+          <li class="has-sub">
+            <a class="menu-link">
+              Historias felices <i class="bi bi-caret-down-fill"></i>
+            </a>
+            <ul class="submenu">
+              <li><a >Nuestra historia</a></li>
+              <li><a >Gatos</a></li>
+              <li><a >Perros</a></li>
+            </ul>
+          </li>
+
+          <!-- Cómo ayudar -->
+          <li class="has-sub">
+            <a class="menu-link" >
+              Cómo ayudar <i class="bi bi-caret-down-fill"></i>
+            </a>
+            <ul class="submenu">
+              <li><a >Apadrinar</a></li>
+              <li><a >Donar</a></li>
+              <li><a >¿Cómo funciona?</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="user-area">
+        <img src="assets/logoInicioSesion.png" alt="Usuario" class="avatar" />
+      </div>
+    </div>
+  </header>
+
+  <!-- Aquí empieza la parte principal -->
+  <main class="hero-carousel css-only">
+    <!-- Radios (estado del carrusel) -->
+    <input type="radio" name="hero" id="hero-1" checked>
+    <input type="radio" name="hero" id="hero-2">
+    <input type="radio" name="hero" id="hero-3">
+
+    <!-- Slides -->
+    <section class="slides">
+      <!-- Slide 1 -->
+      <article class="slide s1">
+        <div class="overlay"></div>
+        <div class="content">
+          <h1>NUESTRA MISIÓN ES AYUDAR EN SITUACIÓN DE CALLE</h1>
+          <p class="subtitle">Rescatamos, cuidamos y buscamos un hogar para cada uno.</p>
+          <a class="btn btn-accion conoce">CONOCE MÁS</a>
+        </div>
+      </article>
+
+      <!-- Slide 2 -->
+      <article class="slide s2">
+        <div class="overlay"></div>
+        <div class="content">
+          <h1>CADA DONACIÓN CAMBIA UNA VIDA</h1>
+          <p class="subtitle">Alimenta tratamientos, castraciones y traslados.</p>
+          <a class="btn btn-accion dona" (click)="goDonar()">DONA</a>
+        </div>
+      </article>
+
+      <!-- Slide 3 -->
+      <article class="slide s3">
+        <div class="overlay"></div>
+        <div class="content">
+          <h1>SOÑAMOS CON UN MUNDO SIN ANIMALES EN LAS CALLES</h1>
+          <p class="subtitle">.</p>
+          <a class="btn btn-accion adopta" (click)="goAdopcion()">ADOPTA</a>
+        </div>
+      </article>
+    </section>
+
+    <!-- Flechas -->
+    <label class="nav prev prev-1" for="hero-3"><i class="bi bi-chevron-left"></i></label>
+    <label class="nav prev prev-2" for="hero-1"><i class="bi bi-chevron-left"></i></label>
+    <label class="nav prev prev-3" for="hero-2"><i class="bi bi-chevron-left"></i></label>
+
+    <label class="nav next next-1" for="hero-2"><i class="bi bi-chevron-right"></i></label>
+    <label class="nav next next-2" for="hero-3"><i class="bi bi-chevron-right"></i></label>
+    <label class="nav next next-3" for="hero-1"><i class="bi bi-chevron-right"></i></label>
+
+    <!-- Dots -->
+    <div class="dots">
+      <label class="dot" for="hero-1"></label>
+      <label class="dot" for="hero-2"></label>
+      <label class="dot" for="hero-3"></label>
+    </div>
+  </main>
+</body>
+</html>

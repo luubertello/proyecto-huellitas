@@ -210,58 +210,188 @@ body{
   object-fit: cover;
 }
 
-    /* Contenedor de las tarjetas */
-    .animals-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: var(--gap);
-      padding: var(--gap);
-      margin-top: 20px;
-    }
 
-    /* Cada tarjeta de animal */
-    .animal-card {
-      background: var(--peach-strong);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      text-align: center;
-      position: relative;
-      padding-bottom: 12px;
-      transition: transform 0.2s;
-    }
+/* --- Carrusel CSS-only --- */
+.hero-carousel {
+  position: relative;
+  width: 100%;
+  height: clamp(460px, 62vh, 640px);
+  overflow: hidden;
+}
 
-    .animal-card:hover {
-      transform: translateY(-4px);
-    }
+/* Radios invisibles para controlar el estado */
+.hero-carousel input[type="radio"] {
+  position: absolute;
+  inset: -9999px;
+}
 
-    /* Foto */
-    .animal-card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      border-top-left-radius: var(--radius);
-      border-top-right-radius: var(--radius);
-    }
+/* Slides */
+.hero-carousel .slides {
+  position: relative;
+  height: 100%;
+}
+.hero-carousel .slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: 50% 35%;
+  opacity: 0;
+  transform: none
+  transition: opacity 450ms ease, transform 900ms ease;
+}
 
-    /* Nombre */
-    .animal-card .name {
-      font-weight: 600;
-      margin-top: 8px;
-      font-size: 1.05rem;
-    }
+/* Fondo de cada slide */
+.hero-carousel .s1 { background-image: url('../../../assets/InicioPagina1.png'); }
+.hero-carousel .s2 { background-image: url('../../../assets/InicioPagina2.png'); }
+.hero-carousel .s3 { background-image: url('../../../assets/InicioPagina3.png'); }
 
-    /* Icono de editar */
-    .animal-card .edit-icon {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      color: var(--text);
-      cursor: pointer;
-      font-size: 1.1rem;
-      transition: color 0.2s;
-    }
+/* Mostrar solo el slide activo */
+#hero-1:checked ~ .slides .s1,
+#hero-2:checked ~ .slides .s2,
+#hero-3:checked ~ .slides .s3 {
+  opacity: 1;
+  transform: scale(1);
+  z-index: 1;
+}
 
-    .animal-card .edit-icon:hover {
-      color: #5a4038;
-    }
+/* Overlay semitransparente */
+.hero-carousel .overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(0,0,0,.35) 0%,
+    rgba(0,0,0,.22) 40%,
+    rgba(0,0,0,0) 70%
+  );
+}
+
+/* Contenido dentro de cada slide */
+.hero-carousel .content {
+  position: absolute;
+  inset: 0 auto auto 0;
+  display: grid;
+  gap: 1.2rem;
+  align-content: center;
+  height: 100%;
+  padding-left: clamp(20px, 7vw, 88px);
+  padding-right: clamp(16px, 5vw, 64px);
+  max-width: min(980px, 94vw);
+  color: #fbf5ef;
+  text-shadow: 0 2px 8px rgba(0,0,0,.35);
+}
+.hero-carousel h1 {
+  font-weight: 700;
+  letter-spacing: .01em;
+  line-height: 1.15;
+  font-size: clamp(24px, 4.6vw, 44px);
+  text-shadow: 0 3px 14px rgba(0,0,0,.45);
+  margin: 0;
+  text-transform: uppercase;
+}
+.hero-carousel .subtitle {
+  font-size: clamp(15px, 2.2vw, 18px);
+  opacity: .98;
+  margin: 0;
+  max-width: 60ch;
+}
+
+/* --- Botones de acción por slide --- */
+.btn.btn-accion {
+  display: inline-block;
+  font-weight: 700;
+  padding: .7rem 1rem;
+  width: 180px;
+  text-align: center;
+  border-radius: 999px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+}
+
+/* Botón del slide 1 */
+.btn.btn-accion.conoce {
+  background: #f7c9ad;
+  color: #2c1c10;
+}
+
+/* Botón del slide 2 */
+.btn.btn-accion.dona {
+  background: #f7c9ad;
+  color: #2c1c10;
+}
+
+/* Botón del slide 3 */
+.btn.btn-accion.adopta {
+  background: #f7c9ad;
+  color: #2c1c10;
+}
+
+/* Hover/active */
+.btn.btn-accion:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0,0,0,.22);
+}
+.btn.btn-accion:active {
+  transform: translateY(0);
+}
+
+/* --- Flechas --- */
+.hero-carousel .nav {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  width: 44px;
+  height: 44px;
+  display: none;
+  place-items: center;
+  border: none;
+  border-radius: 999px;
+  background: rgba(0,0,0,.35);
+  color: #fff;
+  cursor: pointer;
+  z-index: 2;
+}
+.hero-carousel .nav i {
+  font-size: 1.2rem;
+}
+.hero-carousel .prev { left: clamp(8px, 2vw, 16px); }
+.hero-carousel .next { right: clamp(8px, 2vw, 16px); }
+
+/* Mostrar la flecha correspondiente según slide activo */
+#hero-1:checked ~ .prev-1, #hero-1:checked ~ .next-1,
+#hero-2:checked ~ .prev-2, #hero-2:checked ~ .next-2,
+#hero-3:checked ~ .prev-3, #hero-3:checked ~ .next-3 {
+  display: grid;
+}
+
+/* --- Dots --- */
+.hero-carousel .dots {
+  position: absolute;
+  bottom: clamp(8px, 3vh, 18px);
+  right: clamp(10px, 3vw, 24px);
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+.hero-carousel .dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.55);
+  cursor: pointer;
+}
+#hero-1:checked ~ .dots .dot:nth-child(1),
+#hero-2:checked ~ .dots .dot:nth-child(2),
+#hero-3:checked ~ .dots .dot:nth-child(3) {
+  background: #fff;
+}
+
+/* Accesibilidad: foco visible */
+.hero-carousel .nav:hover { background: rgba(0,0,0,.55); }
+.hero-carousel .nav:focus-visible,
+.hero-carousel .dot:focus-visible,
+.btn.btn-accion:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
