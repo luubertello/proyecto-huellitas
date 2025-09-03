@@ -1,1 +1,148 @@
-<p>crear-animal works!</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Huellitas · Ingresar</title>
+
+  <!-- Fuente -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="crear-animal.css" />
+</head>
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="container">
+      <a class="brand">
+        <img src="assets/logo completo.png" alt="Huellitas logo" class="logo" />
+      </a>
+
+      <nav class="main-nav" aria-label="Principal">
+        <ul>
+          <!-- Animales -->
+          <li class="has-sub">
+            <a class="menu-link">
+              Animales <i class="bi bi-caret-down-fill"></i>
+            </a>
+            <ul class="submenu">
+              <li><a>Gestion de Gatos</a></li>
+              <li><a>Gestion de Perros</a></li>
+              <li><a>Registrar nuevo animal</a></li>
+            </ul>
+          </li>
+
+          <!-- Solicitudes de adopcion -->
+          <li class="has-sub">
+            <a class="menu-link">
+              Solicitudes <i class="bi bi-caret-down-fill"></i>
+            </a>
+            <ul class="submenu">
+              <li><a>Todas</a></li>
+              <li><a>Misión</a></li>
+              <li><a>Noticias y eventos</a></li>
+            </ul>
+          </li>
+
+          <!-- Inventario -->
+          <li class="has-sub">
+            <a class="menu-link">
+              Inventario <i class="bi bi-caret-down-fill"></i>
+            </a>
+            <ul class="submenu">
+              <li><a >Stock disponible</a></li>
+              <li><a >Registrar nuevo insumo</a></li>
+            </ul>
+          </li>
+
+          <!-- Estadisticas -->
+          <li class="has-sub">
+            <a class="menu-link" >
+              Estadisticas <i class="bi bi-caret-down-fill"></i>
+            </a>
+            <ul class="submenu">
+              <li><a >Donaciones</a></li>
+              <li><a >Animales</a></li>
+              <li><a >Insumos</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="user-area">
+        <img src="assets/logoInicioSesion.png" alt="Usuario" class="avatar" />
+      </div>
+    </div>
+  </header>
+  <!-- Contenido -->
+<main class="page">
+  <section class="auth">
+    <div class="card">
+      <h1>Registrar Animal</h1>
+
+      <form class="form" [formGroup]="registrarAnimalForm" (ngSubmit)="onSubmit()">
+
+        <label class="field">
+          <span>Nombre*</span>
+          <input type="text" formControlName="nombre" placeholder="Ej: Firulais" />
+        </label>
+
+        <label class="field">
+          <span>Especie*</span>
+          <input type="text" formControlName="especie" placeholder="Ej: Perro" />
+        </label>
+
+        <label class="field">
+          <span>Raza*</span>
+          <input type="text" formControlName="raza" placeholder="Ej: Labrador" />
+        </label>
+
+        <label class="field">
+          <span>Edad*</span>
+          <input type="number" formControlName="edad" placeholder="Ej: 3" />
+        </label>
+
+        <label class="field">
+  <span>Sexo*</span>
+  <div class="radio-group">
+    <label>
+      <input type="radio" formControlName="sexo" value="Macho" /> Macho
+    </label>
+    <label>
+      <input type="radio" formControlName="sexo" value="Hembra" /> Hembra
+    </label>
+  </div>
+  @if (submitted && registrarAnimalForm.get('sexo')?.hasError('required')) {
+  <div class="error">
+    Debe seleccionar Macho o Hembra
+  </div>
+}
+
+</label>
+
+         <label class="field">
+          <span>Descripción</span>
+          <textarea formControlName="descripcion" placeholder="Descripción del animal"></textarea>
+        </label>
+
+        <label class="field">
+          <span>Imagen*</span>
+          <input type="file" formControlName="imagen" />
+        </label>
+
+        <button type="submit" class="btn-primary" [disabled]="loading">
+          REGISTRAR ANIMAL
+        </button>
+      </form>
+    </div>
+  </section>
+</main>
+
+  <footer class="footer" aria-hidden="true"></footer>
+</body>
+</html>
