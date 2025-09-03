@@ -1,14 +1,14 @@
 import { Routes } from '@angular/router';
-import { IniciarSesion } from './pages/iniciar-sesion/iniciar-sesion';
-import { Inicio } from './pages/inicio/inicio';
-import { Registro } from './pages/registro/registro';
-import { AdoptaGatos } from './pages/adopta-gatos/adopta-gatos';
-import { AdoptaPerros } from './pages/adopta-perros/adopta-perros';
-import { Donaciones } from './pages/donaciones/donaciones';
-import { DonaInsumos } from './pages/dona-insumos/dona-insumos';
-import { PerfilAnimal } from './pages/perfil-animal/perfil-animal';
-import { FormularioAdopcion } from './pages/formulario-adopcion/formulario-adopcion';
-import { RequisitosAdopcion } from './pages/requisitos-adopcion/requisitos-adopcion';
+import { IniciarSesion } from './pages/common/iniciar-sesion/iniciar-sesion';
+import { Inicio } from './pages/admin/inicio/inicio';
+import { Registro } from './pages/common/registro/registro';
+import { AdoptaGatos } from './pages/usuario/adopta-gatos/adopta-gatos';
+import { AdoptaPerros } from './pages/usuario/adopta-perros/adopta-perros';
+import { Donaciones } from './pages/usuario/donaciones/donaciones';
+import { DonaInsumos } from './pages/usuario/dona-insumos/dona-insumos';
+import { PerfilAnimal } from './pages/usuario/perfil-animal/perfil-animal';
+import { FormularioAdopcion } from './pages/usuario/formulario-adopcion/formulario-adopcion';
+import { RequisitosAdopcion } from './pages/usuario/requisitos-adopcion/requisitos-adopcion';
 import { GestionarAnimales } from './pages/admin/gestionar-animales/gestionar-animales';
 
 export const routes: Routes = [
