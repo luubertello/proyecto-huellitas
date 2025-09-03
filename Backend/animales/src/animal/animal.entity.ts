@@ -14,7 +14,7 @@ export class Animal {
   @Column()
   raza: string;
 
-  @Column()
+  @Column({ type: 'date', nullable: true })
   fechaNacimiento: Date;
 
   @Column()
