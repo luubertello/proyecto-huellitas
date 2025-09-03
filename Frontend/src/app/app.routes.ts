@@ -11,6 +11,7 @@ import { FormularioAdopcion } from './pages/usuario/formulario-adopcion/formular
 import { RequisitosAdopcion } from './pages/usuario/requisitos-adopcion/requisitos-adopcion';
 import { GestionarAnimales } from './pages/admin/gestionar-animales/gestionar-animales';
 import { CrearAnimal } from './pages/admin/crear-animal/crear-animal';
+import { DonaDinero } from './pages/usuario/dona-dinero/dona-dinero';
 
 export const routes: Routes = [
   { path: 'inicio', component: Inicio },
@@ -29,6 +30,7 @@ export const routes: Routes = [
 
   { path: 'donaciones', component: Donaciones },
   { path: 'dona-insumos', component: DonaInsumos },
+  { path: 'dona-dinero', component: DonaDinero },
   { path: 'inicio-sesion', component: IniciarSesion },
   { path: 'registro', component: Registro },
   { path: 'gestion-animal', component: GestionarAnimales },

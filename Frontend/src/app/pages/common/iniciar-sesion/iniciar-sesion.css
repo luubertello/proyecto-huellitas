@@ -203,7 +203,7 @@ body{
 }
   
 :host .auth .card{
-  width: min(800px, 100%) !important;
+  width: min(800px, 100%);
   background: var(--card);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
