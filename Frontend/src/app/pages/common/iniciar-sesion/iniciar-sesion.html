@@ -1,80 +1,62 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Huellitas · Ingresar</title>
 
-  <!-- Fuente -->
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-  <!-- Bootstrap Icons -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-  <!-- Estilos -->
-  <link rel="stylesheet" href="iniciar-sesion.css" />
-</head>
-<body>
   <!-- Topbar -->
   <header class="topbar">
     <div class="container">
-      <a class="brand" href="#">
+      <a class="brand" (click)="goInicio()">
         <img src="assets/logo completo.png" alt="Huellitas logo" class="logo" />
       </a>
 
       <nav class="main-nav" aria-label="Principal">
-         <ul>
-    <!-- Adoptar -->
-    <li class="has-sub">
-      <a class="menu-link" routerLink="/adoptar">
-        Adoptar <i class="bi bi-caret-down-fill"></i>
-      </a>
-      <ul class="submenu">
-        <li><a routerLink="/adoptar/gatos">Gatos en adopción</a></li>
-        <li><a routerLink="/adoptar/perros">Perros en adopción</a></li>
-        <li><a routerLink="/adoptar/formulario-gatos">Formulario pre-adopción (Gatos)</a></li>
-        <li><a routerLink="/adoptar/formulario-perros">Formulario pre-adopción (Perros)</a></li>
-        <li><a routerLink="/adoptar/como-adoptar">Cómo adoptar</a></li>
-      </ul>
-    </li>
+        <ul>
+          <!-- Adoptar -->
+          <li class="has-sub">
+            <a class="menu-link" (click)="goAdopcion()">
+              Adoptar <i class="bi bi-caret-down-fill"></i>
+            </a>
+            <ul class="submenu">
+              <li><a (click)="goAdopcionGatos()">Gatos en adopción</a></li>
+              <li><a (click)="goAdopcionPerros()">Perros en adopción</a></li>
+              <li><a (click)="goAdopcionFormulario()">Formulario pre-adopción</a></li>
+              <li><a (click)="goAdopcionRequisitos()">Cómo adoptar</a></li>
+            </ul>
+          </li>
 
-    <!-- Quiénes somos -->
-    <li class="has-sub">
-      <a class="menu-link" routerLink="/quienes-somos">
-        Quiénes somos <i class="bi bi-caret-down-fill"></i>
-      </a>
-      <ul class="submenu">
-        <li><a routerLink="/quienes-somos/historia">Nuestra historia</a></li>
-        <li><a routerLink="/quienes-somos/mision">Misión</a></li>
-        <li><a routerLink="/quienes-somos/noticias">Noticias y eventos</a></li>
-      </ul>
-    </li>
+          <!-- Quiénes somos -->
+          <li class="has-sub">
+            <a class="menu-link">
+              Quiénes somos <i class="bi bi-caret-down-fill"></i>
+            </a>
+            <ul class="submenu">
+              <li><a >Nuestra historia</a></li>
+              <li><a>Misión</a></li>
+              <li><a >Noticias y eventos</a></li>
+            </ul>
+          </li>
 
-    <!-- Historias felices -->
-    <li class="has-sub">
-      <a class="menu-link" routerLink="/historias-felices">
-        Historias felices <i class="bi bi-caret-down-fill"></i>
-      </a>
-      <ul class="submenu">
-        <li><a routerLink="/historias-felices/nuestra">Nuestra historia</a></li>
-        <li><a routerLink="/historias-felices/gatos">Gatos</a></li>
-        <li><a routerLink="/historias-felices/perros">Perros</a></li>
-      </ul>
-    </li>
+          <!-- Historias felices -->
+          <li class="has-sub">
+            <a class="menu-link">
+              Historias felices <i class="bi bi-caret-down-fill"></i>
+            </a>
+            <ul class="submenu">
+              <li><a >Nuestra historia</a></li>
+              <li><a >Gatos</a></li>
+              <li><a >Perros</a></li>
+            </ul>
+          </li>
 
-    <!-- Cómo ayudar -->
-    <li class="has-sub">
-      <a class="menu-link" routerLink="/como-ayudar">
-        Cómo ayudar <i class="bi bi-caret-down-fill"></i>
-      </a>
-      <ul class="submenu">
-        <li><a routerLink="/como-ayudar/apadrinar">Apadrinar</a></li>
-        <li><a routerLink="/como-ayudar/donar">Donar</a></li>
-        <li><a routerLink="/como-ayudar/como_funciona">¿Cómo funciona?</a></li>
-      </ul>
-    </li>
-  </ul>
+          <!-- Cómo ayudar -->
+          <li class="has-sub">
+            <a class="menu-link" >
+              Cómo ayudar <i class="bi bi-caret-down-fill"></i>
+            </a>
+            <ul class="submenu">
+              <li><a >Apadrinar</a></li>
+              <li><a >Donar</a></li>
+              <li><a >¿Cómo funciona?</a></li>
+            </ul>
+          </li>
+        </ul>
       </nav>
 
       <div class="user-area">
@@ -82,7 +64,6 @@
       </div>
     </div>
   </header>
-
   <!-- Contenido -->
   <main class="page">
     <section class="auth">
@@ -104,7 +85,7 @@
 
           <div class="help-links">
             <p class="muted">
-              ¿No tienes cuenta? <a href="#">Crea una</a>
+              ¿No tienes cuenta? <a (click)="goRegistro()">Crea una</a>
             </p>
             <p class="muted">
               ¿Olvidaste tu contraseña? <a routerLink="/registro">Cambia tu contraseña</a>
@@ -116,6 +97,5 @@
   </main>
 
   <footer class="footer" aria-hidden="true"></footer>
-</body>
-</html>
+
 
