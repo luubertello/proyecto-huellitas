@@ -1,37 +1,24 @@
-import { Controller } from '@nestjs/common';
-import { UseGuards, Get, Post, Put, Patch, Delete, Param } from '@nestjs/common';
+import { Controller, Post, Get, Param, Body } from '@nestjs/common';
+import { AnimalService } from './animal.service';
+import { CrearAnimalDto } from 'src/DTO/crearAnimal.dto';
+import { Animal } from './animal.entity';
 
 @Controller('animal')
 export class AnimalController {
-    
-    // Buscar todos los animales
-    @Get()
-    async findAll() {
-        return 'busca todos';
-  }
-  
-  // Crear animal
-    @Post()
-    create(): string {
-        return 'This action adds a new animal';
+  constructor(private readonly animalService: AnimalService) {}
+
+  @Post()
+  create(@Body() dto: CrearAnimalDto): Promise<Animal> {
+    return this.animalService.create(dto);
   }
 
-  // Modificar animal
-    @Put(':id')
-    update(@Param('id') id: string): string {
-        return `This action updates cat with ID ${id}`;
+  @Get()
+  findAll(): Promise<Animal[]> {
+    return this.animalService.findAll();
   }
 
-  // Modificar parcialmente animal
-    @Patch(':id')
-    partialUpdate(@Param('id') id: string): string {
-        return `This action partially updates cat with ID ${id}`;
-  }
-
-  // Eliminar animal
-    @Delete(':id')
-    remove(@Param('id') id: string): string {
-        return `This action removes cat with ID ${id}`;
+  @Get(':id')
+  findOne(@Param('id') id: string): Promise<Animal> {
+    return this.animalService.findOne(+id);
   }
 }
-

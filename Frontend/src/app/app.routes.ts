@@ -10,6 +10,7 @@ import { PerfilAnimal } from './pages/usuario/perfil-animal/perfil-animal';
 import { FormularioAdopcion } from './pages/usuario/formulario-adopcion/formulario-adopcion';
 import { RequisitosAdopcion } from './pages/usuario/requisitos-adopcion/requisitos-adopcion';
 import { GestionarAnimales } from './pages/admin/gestionar-animales/gestionar-animales';
+import { CrearAnimal } from './pages/admin/crear-animal/crear-animal';
 
 export const routes: Routes = [
   { path: 'inicio', component: Inicio },
@@ -31,6 +32,8 @@ export const routes: Routes = [
   { path: 'inicio-sesion', component: IniciarSesion },
   { path: 'registro', component: Registro },
   { path: 'gestion-animal', component: GestionarAnimales },
+  { path: 'crear-animal', component: CrearAnimal },
+
 
   { path: '', redirectTo: 'inicio', pathMatch: 'full' }
 ];
