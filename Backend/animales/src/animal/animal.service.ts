@@ -17,6 +17,27 @@ export class AnimalService {
     private readonly estadoRepo: Repository<Estado>,
   ) {}
 
+  // Buscar todos los animales
+  async findAll(): Promise<Animal[]> {
+    return this.animalRepo.find({ relations: ['especie', 'estadoActual', 'cambiosEstado'] });
+  }
+  
+  // Buscar animal por ID
+  async findOne(id: number): Promise<Animal> {
+    const animal = await this.animalRepo.findOne({ 
+        where: { id }, 
+        relations: ['especie', 'estadoActual', 'cambiosEstado'],
+    });
+
+    // Si no existe animal con esa ID, tira error
+    if (!animal) {
+        throw new Error('Animal no encontrado');
+    }
+
+    return animal;
+  }
+
+  // Crear animal
   async create(dto: CrearAnimalDto): Promise<Animal> {
     const especie = await this.especieRepo.findOne({ where: { id: dto.especieId } });
     const estado = await this.estadoRepo.findOne({ where: { id: dto.estadoActualId } });
@@ -34,20 +55,21 @@ export class AnimalService {
     return this.animalRepo.save(animal);
   }
 
-  async findAll(): Promise<Animal[]> {
-    return this.animalRepo.find({ relations: ['especie', 'estadoActual', 'cambiosEstado'] });
+  // Actualizar datos
+  async update(id: number, dto: Partial<CrearAnimalDto>): Promise<Animal> {
+    const animal = await this.findOne(id); // findOne valida la existencia del animal que vamos a actualizar
+
+    // Actualizamos solo los campos que vienen en dto
+    Object.assign(animal, dto);
+
+    return this.animalRepo.save(animal);
   }
 
-async findOne(id: number): Promise<Animal> {
-  const animal = await this.animalRepo.findOne({ 
-    where: { id }, 
-    relations: ['especie', 'estadoActual', 'cambiosEstado'],
-  });
+// Eliminar animal
+    async remove(id: number): Promise<void> {
+        const animal = await this.findOne(id); // validamos que exista
+        await this.animalRepo.remove(animal);
+    }
 
-  if (!animal) {
-    throw new Error('Animal no encontrado');
-  }
 
-  return animal;
-}
 }
