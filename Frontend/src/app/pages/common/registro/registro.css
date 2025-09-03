@@ -186,19 +186,30 @@ body{
 
 /* Página */
 .page{
+  background: var(--bg);
   min-height: calc(100vh - 92px);
   display:flex;
   align-items:center;
   justify-content:center;
   padding: 36px 16px;
 }
+.auth{
+  width: 100%;
+  max-width: 600px;
+  padding: 40px 90px;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
 
 :host .auth .card{
-  width: min(900px, 100%) !important;
+  width: 100%;
+  max-width: 680px !important;
+  margin: 0 auto;
   background: var(--card);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
-  padding: 56px 300px;
+  padding: 40px 32px;
   text-align:center;
 }
 .auth h1{
