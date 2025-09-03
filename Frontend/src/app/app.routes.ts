@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { IniciarSesion } from './pages/common/iniciar-sesion/iniciar-sesion';
-import { Inicio } from './pages/admin/inicio/inicio';
+import { Inicio } from './pages/usuario/inicio/inicio';
 import { Registro } from './pages/common/registro/registro';
 import { AdoptaGatos } from './pages/usuario/adopta-gatos/adopta-gatos';
 import { AdoptaPerros } from './pages/usuario/adopta-perros/adopta-perros';

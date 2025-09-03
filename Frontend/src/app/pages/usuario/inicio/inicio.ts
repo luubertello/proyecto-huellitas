@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-inicio',
   templateUrl: './inicio.html',
-  styleUrls: ['./inicio.css']
+  styleUrls: ['./inicio.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class Inicio {
   constructor(private router: Router) {}

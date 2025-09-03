@@ -241,9 +241,9 @@ body{
 }
 
 /* Fondo de cada slide */
-.hero-carousel .s1 { background-image: url('../../../assets/InicioPagina1.png'); }
-.hero-carousel .s2 { background-image: url('../../../assets/InicioPagina2.png'); }
-.hero-carousel .s3 { background-image: url('../../../assets/InicioPagina3.png'); }
+.hero-carousel .s1 { background-image: url('/assets/InicioPagina1.png'); }
+.hero-carousel .s2 { background-image: url('/assets/InicioPagina2.png'); }
+.hero-carousel .s3 { background-image: url('/assets/InicioPagina3.png'); }
 
 /* Mostrar solo el slide activo */
 #hero-1:checked ~ .slides .s1,
