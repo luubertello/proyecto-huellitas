@@ -12,29 +12,47 @@ import { RequisitosAdopcion } from './pages/usuario/requisitos-adopcion/requisit
 import { GestionarAnimales } from './pages/admin/gestionar-animales/gestionar-animales';
 import { CrearAnimal } from './pages/admin/crear-animal/crear-animal';
 import { DonaDinero } from './pages/usuario/dona-dinero/dona-dinero';
+import { AdminLayout } from './layout/admin-layout/admin-layout';
+import { UsuarioLayout } from './layout/usuario-layout/usuario-layout';
+import { Adopcion } from './pages/usuario/adopcion/adopcion';
+import { EditarAnimal } from './pages/admin/editar-animal/editar-animal';
 
 export const routes: Routes = [
-  { path: 'inicio', component: Inicio },
+   { 
+    path: 'admin',
+    component: AdminLayout,
+    children: [
+      { path: 'registrar-animal', component: CrearAnimal }, // /admin/registrar-animal
+      { path: 'gestion-animal', component: GestionarAnimales }, // /admin/gestion-animal
+      { path: 'editar-animal', component: EditarAnimal }, // /admin/editar-animal
+    ]},
 
   {
-    path: 'adopcion',
+    path: '',
+    component: UsuarioLayout,
     children: [
-      { path: 'gatos', component: AdoptaGatos },
-      { path: 'perros', component: AdoptaPerros },
-      { path: 'perfil-animal', component: PerfilAnimal },
-      { path: 'formulario', component: FormularioAdopcion },
-      { path: 'requisitos', component: RequisitosAdopcion },
-      { path: '', redirectTo: 'adopcion', pathMatch: 'full' } // redirección por defecto
-    ]
+      { path: 'inicio', component: Inicio },
+      {
+        path: 'adopta',
+        children: [
+          { path: '', component: Adopcion },           // /adopta
+          { path: 'gatos', component: AdoptaGatos },   // /adopta/gatos
+          { path: 'perros', component: AdoptaPerros }, // /adopta/perros
+          { path: 'requisitos', component: RequisitosAdopcion }, // /adopta/requisitos
+          { path: 'formulario', component: FormularioAdopcion }, // /adopta/formulario
+          { path: 'perfil-animal', component: PerfilAnimal }, // /adopta/perfil-animal
+        ],
+      },
+      {
+        path: 'donar',
+        children: [
+          { path: '', component: Donaciones },         // /donar
+          { path: 'dinero', component: DonaDinero },  // /donar/dinero
+          { path: 'insumos', component: DonaInsumos } // /donar/insumos
+        ],
+      },
+    ],
   },
-
-  { path: 'donaciones', component: Donaciones },
-  { path: 'dona-insumos', component: DonaInsumos },
-  { path: 'dona-dinero', component: DonaDinero },
-  { path: 'inicio-sesion', component: IniciarSesion },
-  { path: 'registro', component: Registro },
-  { path: 'gestion-animal', component: GestionarAnimales },
-  { path: 'crear-animal', component: CrearAnimal },
 
 
   { path: '', redirectTo: 'inicio', pathMatch: 'full' }

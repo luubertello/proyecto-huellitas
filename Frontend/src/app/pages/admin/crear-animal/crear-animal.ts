@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -8,7 +8,8 @@ import { HttpClientModule } from '@angular/common/http';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
   templateUrl: './crear-animal.html',
-  styleUrls: ['./crear-animal.css']
+  styleUrls: ['./crear-animal.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class CrearAnimal implements OnInit {
   registrarAnimalForm!: FormGroup;
