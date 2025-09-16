@@ -32,6 +32,9 @@ export const routes: Routes = [
     component: UsuarioLayout,
     children: [
       { path: 'inicio', component: Inicio },
+      { path: 'iniciar-sesion', component: IniciarSesion },
+      { path: 'registro', component: Registro },
+      { path: '', redirectTo: 'inicio', pathMatch: 'full' },
       {
         path: 'adopta',
         children: [
@@ -55,5 +58,5 @@ export const routes: Routes = [
   },
 
 
-  { path: '', redirectTo: 'inicio', pathMatch: 'full' }
+  
 ];
