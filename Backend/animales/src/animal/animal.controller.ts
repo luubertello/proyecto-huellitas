@@ -3,7 +3,7 @@ import { AnimalService } from './animal.service';
 import { CrearAnimalDto } from 'src/DTO/crearAnimal.dto';
 import { Animal } from './animal.entity';
 
-@Controller('animal')
+@Controller('animales')
 export class AnimalController {
   constructor(private readonly animalService: AnimalService) {}
 
