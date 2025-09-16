@@ -10,6 +10,10 @@ export class ProxyMiddleware implements NestMiddleware {
     const targets: Record<string, string> = {
       '/usuarios': 'http://localhost:3001',
       '/animales': 'http://localhost:3002',
+      '/raza': 'http://localhost:3002',
+      '/especie': 'http://localhost:3002',
+      '/sexo': 'http://localhost:3002',
+      '/estado': 'http://localhost:3002',
       '/adopcion': 'http://localhost:3003',
       '/donacion': 'http://localhost:3004',
       '/inventario': 'http://localhost:3005',

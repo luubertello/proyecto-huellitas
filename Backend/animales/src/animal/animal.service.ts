@@ -5,6 +5,8 @@ import { Animal } from './animal.entity';
 import { CrearAnimalDto } from 'src/DTO/crearAnimal.dto';
 import { Especie } from 'src/especie/especie.entity';
 import { Estado } from 'src/estado/estado.entity';
+import { Raza } from 'src/raza/raza.entity';
+import { Sexo } from 'src/sexo/sexo.entity';
 
 @Injectable()
 export class AnimalService {
@@ -15,18 +17,22 @@ export class AnimalService {
     private readonly especieRepo: Repository<Especie>,
     @InjectRepository(Estado)
     private readonly estadoRepo: Repository<Estado>,
+    @InjectRepository(Raza)
+    private readonly razaRepo: Repository<Raza>,
+    @InjectRepository(Sexo)
+    private readonly sexoRepo: Repository<Sexo>,
   ) {}
 
   // Buscar todos los animales
   async findAll(): Promise<Animal[]> {
-    return this.animalRepo.find({ relations: ['especie', 'estadoActual', 'cambiosEstado'] });
+    return this.animalRepo.find({ relations: ['especie', 'estadoActual', 'raza', 'sexo', 'cambiosEstado'] });
   }
   
   // Buscar animal por ID
   async findOne(id: number): Promise<Animal> {
     const animal = await this.animalRepo.findOne({ 
         where: { id }, 
-        relations: ['especie', 'estadoActual', 'cambiosEstado'],
+        relations: ['especie', 'estadoActual', 'raza', 'sexo', 'cambiosEstado'],
     });
 
     // Si no existe animal con esa ID, tira error
@@ -41,10 +47,13 @@ export class AnimalService {
   async create(dto: CrearAnimalDto): Promise<Animal> {
     const especie = await this.especieRepo.findOne({ where: { id: dto.especieId } });
     const estado = await this.estadoRepo.findOne({ where: { id: dto.estadoActualId } });
+    const raza = await this.razaRepo.findOne({ where: { id: dto.razaId } });
+    const sexo = await this.sexoRepo.findOne({ where: { id: dto.sexoId } });
 
     const animal = this.animalRepo.create({
     nombre: dto.nombre,
-    raza: dto.raza,
+    raza,
+    sexo,
     fechaNacimiento: dto.fechaNacimiento,
     descripcion: dto.descripcion,
     foto: dto.foto,

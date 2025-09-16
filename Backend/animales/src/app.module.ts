@@ -6,6 +6,12 @@ import { AnimalModule } from './animal/animal.module';
 import { CambioEstadoModule } from './cambioEstado/cambioEstado.module';
 import { EstadoModule } from './estado/estado.module';
 import { EspecieModule } from './especie/especie.module';
+import { RazaController } from './raza/raza.controller';
+import { RazaService } from './raza/raza.service';
+import { SexoController } from './sexo/sexo.controller';
+import { SexoService } from './sexo/sexo.service';
+import { RazaModule } from './raza/raza.module';
+import { SexoModule } from './sexo/sexo.module';
 
 
 @Module({
@@ -23,7 +29,9 @@ import { EspecieModule } from './especie/especie.module';
     AnimalModule,
     CambioEstadoModule,
     EstadoModule,
-    EspecieModule
+    EspecieModule,
+    RazaModule,
+    SexoModule
   ],
   controllers: [AppController],
   providers: [AppService],

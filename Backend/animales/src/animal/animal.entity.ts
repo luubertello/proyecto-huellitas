@@ -2,6 +2,8 @@ import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, OneToMan
 import { CambioEstado } from "src/cambioEstado/cambioEstado.entity";
 import { Especie } from "src/especie/especie.entity";
 import { Estado } from "src/estado/estado.entity";
+import { Raza } from "src/raza/raza.entity";
+import { Sexo } from "src/sexo/sexo.entity";
 
 @Entity('animal')
 export class Animal {
@@ -11,9 +13,6 @@ export class Animal {
   @Column()
   nombre: string;
 
-  @Column()
-  raza: string;
-
   @Column({ type: 'date', nullable: true })
   fechaNacimiento: Date;
 
@@ -22,18 +21,24 @@ export class Animal {
 
   @Column()
   foto: string;
-  
+
   // Relaciones
-  @OneToMany(() => CambioEstado, cambio => cambio.animal)
-  cambiosEstado: CambioEstado[];
-  
-  @ManyToOne(() => Especie, especie => especie.animales)
+  @ManyToOne(() => Sexo, sexo => sexo.animales, { eager: true })
+  @JoinColumn({ name: 'sexo_id' })
+  sexo: Sexo;
+
+  @ManyToOne(() => Raza, raza => raza.animales, { eager: true })
+  @JoinColumn({ name: 'raza_id' })
+  raza: Raza;
+
+  @ManyToOne(() => Especie, especie => especie.animales, { eager: true })
   @JoinColumn({ name: 'especie_id' })
   especie: Especie;
 
-  @ManyToOne(() => Estado, estadoActual => estadoActual.animales)
+  @ManyToOne(() => Estado, estadoActual => estadoActual.animales, { eager: true })
   @JoinColumn({ name: 'estadoActual_id' })
   estadoActual: Estado;
-  
 
+  @OneToMany(() => CambioEstado, cambio => cambio.animal)
+  cambiosEstado: CambioEstado[];
 }

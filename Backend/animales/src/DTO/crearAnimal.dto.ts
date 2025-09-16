@@ -4,8 +4,11 @@ export class CrearAnimalDto {
   @IsString()
   nombre: string;
 
-  @IsString()
-  raza: string;
+  @IsInt()
+  razaId: number; // ahora es relación a la entidad Raza
+
+  @IsInt()
+  sexoId: number; // relación a la entidad Sexo
 
   @IsOptional()
   @IsDate()

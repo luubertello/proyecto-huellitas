@@ -1,6 +1,15 @@
+// main.ts
 import { bootstrapApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
 import { App } from './app/app';
+import { appConfig } from './app/app.config';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
-bootstrapApplication(App, appConfig)
-  .catch((err) => console.error(err));
+// Agregamos provideHttpClient con fetch a los providers existentes
+bootstrapApplication(App, {
+  ...appConfig,
+  providers: [
+    ...(appConfig.providers || []),
+    provideHttpClient(withFetch()) // <-- esto habilita fetch
+  ]
+})
+.catch((err) => console.error(err));
