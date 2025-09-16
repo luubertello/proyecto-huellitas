@@ -1,0 +1,91 @@
+/* Página */
+.page{
+  background: var(--bg);
+  min-height: calc(100vh - 92px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 36px 16px;
+}
+.auth{
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* Tarjeta de requisitos */
+:host .auth .card.requirements{
+  width: min(900px, 100%);
+  background: #f5ede7; /* tono beige claro */
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 48px 40px;
+  text-align: left;
+}
+
+/* Título */
+.requirements .title{
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 28px;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+/* Lista de requisitos */
+.req-list{
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.req-list li{
+  display: flex;
+  gap: 10px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+.req-list .paw{
+  font-size: 1rem;
+  flex-shrink: 0;
+  color: #6b5347;
+}
+
+/* Nota final */
+.note.center{
+  text-align: center;
+  font-size: 0.85rem;
+  margin: 12px 0 24px;
+  color: var(--text-muted);
+}
+
+/* Botón */
+.btn-primary.btn-lg{
+  display: block;
+  margin: 0 auto;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 24px;
+  background: #f3ba64; /* naranja */
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: filter .2s ease, transform .05s ease-in-out;
+}
+.btn-primary.btn-lg:hover{ filter: brightness(1.05); }
+.btn-primary.btn-lg:active{ transform: translateY(1px); }
+
+/* Responsive */
+@media (max-width: 768px){
+  :host .auth .card.requirements{
+    padding: 32px 20px;
+  }
+}
