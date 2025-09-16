@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-requisitos-adopcion',
   imports: [],
@@ -8,5 +8,9 @@ import { Component, ViewEncapsulation } from '@angular/core';
   encapsulation: ViewEncapsulation.None,
 })
 export class RequisitosAdopcion {
+  constructor(private router: Router) {}
+  goFormulario(){
+    this.router.navigate(['/adopta/formulario']);
+  }
 
 }
