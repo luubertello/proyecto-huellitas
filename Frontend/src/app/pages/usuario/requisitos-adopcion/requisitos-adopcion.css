@@ -1,4 +1,126 @@
-/* Página */
+/* ====== TARJETA REQUISITOS (override) ====== */
+:root{
+  --peach:#f7c9ad;
+  --peach-strong:#f3ba98;
+  --bg:#fbf5ef;
+  --card:#eddccf;
+  --text:#4a3b35;
+  --text-muted:#927c72;
+  --white:#ffffff;
+  --shadow: 0 10px 25px rgba(0,0,0,.08);
+  --radius: 18px;
+  --radius-lg: 26px;
+  --gap: 18px;
+}
+
+
+body { background: #fff; }                 /* o el color de tu layout */
+
+body{
+  margin:0;
+  font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:var(--text);
+  background:var(--bg);
+}
+
+/* Contenedor central */
+.auth{
+  width: 100%;
+  max-width: 950px;              /* más ancho como en la imagen */
+  padding: 32px 16px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.card.requirements .card-head{
+  text-align: center;   /* centra todo el bloque */
+}
+/* La tarjeta en sí: asegúrate de que el <div> tenga class="card requirements" */
+.auth .card.requirements{
+  width: 100%;
+  background: #eddccf;           /* beige claro de la imagen */
+  border-radius: 22px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.08);
+  padding: 36px 32px !important; /* ¡override del padding grande anterior! */
+  text-align: left !important;   /* override del text-align:center anterior */
+}
+
+.card.requirements .eyebrow{
+  margin:0;
+  font-size:.90rem;
+  letter-spacing:.12em;
+  text-transform: uppercase;
+  color:#765f55;
+  font-weight:700;
+}
+
+.card.requirements .heading{
+  margin:.35rem 0 0;
+  font-size:1.9rem;
+  line-height:1.2;
+  color:#3b2f2a;
+  font-weight:800;
+}
+
+.card.requirements .divider{
+  display:block;
+  width:88px;
+  height:4px;
+  border-radius:999px;
+  margin:14px auto 6px;
+  background:#e2d2c9;
+}
+
+/* Lista con huellitas */
+.auth .card.requirements .req-list{
+  list-style: none;       /* quita viñetas nativas */
+  padding: 0;
+  margin: 0 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.auth .card.requirements .req-list li{
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--text);
+  font-size: .96rem;
+  line-height: 1.55;
+}
+.auth .card.requirements .req-list .paw{
+  flex: 0 0 18px;
+  width: 18px;
+  height: 22px;
+  line-height: 22px;
+  font-size: 16px;        /* tamaño de la huella */
+  margin-top: 2px;        /* alinea con primera línea del párrafo */
+}
+
+/* Nota y botón */
+.auth .card.requirements .note{
+  color: var(--text-muted);
+  font-size: .82rem;
+  text-align: center;
+  margin: 6px 0 18px;
+}
+.auth .card.requirements .btn-primary.btn-lg{
+  display: block;
+  margin: 0 auto;
+  padding: 12px 28px;
+  border-radius: 24px;
+  background: #f3b06b;   /* naranja suave */
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: filter .2s ease, transform .05s ease-in-out;
+}
+.auth .card.requirements .btn-primary.btn-lg:hover{ filter: brightness(1.05); }
+.auth .card.requirements .btn-primary.btn-lg:active{ transform: translateY(1px); }
+
+/* Ajustes de la página para que todo quede centrado vertical/horizontal */
 .page{
   background: var(--bg);
   min-height: calc(100vh - 92px);
@@ -7,85 +129,9 @@
   justify-content:center;
   padding: 36px 16px;
 }
-.auth{
-  width: 100%;
-  max-width: 800px;
-  padding: 20px;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-}
-
-/* Tarjeta de requisitos */
-:host .auth .card.requirements{
-  width: min(900px, 100%);
-  background: #f5ede7; /* tono beige claro */
-  border-radius: 18px;
-  box-shadow: var(--shadow);
-  padding: 48px 40px;
-  text-align: left;
-}
-
-/* Título */
-.requirements .title{
-  text-align: center;
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 28px;
-  line-height: 1.4;
-  color: var(--text);
-}
-
-/* Lista de requisitos */
-.req-list{
-  list-style: none;
-  padding: 0;
-  margin: 0 0 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-.req-list li{
-  display: flex;
-  gap: 10px;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  color: var(--text);
-}
-.req-list .paw{
-  font-size: 1rem;
-  flex-shrink: 0;
-  color: #6b5347;
-}
-
-/* Nota final */
-.note.center{
-  text-align: center;
-  font-size: 0.85rem;
-  margin: 12px 0 24px;
-  color: var(--text-muted);
-}
-
-/* Botón */
-.btn-primary.btn-lg{
-  display: block;
-  margin: 0 auto;
-  padding: 14px 32px;
-  border: none;
-  border-radius: 24px;
-  background: #f3ba64; /* naranja */
-  color: #fff;
-  font-weight: 700;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: filter .2s ease, transform .05s ease-in-out;
-}
-.btn-primary.btn-lg:hover{ filter: brightness(1.05); }
-.btn-primary.btn-lg:active{ transform: translateY(1px); }
 
 /* Responsive */
 @media (max-width: 768px){
-  :host .auth .card.requirements{
-    padding: 32px 20px;
-  }
+  .auth{ padding: 20px 12px; }
+  .auth .card.requirements{ padding: 28px 18px !important; }
 }
