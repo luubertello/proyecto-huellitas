@@ -1,63 +1,61 @@
-<body>
-  <main class="page">
-    <section class="auth">
-      <div class="card">
-        <h1>Registrar Animal</h1>
+<main class="page">
+  <section class="auth">
+    <div class="card">
+      <h1>Registrar Animal</h1>
 
-        <form class="form" [formGroup]="registrarAnimalForm" (ngSubmit)="onSubmit()">
+      <form class="form" [formGroup]="registrarAnimalForm" (ngSubmit)="onSubmit()">
 
-          <label class="field">
-            <span>Nombre*</span>
-            <input type="text" formControlName="nombre" placeholder="Ej: Michi" />
-          </label>
+        <label class="field">
+          <span>Nombre*</span>
+          <input type="text" formControlName="nombre" placeholder="Ej: Michi" />
+        </label>
 
-          <label class="field">
-            <span>Raza*</span>
-            <select formControlName="razaId">
-              <option value="" disabled selected>Seleccione una raza</option>
-              <option *ngFor="let r of razas" [value]="r.id">{{ r.nombre }}</option>
-            </select>
-          </label>
+        <label class="field">
+          <span>Especie*</span>
+          <select formControlName="especie" class="form-control" (change)="onEspecieChange()">
+            <option value="">Seleccione especie</option>
+            <option *ngFor="let e of especies" [value]="e.id">{{ e.nombre }}</option>
+          </select>
+        </label>
 
-          <label class="field">
-            <span>Sexo*</span>
-            <select formControlName="sexoId">
-              <option value="" disabled selected>Seleccione un sexo</option>
-              <option *ngFor="let s of sexos" [value]="s.id">{{ s.nombre }}</option>
-            </select>
-          </label>
+        <label class="field">
+          <span>Raza*</span>
+          <select formControlName="raza" class="form-control">
+            <option value="">Seleccione raza</option>
+            <option *ngFor="let r of razas" [value]="r.id">{{ r.nombre }}</option>
+          </select>
+        </label>
 
-          <label class="field">
-            <span>Especie*</span>
-            <select formControlName="especieId">
-              <option value="" disabled selected>Seleccione una especie</option>
-              <option *ngFor="let e of especies" [value]="e.id">{{ e.nombre }}</option>
-            </select>
-          </label>
+        <label class="field">
+          <span>Sexo*</span>
+          <select formControlName="sexo" class="form-control">
+            <option value="">Seleccione sexo</option>
+            <option *ngFor="let s of sexos" [value]="s.id">{{ s.nombre }}</option>
+          </select>
+        </label>
 
-          <label class="field">
-            <span>Fecha de Nacimiento (opcional)</span>
-            <input type="date" formControlName="fechaNacimiento" />
-          </label>
+        <label class="field">
+          <span>Fecha de Nacimiento (opcional)</span>
+          <input type="date" formControlName="fechaNacimiento" />
+        </label>
 
-          <label class="field">
-            <span>Descripción</span>
-            <textarea formControlName="descripcion" placeholder="Descripción del animal"></textarea>
-          </label>
+        <label class="field">
+          <span>Descripción</span>
+          <textarea formControlName="descripcion" placeholder="Descripción del animal"></textarea>
+        </label>
 
-          <label class="field">
-            <span>Foto*</span>
-            <input type="file" formControlName="foto" />
-          </label>
+        <label class="field">
+          <span>Foto (URL)</span>
+          <input type="text" formControlName="foto" placeholder="https://..." />
+        </label>
 
-          <button type="submit" class="btn-primary" [disabled]="loading">
-            REGISTRAR ANIMAL
-          </button>
+        <button type="submit" class="btn-primary">
+          REGISTRAR ANIMAL
+        </button>
 
-        </form>
-      </div>
-    </section>
-  </main>
+      </form>
+    </div>
+  </section>
+</main>
 
-  <footer class="footer" aria-hidden="true"></footer>
-</body>
+<footer class="footer" aria-hidden="true"></footer>

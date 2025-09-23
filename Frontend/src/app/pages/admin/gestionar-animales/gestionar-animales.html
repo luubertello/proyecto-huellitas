@@ -1,20 +1,8 @@
+<main class="animals-container">
+  <div class="animal-card" *ngFor="let animal of animales">
+    <img [src]="animal.foto" [alt]="animal.nombre">
+    <div class="name">{{ animal.nombre }}</div>
+    <i class="bi bi-pencil edit-icon"></i>
+  </div>
+</main>
 
-  <!-- Contenido principal -->
- <main class="animals-container">
-    <div class="animal-card">
-      <img src="/assets/Mango_gato1.jpg" alt="Mango">
-      <div class="name">Mango</div>
-      <i class="bi bi-pencil edit-icon"></i>
-    </div>
-    <div class="animal-card">
-      <img src="/assets/Kyra_gato5.jpg" alt="Kyra">
-      <div class="name">Kyra</div>
-      <i class="bi bi-pencil edit-icon"></i>
-    </div>
-    <div class="animal-card">
-      <img src="/assets/Micha_gato2.jpg" alt="Mango">
-      <div class="name">Micha</div>
-      <i class="bi bi-pencil edit-icon"></i>
-    </div>
-    <!-- Más tarjetas -->
-  </main>

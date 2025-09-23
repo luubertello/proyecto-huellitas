@@ -1,5 +1,5 @@
 // raza.controller.ts
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Query } from '@nestjs/common';
 import { RazaService } from './raza.service';
 import { Raza } from './raza.entity';
 
@@ -8,7 +8,10 @@ export class RazaController {
   constructor(private readonly razaService: RazaService) {}
 
   @Get()
-  findAll(): Promise<Raza[]> {
+  findAll(@Query('especieId') especieId: string): Promise<Raza[]> {
+    if (especieId) {
+      return this.razaService.findByEspecie(+especieId); // Convierte el string a number
+    }
     return this.razaService.findAll();
   }
 
