@@ -1,9 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, OneToMany } from "typeorm";
-import { CambioEstado } from "src/cambioEstado/cambioEstado.entity";
-import { Especie } from "src/especie/especie.entity";
-import { Estado } from "src/estado/estado.entity";
-import { Raza } from "src/raza/raza.entity";
-import { Sexo } from "src/sexo/sexo.entity";
+import { CambioEstado } from "../cambioEstado/cambioEstado.entity";
+import { Especie } from "../especie/especie.entity";
+import { Estado } from "../estado/estado.entity";
+import { Raza } from "../raza/raza.entity";
+import { Sexo } from "../sexo/sexo.entity";
 
 @Entity('animal')
 export class Animal {

@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, OneToMany } from "typeorm";
-import { Animal } from "src/animal/animal.entity";
+import { Animal } from "../animal/animal.entity";
 
 @Entity('cambio_estado')
 export class CambioEstado {

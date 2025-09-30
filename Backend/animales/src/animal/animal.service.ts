@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Animal } from './animal.entity';
-import { CrearAnimalDto } from 'src/DTO/crearAnimal.dto';
-import { Especie } from 'src/especie/especie.entity';
-import { Estado } from 'src/estado/estado.entity';
-import { Raza } from 'src/raza/raza.entity';
-import { Sexo } from 'src/sexo/sexo.entity';
+import { CrearAnimalDto } from '../DTO/crearAnimal.dto';
+import { Especie } from '../especie/especie.entity';
+import { Estado } from '../estado/estado.entity';
+import { Raza } from '../raza/raza.entity';
+import { Sexo } from '../sexo/sexo.entity';
 
 @Injectable()
 export class AnimalService {

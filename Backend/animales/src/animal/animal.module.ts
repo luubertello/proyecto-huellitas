@@ -3,13 +3,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Animal } from './animal.entity';
 import { AnimalService } from './animal.service';
 import { AnimalController } from './animal.controller';
-import { Estado } from 'src/estado/estado.entity';
-import { Especie } from 'src/especie/especie.entity';
-import { Raza } from 'src/raza/raza.entity';
-import { Sexo } from 'src/sexo/sexo.entity';
+import { Estado } from '../estado/estado.entity';
+import { Especie } from '../especie/especie.entity';
+import { Raza } from '../raza/raza.entity';
+import { Sexo } from '../sexo/sexo.entity';
+import { CambioEstado } from '../cambioEstado/cambioEstado.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Animal, Estado, Especie, Raza, Sexo])],
+  imports: [TypeOrmModule.forFeature([Animal, Estado, Especie, Raza, Sexo, CambioEstado])],
   providers: [AnimalService],
   controllers: [AnimalController],
 })

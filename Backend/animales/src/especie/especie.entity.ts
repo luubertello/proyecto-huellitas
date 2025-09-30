@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, OneToMany } from "typeorm";
-import { Animal } from "src/animal/animal.entity";
-import { Raza } from "src/raza/raza.entity";
+import { Animal } from "../animal/animal.entity";
+import { Raza } from "../raza/raza.entity";
 
 @Entity('especie')
 export class Especie {

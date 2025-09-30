@@ -2,7 +2,7 @@
 import { Controller, Get, Param, Post, Body, ParseIntPipe} from '@nestjs/common';
 import { Especie } from './especie.entity';
 import { EspecieService } from './especie.service';
-import { Raza } from 'src/raza/raza.entity';
+import { Raza } from '../raza/raza.entity';
 
 
 @Controller('especie')
