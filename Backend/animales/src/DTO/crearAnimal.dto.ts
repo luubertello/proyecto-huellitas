@@ -9,6 +9,5 @@ export class CrearAnimalDto {
   foto: string;
   especieId: number;
   estadoActualId: number;
-  // foto ya no va, se maneja con @UploadedFile
 }
 
