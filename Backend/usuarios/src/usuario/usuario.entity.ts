@@ -6,12 +6,33 @@ export class Usuario {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  nombre: string;
+
+  @Column()
+  apellido: string;
+
+  @Column()
+  dni: number;
+
+  @Column()
+  sexo: string;
+
+  @Column()
+  fechaNacimiento: Date;
+
+  @Column()
+  direccion: string;
+
   @Index({unique:true})
   @Column()
   email: string;
 
   @Column()
-  contrasena: string;
+  contraseña: string;
+
+  @Column()
+  telefono: number;
 
   @Column('simple-array', { nullable: true })
   permisos: string[];
