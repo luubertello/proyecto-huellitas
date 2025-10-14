@@ -100,7 +100,7 @@ describe('AnimalService', () => {
       });
     });
 
-    it('debería lanzar error si no existe el animal', async () => {
+    it('debería dar error si no existe el animal', async () => {
       mockRepo.findOne.mockResolvedValue(undefined);
 
       await expect(service.findOne(999)).rejects.toThrow('Animal no encontrado');
