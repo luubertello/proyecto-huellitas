@@ -1,16 +1,33 @@
+// En: src/app.module.ts
+
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsuarioController } from './usuario/usuario.controller';
-import { UsuarioService } from './usuario/usuario.service';
-import { RolService } from './rol/rol.service';
-import { PermisosService } from './permisos/permisos.service';
-import { RolController } from './rol/rol.controller';
-import { PermisosController } from './permisos/permisos.controller';
+import { UsuarioModule } from './usuario/usuario.module';
+import { RolModule } from './rol/rol.module';
+import { PermisosModule } from './permisos/permisos.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController, UsuarioController, RolController, PermisosController],
-  providers: [AppService, UsuarioService, RolService, PermisosService],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.DB_HOST || 'localhost',
+      port: parseInt(process.env.DB_PORT || '5432', 10),
+      username: process.env.DB_USERNAME || 'admin',
+      password: process.env.DB_PASSWORD || '1234',
+      database: process.env.DB_DATABASE || 'usuarios',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true,
+    }),
+
+    UsuarioModule,
+    RolModule,
+    PermisosModule,
+    AuthModule,
+  ],
+  controllers: [AppController], // El AppModule solo debe tener su propio controller
+  providers: [AppService],   // Y su propio service
 })
 export class AppModule {}

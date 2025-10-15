@@ -8,7 +8,10 @@ export class ProxyMiddleware implements NestMiddleware {
 
   constructor() {
     const targets: Record<string, string> = {
-      '/usuarios': 'http://localhost:3001',
+      '/usuarios': 'http://127.0.0.1:3001',
+      '/rol': 'http://localhost:3001',
+      '/permisos': 'http://localhost:3001',
+      '/auth': 'http://127.0.0.1:3001',
       '/animales': 'http://localhost:3002',
       '/raza': 'http://localhost:3002',
       '/especie': 'http://localhost:3002',
@@ -30,7 +33,7 @@ export class ProxyMiddleware implements NestMiddleware {
   }
 
   use(req: any, res: any, next: () => void) {
-    const url = req.originalUrl; // <-- importante
+    const url = req.originalUrl;
 
     if (url === '/') {
       return res.send('Gateway funcionando 🚀');

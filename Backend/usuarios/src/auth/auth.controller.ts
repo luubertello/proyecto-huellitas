@@ -1,17 +1,33 @@
-import { Controller, Post, Body } from '@nestjs/common';
+// En: src/auth/auth.controller.ts
+
+import { Controller, Post, Body, UseGuards, Get, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { LoginDto } from 'src/DTO/login.dto';
+import { RegistroDto } from 'src/DTO/registro.dto';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
-  @Post('register')
-  register(@Body() body: { email: string; password: string }) {
-    return this.authService.registroUsuario(body.email, body.password);
+  // POST /auth/registro - Endpoint público
+  @Post('registro')
+  async registro(@Body() registroDto: RegistroDto) {
+    return this.authService.registro(registroDto);
   }
 
+  // POST /auth/login - Endpoint público
   @Post('login')
-  login(@Body() body: { email: string; password: string }) {
-    return this.authService.login(body.email, body.password);
+  async login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto);
+  }
+
+  // GET /auth/renew-token - Endpoint protegido
+  // Renueva el token para mantener la sesión activa.
+  @UseGuards(JwtAuthGuard)
+  @Get('renew-token')
+  async renewToken(@Request() req) {
+    // req.user es el payload del token que el JwtAuthGuard ya validó
+    return this.authService.login(req.user);
   }
 }

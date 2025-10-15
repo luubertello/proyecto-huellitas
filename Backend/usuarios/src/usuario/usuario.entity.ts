@@ -33,9 +33,6 @@ export class Usuario {
 
   @Column()
   telefono: number;
-
-  @Column('simple-array', { nullable: true })
-  permisos: string[];
   
   @ManyToOne(() => Rol, rol => rol.usuarios)
   rol: Rol;

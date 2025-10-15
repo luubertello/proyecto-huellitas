@@ -1,58 +1,31 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Req,
-  UseGuards,
-  Query,
-} from '@nestjs/common';
-import { Request } from 'express';
+// En: src/usuario/usuario.controller.ts
+
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-
+// Aplicamos el Guard en todo el controlador
+// Todas las rutas dentro de Usuario requieren un token JWT válido
+@UseGuards(JwtAuthGuard)
 @Controller('usuarios')
 export class UsuarioController {
-  constructor(private service: UsuarioService) {}
+  constructor(private readonly usuarioService: UsuarioService) {}
 
+  // GET /usuarios
   @Get()
-  async getUsuarios(
-    @Query('page') page = 1,
-    @Query('quantity') quantity = 10,
-  ) {
-    return this.service.getUsuarios(page, quantity);
+  async getUsuarios() {
+    return this.usuarioService.findAll();
   }
 
-  // Busca mi usuario
-  @UseGuards(AuthGuard)
-  @Get('me')
-  getPerfil(@Req() req: RequestWithUser) {
-    return {
-      email: req.user!.email,
-    };
+  @Get('test')
+  testEndpoint() {
+    console.log('--- ¡LA RUTA DE PRUEBA FUE ALCANZADA! ---');
+    return { message: '¡El controlador de usuarios funciona!' };
   }
 
-  // Iniciar sesion
-  @UseGuards(AuthGuard)
-  @Post('login')
-  loginUsuario(@Body() body: LoginDTO) {
-    console.log('Login request body:', body);
-    return this.service.login(body);
-  }
-
-  // Registrar nuevo usuario
-  @UseGuards(AuthGuard)
-  @Post('register')
-  registroUsuario(@Body() body: RegisterDTO) {
-    return this.service.registro(body);
-  }
-
-  // Reinicia el token de acceso
-  @Get('refresh-token')
-  refreshToken(@Req() request: Request) {
-    return this.service.refreshToken(
-      request.headers['refresh-token'] as string,
-    );
+  // GET /usuarios/email/test@example.com
+  @Get('email/:email')
+  async buscarUsuarioPorEmail(@Param('email') email: string) {
+    return this.usuarioService.findOneByEmail(email);
   }
 }

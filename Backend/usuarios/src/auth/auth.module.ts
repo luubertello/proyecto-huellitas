@@ -4,10 +4,11 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
+import { UsuarioModule } from 'src/usuario/usuario.module';
 
 @Module({
   imports: [
-    UsersModule,
+    UsuarioModule,
     PassportModule,
     JwtModule.register({
       secret: 'mi_secreto_super_seguro', // usa env vars en prod!

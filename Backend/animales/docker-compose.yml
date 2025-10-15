@@ -1,13 +1,31 @@
-version: '3.9'
+
 services:
-  postgres:
-    image: postgres:15
-    container_name: animales_db
+  # Servicio para la API de Animales
+  animales-api:
+    build: . 
+    container_name: huellitas_animales_api
+    restart: always
+    ports:
+      - "3002:3000"
+    depends_on:
+      - animales_pg 
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      DB_HOST: animales_pg
+      DB_PORT: 5432
+      DB_USERNAME: admin
+      DB_PASSWORD: '1234'
+      DB_DATABASE: animales
+      JWT_SECRET: ESTA-ES-UNA-CLAVE-SECRETA-MUY-SEGURA-CAMBIAME
+
+  # Servicio para la Base de Datos de Animales
+  animales_pg:
+    image: postgres:15-alpine
+    container_name: animales_pg
+    restart: always
+    environment:
       POSTGRES_DB: animales
-      POSTGRES_HOST_AUTH_METHOD: trust 
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: '1234'
     ports:
       - "5433:5432"
     volumes:
