@@ -6,11 +6,10 @@ import { AnimalController } from './animal.controller';
 import { Estado } from '../estado/estado.entity';
 import { Especie } from '../especie/especie.entity';
 import { Raza } from '../raza/raza.entity';
-import { Sexo } from '../sexo/sexo.entity';
 import { CambioEstado } from '../cambioEstado/cambioEstado.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Animal, Estado, Especie, Raza, Sexo, CambioEstado])],
+  imports: [TypeOrmModule.forFeature([Animal, Estado, Especie, Raza, CambioEstado])],
   providers: [AnimalService],
   controllers: [AnimalController],
 })

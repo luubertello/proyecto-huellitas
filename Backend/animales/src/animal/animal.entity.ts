@@ -3,7 +3,6 @@ import { CambioEstado } from "../cambioEstado/cambioEstado.entity";
 import { Especie } from "../especie/especie.entity";
 import { Estado } from "../estado/estado.entity";
 import { Raza } from "../raza/raza.entity";
-import { Sexo } from "../sexo/sexo.entity";
 
 @Entity('animal')
 export class Animal {
@@ -12,6 +11,9 @@ export class Animal {
 
   @Column()
   nombre: string;
+
+  @Column()
+  sexo: string
 
   @Column({ type: 'date', nullable: true })
   fechaNacimiento: Date;
@@ -23,9 +25,6 @@ export class Animal {
   foto: string;
 
   // Relaciones
-  @ManyToOne(() => Sexo, sexo => sexo.animales, { eager: true })
-  @JoinColumn({ name: 'sexo_id' })
-  sexo: Sexo;
 
   @ManyToOne(() => Raza, raza => raza.animales, { eager: true })
   @JoinColumn({ name: 'raza_id' })

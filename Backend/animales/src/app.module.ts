@@ -6,24 +6,19 @@ import { AnimalModule } from './animal/animal.module';
 import { CambioEstadoModule } from './cambioEstado/cambioEstado.module';
 import { EstadoModule } from './estado/estado.module';
 import { EspecieModule } from './especie/especie.module';
-import { RazaController } from './raza/raza.controller';
-import { RazaService } from './raza/raza.service';
-import { SexoController } from './sexo/sexo.controller';
-import { SexoService } from './sexo/sexo.service';
 import { RazaModule } from './raza/raza.module';
-import { SexoModule } from './sexo/sexo.module';
 
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost', 
-      port: 5433,
-      username: 'admin',
-      password: 'admin',
-      database: 'animales',
-      autoLoadEntities: true, 
+      host: process.env.DB_HOST || 'localhost',
+      port: parseInt(process.env.DB_PORT || '5432', 10),
+      username: process.env.DB_USERNAME || 'admin',
+      password: process.env.DB_PASSWORD || '1234',
+      database: process.env.DB_DATABASE || 'usuarios',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
     AnimalModule,
@@ -31,7 +26,6 @@ import { SexoModule } from './sexo/sexo.module';
     EstadoModule,
     EspecieModule,
     RazaModule,
-    SexoModule
   ],
   controllers: [AppController],
   providers: [AppService],
