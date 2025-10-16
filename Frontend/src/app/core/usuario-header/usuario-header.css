@@ -209,3 +209,76 @@ body{
   border-radius: 50%;
   object-fit: cover;
 }
+
+/* --- Accesibilidad utilitaria --- */
+.visually-hidden{
+  position:absolute!important;
+  width:1px;height:1px;
+  margin:-1px;border:0;padding:0;
+  white-space:nowrap;clip-path:inset(50%);clip:rect(0 0 0 0);overflow:hidden;
+}
+
+/* --- Área de usuario --- */
+.user-area{
+  position:relative;
+  justify-self:end;       /* alinea a la derecha en la grilla de la topbar */
+}
+
+.avatar-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  margin:0;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  border-radius:50%;
+  outline-offset: 4px;    /* foco visible sin mover layout */
+}
+
+.user-area .avatar{
+  width: clamp(32px, 4vw, 50px);
+  height: clamp(32px, 4vw, 50px);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Submenú del usuario (reutiliza tu estilo .submenu) */
+.user-submenu{
+  left: auto;               /* lo anclamos al borde derecho del avatar */
+  right: 0;
+  top: calc(100% + 10px);
+  min-width: 200px;
+  z-index: 60;              /* por encima de la topbar (50) y otros submenús (20) */
+  background: #f6d3bd;      /* coherente con tu paleta */
+}
+
+/* Mostrar al hover/focus (mouse y teclado) */
+.user-area.has-sub:hover > .user-submenu,
+.user-area.has-sub:focus-within > .user-submenu{
+  display:block;
+}
+
+/* Detalles de items */
+.user-submenu li a{
+  display:block;
+  padding:10px 14px;
+  text-decoration:none;
+  color:#3f2f29;
+  font-weight:600;
+  white-space:nowrap;
+}
+.user-submenu li a:hover,
+.user-submenu li a:focus{
+  background: rgba(0,0,0,.06);
+}
+
+/* Flechita del popover */
+.user-submenu::before{
+  content:"";
+  position:absolute;
+  top:-6px; right: 18px;
+  border:6px solid transparent;
+  border-bottom-color:#f6d3bd;
+}

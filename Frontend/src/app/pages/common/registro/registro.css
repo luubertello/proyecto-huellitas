@@ -195,21 +195,20 @@ body{
 }
 .auth{
   width: 100%;
-  max-width: 600px;
-  padding: 40px 90px;
+  max-width: 900px;
+  padding: 32px 16px;
   margin: 0;
   display: flex;
   justify-content: center;
 }
 
-:host .auth .card{
-  width: 100%;
-  max-width: 680px !important;
+.auth .card{
+  width: min(620px, 100%);
   margin: 0 auto;
   background: var(--card);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
-  padding: 40px 32px;
+  padding: 40px 28px;
   text-align:center;
 }
 .auth h1{

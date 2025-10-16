@@ -58,8 +58,24 @@
         </ul>
       </nav>
 
-      <div class="user-area">
+      <!--Usuario-->
+      <div class="user-area has-sub" aria-label="Cuenta de usuario">
+      <button class="avatar-btn" aria-haspopup="true" aria-expanded="false">
         <img src="/assets/logoInicioSesion.png" alt="Usuario" class="avatar" />
-      </div>
-    </div>
+        <span class="visually-hidden">Abrir opciones de cuenta</span>
+      </button>
+      <ul class="submenu user-submenu" role="menu">
+      <li role="none">
+        <a role="menuitem" (click)="goRegistro()">Crear cuenta</a>
+      </li>
+      <li role="none">
+        <a role="menuitem" (click)="goInicioSesion()">Iniciar sesión</a>
+      </li>
+    </ul>
+  </div>
+  </div>
   </header>
+
+
+
+ 

@@ -12,7 +12,7 @@ export class Registro {
   constructor (private router: Router) {}
 
   goInicioSesion() {
-      this.router.navigate(['/inicio-sesion']);
+      this.router.navigate(['/iniciar-sesion']);
     }
 
   goAdopcionGatos() {

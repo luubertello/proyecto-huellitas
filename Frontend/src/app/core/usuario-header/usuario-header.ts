@@ -37,4 +37,12 @@ goAdopcionGatos() {
   goInicio() {
     this.router.navigate(['/inicio]']);
   }
+
+  goRegistro() {
+      this.router.navigate(['/registro']);
+    }
+
+  goInicioSesion() {
+      this.router.navigate(['/iniciar-sesion']);
+    }
 }
