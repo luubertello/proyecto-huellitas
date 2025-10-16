@@ -11,19 +11,19 @@
   <!-- Datos -->
   <section class="info">
     <ul class="facts">
-      <li><strong>Especie:</strong> {{ a.especie }}</li>
-      <li><strong>Raza:</strong> {{ a.raza }}</li>
-      <li><strong>Fecha de nacimiento:</strong> {{ a.fechaNacimiento | date:'dd/MM/yyyy' }}</li>
-      <li><strong>Sexo:</strong> {{ a.sexo }}</li>
+      <li><strong>Especie:</strong> {{ animal.especie }}</li>
+      <li><strong>Raza:</strong> {{ animal.raza }}</li>
+      <li><strong>Fecha de nacimiento:</strong> {{ animal.fechaNacimiento | date:'dd/MM/yyyy' }}</li>
+      <li><strong>Sexo:</strong> {{ animal.sexo }}</li>
     </ul>
 
     <!-- Descripción -->
     <div class="desc">
-      {{ a.descripcion }}
+      {{ animal.descripcion }}
     </div>
 
     <!-- CTA -->
-    <button class="btn-primary" (click)="registrarSolicitudAdopcion(a)">ADOPTAR</button>
+    <button class="btn-primary" (click)="registrarSolicitudAdopcion(animal)">ADOPTAR</button>
   </section>
 </main>
 
