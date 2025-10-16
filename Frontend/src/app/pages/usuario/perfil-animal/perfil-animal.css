@@ -1,0 +1,114 @@
+:root{
+  --bg: #fff7f1;
+  --card: #f6d3bd;
+  --ink: #2f2621;
+  --muted: #6e5c54;
+  --accent: #f0a56b;
+  --radius: 18px;
+  --radius-lg: 22px;
+  --shadow: 0 10px 30px rgba(0,0,0,.08);
+}
+
+/* Título */
+.page-title{
+  width: min(1100px, 92%);
+  margin: 28px auto 10px;
+  border-top: 4px solid rgba(0,0,0,.08);
+  padding-top: 12px;
+  font-size: clamp(2rem, 3vw + 1rem, 3rem);
+  line-height: 1.1;
+  font-weight: 900;
+  letter-spacing: .4px;
+  color: var(--ink);
+}
+
+/* Layout principal del perfil */
+.animal-profile{
+  width: min(1100px, 92%);
+  margin: 0 auto 64px;
+  color: var(--ink);
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 26px clamp(20px, 4vw, 44px);
+  align-items: start;
+}
+
+@media (max-width: 860px){
+  .animal-profile{
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Foto con marco */
+.photo-frame{
+  margin: 0;
+  padding: 16px;
+  background: var(--accent);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 360px;
+  justify-self: start;
+}
+
+.photo{
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+/* Columna de información */
+.info{
+  display: grid;
+  gap: 14px;
+}
+
+/* Lista de datos (especie, raza, etc.) */
+.facts{
+  list-style: none;
+  padding: 0;
+  margin: 0 0 6px 0;
+  display: grid;
+  gap: 8px;
+  font-size: clamp(1rem, .3vw + 1rem, 1.1rem);
+  color: var(--ink);
+}
+.facts li strong{ font-weight: 800; }
+
+/* Descripción estilo “burbuja” */
+.desc{
+  background: var(--card);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: clamp(16px, 2.5vw, 22px) clamp(18px, 3vw, 28px);
+  line-height: 1.55;
+  font-size: 1rem;
+  color: var(--ink);
+}
+.desc p{ margin: 0 0 10px; }
+.desc p:last-child{ margin-bottom: 0; }
+
+/* Botón CTA */
+.btn-primary{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 26px;
+  font-weight: 800;
+  text-transform: uppercase;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #2f1d12;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(0,0,0,.08);
+  transition: transform .06s ease, box-shadow .2s ease, opacity .2s ease;
+}
+.btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 10px 20px rgba(0,0,0,.12); }
+.btn-primary:active{ transform: translateY(0); box-shadow: 0 6px 12px rgba(0,0,0,.10); }
+.btn-primary[disabled]{ opacity: .6; cursor: not-allowed; }
+
+/* Fondo general (si tu layout no lo setea) */
+body{ background: var(--bg); }

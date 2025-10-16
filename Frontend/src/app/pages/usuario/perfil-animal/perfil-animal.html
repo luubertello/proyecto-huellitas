@@ -1,1 +1,29 @@
-<p>perfil-animal works!</p>
+<h1 class="page-title">
+  {{ animal?.nombre }}
+</h1>
+
+<main class="animal-profile" *ngFor="let animal of animales">
+  <!-- Foto -->
+  <figure class="photo-frame">
+    <img [src]="animal.foto" [alt]="animal.nombre" class="photo" />
+  </figure>
+
+  <!-- Datos -->
+  <section class="info">
+    <ul class="facts">
+      <li><strong>Especie:</strong> {{ a.especie }}</li>
+      <li><strong>Raza:</strong> {{ a.raza }}</li>
+      <li><strong>Fecha de nacimiento:</strong> {{ a.fechaNacimiento | date:'dd/MM/yyyy' }}</li>
+      <li><strong>Sexo:</strong> {{ a.sexo }}</li>
+    </ul>
+
+    <!-- Descripción -->
+    <div class="desc">
+      {{ a.descripcion }}
+    </div>
+
+    <!-- CTA -->
+    <button class="btn-primary" (click)="registrarSolicitudAdopcion(a)">ADOPTAR</button>
+  </section>
+</main>
+
