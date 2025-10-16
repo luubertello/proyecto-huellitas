@@ -51,7 +51,7 @@ export class PerfilAnimal implements OnInit {
   cargarAnimal(id: number): void {
     if (!id) return;
 
-    const url = `${this.apiUrl}/${id}`; // Construye la URL final, ej: http://localhost:3000/animales/123
+    const url = `${this.apiUrl}/${id}`;
 
     this.http.get<Animal>(url).subscribe({
       // Si la llamada es exitosa

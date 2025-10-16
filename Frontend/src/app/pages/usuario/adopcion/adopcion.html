@@ -1,1 +1,8 @@
-<p>adopcion works!</p>
+<h1 class="page-title">Adopta!</h1>
+
+<main class="animals-container">
+  <div class="animal-card" *ngFor="let animal of animales" (click)="goPerfil(animal)">
+    <img [src]="animal.foto" [alt]="animal.nombre">
+    <div class="name">{{ animal.nombre }}</div>
+  </div>
+</main>

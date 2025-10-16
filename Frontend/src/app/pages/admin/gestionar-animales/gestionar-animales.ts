@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-gestionar-animales',
@@ -12,7 +12,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
   encapsulation: ViewEncapsulation.None,
   host: { 'ngSkipHydration': 'true' }
 })
-export class GestionarAnimales {
+export class GestionarAnimales implements OnInit {
   animales: any[] = [];
 
   constructor(private http: HttpClient) {}
