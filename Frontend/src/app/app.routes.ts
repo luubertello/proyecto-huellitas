@@ -43,7 +43,7 @@ export const routes: Routes = [
           { path: 'perros', component: AdoptaPerros }, // /adopta/perros
           { path: 'requisitos', component: RequisitosAdopcion }, // /adopta/requisitos
           { path: 'formulario', component: FormularioAdopcion }, // /adopta/formulario
-          { path: 'perfil-animal', component: PerfilAnimal }, // /adopta/perfil-animal
+          { path: 'animal/:id', component: PerfilAnimal } // /adopta/perfil-animal
         ],
       },
       {

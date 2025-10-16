@@ -4,25 +4,29 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, Validators, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { Router, RouterModule } from '@angular/router'; 
 
 @Component({
   selector: 'app-crear-animal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, RouterModule], 
   templateUrl: './crear-animal.html',
   styleUrls: ['./crear-animal.css'],
   encapsulation: ViewEncapsulation.None,
   host: { 'ngSkipHydration': 'true' }
-  
 })
 export class CrearAnimal implements OnInit {
 
   registrarAnimalForm: FormGroup;
   especies: any[] = [];
   razas: any[] = [];
-  sexos: any[] = [];
+  public registroExitoso = false; 
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(
+    private fb: FormBuilder, 
+    private http: HttpClient,
+    private router: Router 
+  ) {
     this.registrarAnimalForm = this.fb.group({
       nombre: ['', Validators.required],
       especie: ['', Validators.required],
@@ -36,40 +40,23 @@ export class CrearAnimal implements OnInit {
 
   ngOnInit() {
     this.loadEspecies();
-    this.loadSexos();
   }
 
   loadEspecies() {
     this.http.get<any[]>('http://localhost:3000/especie')
       .subscribe({
-        next: (data) => {
-          console.log('Especies:', data);
-          this.especies = data;
-        },
+        next: (data) => this.especies = data,
         error: (err) => console.error('Error cargando especies', err)
-      });
-  }
-
-  loadSexos() {
-    this.http.get<any[]>('http://localhost:3000/sexo')
-      .subscribe({
-        next: (data) => {
-          console.log('Sexos:', data);
-          this.sexos = data;
-        },
-        error: (err) => console.error('Error cargando sexos', err)
       });
   }
 
   onEspecieChange() {
     const especieId = this.registrarAnimalForm.get('especie')?.value;
     const razaControl = this.registrarAnimalForm.get('raza');
-
     if (especieId) {
       this.http.get<any[]>(`http://localhost:3000/raza?especieId=${especieId}`)
         .subscribe({
           next: (data) => {
-            console.log('Razas recibidas:', data);
             this.razas = data;
             razaControl?.enable();
             razaControl?.setValue('');
@@ -89,30 +76,44 @@ export class CrearAnimal implements OnInit {
   }
 
   onSubmit() {
-  if (!this.registrarAnimalForm.valid) {
-    console.warn('Formulario inválido');
-    return;
+    if (!this.registrarAnimalForm.valid) {
+      console.warn('Formulario inválido');
+      this.registrarAnimalForm.markAllAsTouched();
+      return;
+    }
+
+    const dto = {
+      nombre: this.registrarAnimalForm.value.nombre,
+      especieId: this.registrarAnimalForm.value.especie,
+      razaId: this.registrarAnimalForm.value.raza,
+      sexo: this.registrarAnimalForm.value.sexo,
+      descripcion: this.registrarAnimalForm.value.descripcion,
+      foto: this.registrarAnimalForm.value.foto,
+      estadoActualId: 1, 
+      fechaNacimiento: this.registrarAnimalForm.value.fechaNacimiento || null
+    };
+
+    this.http.post('http://localhost:3000/animales', dto)
+      .subscribe({
+        next: res => {
+          console.log('Animal registrado:', res);
+          this.registroExitoso = true;
+        },
+        error: err => {
+          console.error('Error al registrar animal', err);
+          alert('Hubo un error al registrar el animal.');
+        }
+      });
   }
 
-  const dto = {
-    nombre: this.registrarAnimalForm.value.nombre,
-    especieId: this.registrarAnimalForm.value.especie,
-    razaId: this.registrarAnimalForm.value.raza,
-    sexoId: this.registrarAnimalForm.value.sexo,
-    descripcion: this.registrarAnimalForm.value.descripcion,
-    foto: this.registrarAnimalForm.value.foto,
-    estadoActualId: 1,
-    fechaNacimiento: this.registrarAnimalForm.value.fechaNacimiento || null
-  };
+  registrarOtro(): void {
+    this.registroExitoso = false;
+    this.registrarAnimalForm.reset();
+    this.registrarAnimalForm.get('raza')?.disable();
+  }
 
-  this.http.post('http://localhost:3000/animales', dto)
-    .subscribe({
-      next: res => {
-        console.log('Animal registrado:', res);
-      },
-      error: err => {
-        console.error('Error al registrar animal', err);
-      }
-    });
+  volverAGestionar(): void {
+    // Aquí ponés la ruta a la que querés que navegue
+    this.router.navigate(['/admin/gestion-animal']); 
   }
 }

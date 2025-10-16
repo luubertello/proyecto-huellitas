@@ -365,3 +365,39 @@ body{
   font-size: 0.85rem;
   margin-top: 4px;
 }
+
+/* --- Estilo Base para AMBOS botones --- */
+.btn {
+  padding: 12px 24px;         /* Espaciado interno */
+  border: none;               /* Sin borde */
+  border-radius: 25px;        /* Bordes bien redondeados */
+  font-family: sans-serif;    /* O la fuente que uses en tu web */
+  font-size: 16px;            /* Tamaño de la letra */
+  font-weight: bold;          /* Letra en negrita */
+  color: #4a3f3a;             /* Color del texto (un marrón oscuro para buena legibilidad) */
+  cursor: pointer;            /* Puntero de mano al pasar por encima */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Transición suave */
+  text-decoration: none;      /* Quita el subrayado si usas etiquetas <a> */
+  display: inline-block;      /* Asegura que el padding se aplique bien */
+  margin: 0 8px;              /* Un pequeño espacio entre los botones */
+}
+
+/* Efecto hover para AMBOS botones */
+.btn:hover {
+  transform: translateY(-2px); /* Se levanta un poco */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+
+/* --- Colores específicos --- */
+
+/* Botón "Registrar otro" */
+.btn-peach {
+  background-color: #f7c9ad; /* Tu color --peach */
+}
+
+/* Botón "Volver a Gestionar Animales" */
+.btn-brown {
+  background-color: #775b51; /* Marrón principal sugerido */
+  color: #f7f3f2;             /* Un color de texto casi blanco para que contraste */
+}

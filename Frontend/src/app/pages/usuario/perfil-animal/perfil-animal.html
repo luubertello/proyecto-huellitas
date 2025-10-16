@@ -1,29 +1,32 @@
-<h1 class="page-title">
-  {{ animal?.nombre }}
-</h1>
+<div *ngIf="animal; else cargando">
 
-<main class="animal-profile" *ngFor="let animal of animales">
-  <!-- Foto -->
-  <figure class="photo-frame">
-    <img [src]="animal.foto" [alt]="animal.nombre" class="photo" />
-  </figure>
+  <h1 class="page-title">
+    {{ animal.nombre }}
+  </h1>
 
-  <!-- Datos -->
-  <section class="info">
-    <ul class="facts">
-      <li><strong>Especie:</strong> {{ animal.especie }}</li>
-      <li><strong>Raza:</strong> {{ animal.raza }}</li>
-      <li><strong>Fecha de nacimiento:</strong> {{ animal.fechaNacimiento | date:'dd/MM/yyyy' }}</li>
-      <li><strong>Sexo:</strong> {{ animal.sexo }}</li>
-    </ul>
+  <main class="animal-profile">
+    <figure class="photo-frame">
+      <img [src]="animal.foto" [alt]="animal.nombre" class="photo" />
+    </figure>
 
-    <!-- Descripción -->
-    <div class="desc">
-      {{ animal.descripcion }}
-    </div>
+    <section class="info">
+      <ul class="facts">
+        <li><strong>Especie:</strong> {{ animal.especie.nombre }}</li>
+        <li><strong>Raza:</strong> {{ animal.raza.nombre }}</li>
+        <li><strong>Fecha de nacimiento:</strong> {{ animal.fechaNacimiento | date:'dd/MM/yyyy' }}</li>
+        <li><strong>Sexo:</strong> {{ animal.sexo }}</li>
+      </ul>
 
-    <!-- CTA -->
-    <button class="btn-primary" (click)="registrarSolicitudAdopcion(animal)">ADOPTAR</button>
-  </section>
-</main>
+      <div class="desc">
+        {{ animal.descripcion }}
+      </div>
 
+      <button class="btn-primary" (click)="registrarSolicitudAdopcion(animal)">ADOPTAR</button>
+    </section>
+  </main>
+
+</div>
+
+<ng-template #cargando>
+  <p class="loading-message">Cargando perfil del animal...</p>
+</ng-template>
