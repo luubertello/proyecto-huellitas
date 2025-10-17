@@ -10,6 +10,10 @@ import { Router } from '@angular/router';
 export class UsuarioHeader {
   constructor(private router: Router) {}
 
+  goInicio(): void {
+    this.router.navigate(['/inicio']);   // 🔸 redirige al inicio
+  }
+
 goAdopcionGatos() {
     this.router.navigate(['/adopta/gatos']);
   }
@@ -32,10 +36,6 @@ goAdopcionGatos() {
 
   goDonar() {
     this.router.navigate(['/donar']);
-  }
-
-  goInicio() {
-    this.router.navigate(['/inicio]']);
   }
 
   goRegistro() {
