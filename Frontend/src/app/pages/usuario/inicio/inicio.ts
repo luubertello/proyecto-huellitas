@@ -28,12 +28,13 @@ goAdopcionGatos() {
   }
 
   goAdopcion() {
-    this.router.navigate(['/adopcion']);
+    this.router.navigate(['/adopta']);
   }
 
   goDonar() {
-    this.router.navigate(['/donaciones']);
+    this.router.navigate(['/donar']);
   }
+
 
   goInicio() {
     this.router.navigate(['/inicio]']);
