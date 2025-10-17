@@ -1,72 +1,86 @@
 <main class="page">
-  <section class="auth">
-    <div class="card">
+  <section class="animal-card">
+
+    <div class="form-pane" *ngIf="!registroExitoso">
       
-      <div *ngIf="!registroExitoso">
-        <h1>Registrar Animal</h1>
-        <form class="form" [formGroup]="registrarAnimalForm" (ngSubmit)="onSubmit()">
-          <label class="field">
-            <span>Nombre*</span>
-            <input type="text" formControlName="nombre" placeholder="Ej: Michi" />
-          </label>
-          <label class="field">
-            <span>Especie*</span>
-            <select formControlName="especie" class="form-control" (change)="onEspecieChange()">
-              <option value="">Seleccione especie</option>
-              <option *ngFor="let e of especies" [value]="e.id">{{ e.nombre }}</option>
-            </select>
-          </label>
-          <label class="field">
-            <span>Raza*</span>
-            <select formControlName="raza" class="form-control">
-              <option value="">Seleccione raza</option>
-              <option *ngFor="let r of razas" [value]="r.id">{{ r.nombre }}</option>
-            </select>
-          </label>
-          <div class="field">
-            <span>Sexo*</span>
-            <div class="radio-group">
+      <div class="card-header">
+          <h1>Registrar Animal</h1>
+          <p class="card-sub">Completa los datos y publícalo en la plataforma.</p>
+      </div>
 
-              <label class="radio-option">
-                <input type="radio" formControlName="sexo" name="sexo" value="Macho">
-                Macho
-              </label>
+      <form class="form" [formGroup]="registrarAnimalForm" (ngSubmit)="onSubmit()">
+        
+        <div class="form-grid">
+            
+            <label class="field span-2">
+              <span>Nombre*</span>
+              <input type="text" formControlName="nombre" placeholder="Ej: Michi" />
+            </label>
+            
+            <label class="field">
+              <span>Especie*</span>
+              <select formControlName="especie" class="form-control" (change)="onEspecieChange()">
+                <option value="">Seleccione especie</option>
+                <option *ngFor="let e of especies" [value]="e.id">{{ e.nombre }}</option>
+              </select>
+            </label>
+            
+            <label class="field">
+              <span>Raza*</span>
+              <select formControlName="raza" class="form-control">
+                <option value="">Seleccione raza</option>
+                <option *ngFor="let r of razas" [value]="r.id">{{ r.nombre }}</option>
+              </select>
+            </label>
 
-              <label class="radio-option">
-                <input type="radio" formControlName="sexo" name="sexo" value="Hembra">
-                Hembra
-              </label>
-
+            <div class="field">
+              <span>Sexo*</span>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input type="radio" formControlName="sexo" name="sexo" value="Macho">
+                  Macho
+                </label>
+                <label class="radio-option">
+                  <input type="radio" formControlName="sexo" name="sexo" value="Hembra">
+                  Hembra
+                </label>
+              </div>
             </div>
-          </div>
-          <label class="field">
-            <span>Fecha de Nacimiento (opcional)</span>
-            <input type="date" formControlName="fechaNacimiento" />
-          </label>
-          <label class="field">
-            <span>Descripción</span>
-            <textarea formControlName="descripcion" placeholder="Descripción del animal"></textarea>
-          </label>
-          <label class="field">
-            <span>Foto (URL)</span>
-            <input type="text" formControlName="foto" placeholder="https://..." />
-          </label>
-          <button type="submit" class="btn-primary" [disabled]="!registrarAnimalForm.valid">
-            REGISTRAR ANIMAL
-          </button>
-        </form>
-      </div>
 
-      <div *ngIf="registroExitoso" class="success-message">
-        <h2>¡Animal Registrado con Éxito!</h2>
-        <p>El nuevo animal ya está visible en la plataforma.</p>
-        <div class="success-actions">
-          <button class="btn btn-peach" (click)="registrarOtro()">Registrar otro</button>
-          <button class="btn btn-brown" (click)="volverAGestionar()">Volver a Gestionar Animales</button>
+            <label class="field">
+              <span>Fecha de Nacimiento (opcional)</span>
+              <input type="date" formControlName="fechaNacimiento" />
+            </label>
+
+            <label class="field span-2">
+              <span>Descripción</span>
+              <textarea formControlName="descripcion" placeholder="Descripción del animal"></textarea>
+            </label>
+            
+            <label class="field span-2">
+              <span>Foto (URL)</span>
+              <input type="text" formControlName="foto" placeholder="https://..." />
+            </label>
+            
         </div>
-      </div>
-      
+        
+        <div class="actions span-2">
+            <button type="submit" class="btn-primary" [disabled]="!registrarAnimalForm.valid">
+              REGISTRAR
+            </button>
+        </div>
+      </form>
     </div>
+
+    <div class="form-pane success-message" *ngIf="registroExitoso">
+      <h2>¡Animal Registrado con Éxito!</h2>
+      <p>El nuevo animal ya está visible en la plataforma.</p>
+      <div class="success-actions">
+        <button class="btn btn-peach" (click)="registrarOtro()">Registrar otro</button>
+        <button class="btn btn-brown" (click)="volverAGestionar()">Volver a Gestionar Animales</button>
+      </div>
+    </div>
+    
   </section>
 </main>
 <footer class="footer" aria-hidden="true"></footer>
