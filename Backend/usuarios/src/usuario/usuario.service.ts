@@ -41,7 +41,14 @@ export class UsuarioService {
     return result;
   }
 
-
+// Verifica si un email ya existe y devuelve un booleano. No lanza error si no lo encuentra.
+async emailYaRegistrado(email: string): Promise<boolean> {
+  const emailEnMinusculas = email.toLowerCase();
+  const usuario = await this.usuarioRepository.findOne({
+    where: { email: emailEnMinusculas },
+  });
+  return !!usuario; // Convierte el resultado (objeto o null) en un booleano (true o false)
+}
 
 // Devuelve todos los usuarios sin su contraseña
   async findAll(): Promise<Usuario[]> {
