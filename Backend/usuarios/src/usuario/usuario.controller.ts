@@ -2,7 +2,7 @@
 
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 // Aplicamos el Guard en todo el controlador
 // Todas las rutas dentro de Usuario requieren un token JWT válido
