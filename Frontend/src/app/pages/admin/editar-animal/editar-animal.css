@@ -48,7 +48,7 @@ body{
   background:var(--bg);
 }
 
-/* Topbar */
+/* Topbar - Se mantienen intactos */
 .topbar{
   background: var(--peach);
   position: sticky;
@@ -209,45 +209,77 @@ body{
   object-fit: cover;
 }
 
-/* Título */
-.page-title{
-  width: min(1100px, 92%);
-  margin: 28px auto 10px;
-  border-top: 4px solid rgba(0,0,0,.08);
-  padding-top: 12px;
-  font-size: clamp(2rem, 3vw + 1rem, 3rem);
-  line-height: 1.1;
-  font-weight: 900;
-  letter-spacing: .4px;
-  color: var(--ink);
+/* ------------------------------------- */
+/* --- NUEVA ESTRUCTURA DE CARD / FICHA --- */
+/* ------------------------------------- */
+
+/* Contenedor principal de la página, similar al .page de la otra vista */
+main.page {
+  min-height: calc(100vh - 92px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 36px 16px;
 }
 
-/* Layout principal del perfil */
-.animal-profile{
-  width: min(1100px, 92%);
-  margin: 0 auto 64px;
-  color: var(--ink);
+/* Card de Registro (animal-card) */
+.animal-card{
+  width: min(1200px, 100%);
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  margin: 36px auto; /* Usamos margin para centrar en vez del flexbox de .page, si lo quisiéramos centrado verticalmente quitamos este margin y centramos el div que contiene al form */
+  padding: clamp(18px, 3vw, 28px);
   display: grid;
-  grid-template-columns: 340px 1fr;
-  gap: 26px clamp(20px, 4vw, 44px);
-  align-items: start;
+  grid-template-columns: 420px 1fr; /* Columna de foto y columna de formulario */
+  gap: clamp(18px, 3vw, 36px);
 }
 
-@media (max-width: 860px){
-  .animal-profile{
-    grid-template-columns: 1fr;
-  }
+/* Estilos de los paneles */
+.photo-pane{ align-self: start; }
+.form-pane{ align-self: start; }
+
+/* Título dentro del card */
+.card-header h1 {
+  margin: 6px 0 4px;
+  font-size: clamp(1.6rem, 2.2vw, 2rem);
+}
+.card-sub {
+  margin: 0 0 14px;
+  color: var(--text-muted);
 }
 
-/* Foto con marco */
+
+/* Estilos del Name Input (Manejo especial en el photo-pane) */
+.animal-name-edit input[type="text"] {
+  font-size: clamp(2.2rem, 3.5vw, 3.5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  color: var(--text);
+  border: none;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  margin-bottom: 15px;
+  width: 100%;
+  border-bottom: 3px solid rgba(0,0,0,0.1);
+  border-radius: 0;
+}
+.animal-name-edit input[type="text"]:focus {
+  border-bottom-color: var(--peach-strong);
+  box-shadow: none;
+}
+
+
+/* Foto y Marco */
 .photo-frame{
   margin: 0;
-  padding: 16px;
-  background: var(--accent);
-  border-radius: 20px;
-  box-shadow: var(--shadow);
+  padding: clamp(10px, 1.8vw, 16px);
+  background: var(--bg); /* Fondo más claro para el marco */
+  border-radius: 28px; /* Bordes más grandes como el otro card */
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.04); /* Borde interior */
   width: 100%;
-  max-width: 360px;
+  max-width: none; /* Asegura que ocupe el 100% de la columna de 420px */
   justify-self: start;
 }
 
@@ -256,166 +288,143 @@ body{
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
-  border-radius: 14px;
+  border-radius: 20px; /* Bordes más redondeados */
 }
 
-/* Columna de información */
-.info{
+/* Estilo para el label "URL de la Foto:" */
+.photo-help {
+  display: block;
+  margin: 10px 0 5px;
+  font-size: .85rem;
+  color: var(--text-muted);
+}
+/* Estilo para el input de la URL */
+.photo-url-input {
+  /* Le damos el estilo de input general */
+  padding: 10px 14px !important;
+  border-radius: 12px !important;
+}
+
+
+/* --- Grid del Formulario de Edición --- */
+.info-grid {
   display: grid;
-  gap: 14px;
+  grid-template-columns: 1fr 1fr; /* Dos columnas para los campos cortos */
+  gap: var(--gap);
+}
+.span-2 { grid-column: 1 / -1; } /* Hace que la descripción ocupe las dos columnas */
+
+
+/* Estilos de campos (adaptados a la nueva estructura .field) */
+.field{
+  text-align:left;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.field span{
+  font-size:.9rem;
+  color: var(--text);
+  font-weight: 700; /* Hacemos los labels más visibles */
 }
 
-/* Lista de datos (especie, raza, etc.) */
-.facts{
-  list-style: none;
-  padding: 0;
-  margin: 0 0 6px 0;
-  display: grid;
-  gap: 8px;
-  font-size: clamp(1rem, .3vw + 1rem, 1.1rem);
-  color: var(--ink);
+.field input[type="text"],
+.field input[type="url"],
+.field input[type="date"],
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 14px 16px; /* Aumentamos el padding para que coincida con el registro */
+  border: 1.5px solid rgba(0,0,0,.06);
+  background: var(--white);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border .2s, box-shadow .2s;
+  box-shadow: none;
 }
-.facts li strong{ font-weight: 800; }
-
-/* Descripción estilo “burbuja” */
-.desc{
-  background: var(--card);
-  border-radius: 18px;
-  box-shadow: var(--shadow);
-  padding: clamp(16px, 2.5vw, 22px) clamp(18px, 3vw, 28px);
-  line-height: 1.55;
-  font-size: 1rem;
-  color: var(--ink);
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--peach-strong);
+  box-shadow: 0 0 0 4px rgba(243,186,152,.25);
 }
-.desc p{ margin: 0 0 10px; }
-.desc p:last-child{ margin-bottom: 0; }
 
-/* Botón CTA */
+/* Revertimos el estilo del <select> para que se parezca al del registro */
+.field select{
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #b6a59e 50%),
+    linear-gradient(135deg, #b6a59e 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) calc(50% - 3px),
+    calc(100% - 10px) calc(50% - 3px);
+  background-size: 8px 8px, 8px 8px;
+  background-repeat: no-repeat;
+  padding-right: 16px; /* Quitamos el padding extra de la flecha anterior */
+}
+
+
+/* --- Descripción (Textarea) --- */
+/* Ya no necesitamos .desc, el textarea está directamente dentro de un .field */
+.field textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+
+/* --- Botones --- */
+.actions {
+  display: flex;
+  gap: 15px; /* Espacio entre los botones */
+  margin-top: 25px;
+  grid-column: 1 / -1; /* Ocupa todo el ancho de la grid */
+}
+
+/* Botón Primario (Guardar Cambios) */
 .btn-primary{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   padding: 12px 26px;
   font-weight: 800;
   text-transform: uppercase;
   border: 0;
-  border-radius: 999px;
-  background: var(--accent);
-  color: #2f1d12;
+  border-radius: 999px; /* Más redondeado */
+  background: #6b5347; /* Marrón principal */
+  color: #fff;
   cursor: pointer;
   box-shadow: 0 6px 14px rgba(0,0,0,.08);
   transition: transform .06s ease, box-shadow .2s ease, opacity .2s ease;
+  min-width: 150px;
 }
+
 .btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 10px 20px rgba(0,0,0,.12); }
 .btn-primary:active{ transform: translateY(0); box-shadow: 0 6px 12px rgba(0,0,0,.10); }
 .btn-primary[disabled]{ opacity: .6; cursor: not-allowed; }
 
-/* Fondo general (si tu layout no lo setea) */
-body{ background: var(--bg); }
-
-/* En editar-animal.css */
-
-.actions-container {
-  display: flex;
-  gap: 1rem; /* Espacio entre los botones */
-  margin-top: 1.5rem;
-}
-
+/* Botón Danger (Eliminar Animal) */
 .btn-danger {
-  background-color: #dc3545; /* Un color rojo para peligro */
+  background-color: #dc3545;
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  padding: 12px 26px; /* Igual al primario */
+  border-radius: 999px; /* Más redondeado */
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 800;
+  text-transform: uppercase;
+  min-width: 150px;
+  transition: transform .06s ease, filter .2s ease;
 }
 
 .btn-danger:hover {
-  background-color: #c82333;
+  filter: brightness(1.1);
+}
+.btn-danger:active{ transform: translateY(1px); }
+
+
+/* Responsive */
+@media (max-width: 980px){
+  .animal-card{ grid-template-columns: 1fr; }
+  .photo-pane{ order: -1; }
+  .info-grid{ grid-template-columns: 1fr; } 
+  .span-2{ grid-column: auto; }
 }
 
-/* --- ESTILOS PARA EL FORMULARIO DE EDICIÓN --- */
-
-/* 1. Estilo base para todos los campos del formulario */
-.animal-profile input[type="text"],
-.animal-profile input[type="url"],
-.animal-profile input[type="date"],
-.animal-profile select,
-.animal-profile textarea {
-  /* Tamaño y Espaciado */
-  width: 100%; /* Ocupa todo el ancho disponible */
-  padding: 10px 14px;
-  margin: 0;
-
-  /* Tipografía */
-  font-family: "Poppins", sans-serif; /* Usamos la misma fuente del body */
-  font-size: 1rem;
-  color: var(--text);
-
-  /* Apariencia */
-  background-color: var(--white);
-  border: 2px solid var(--card); /* Un borde sutil que combine */
-  border-radius: 12px; /* Bordes redondeados */
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.06); /* Sombra interior sutil */
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-/* Efecto al hacer foco (click) en un campo */
-.animal-profile input:focus,
-.animal-profile select:focus,
-.animal-profile textarea:focus {
-  outline: none; /* Quitamos el borde azul por defecto */
-  border-color: var(--peach-strong); /* Resaltamos el borde con un color de la paleta */
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.06), 0 0 0 3px rgba(243, 186, 152, 0.5);
-}
-
-/* 2. Estilo específico para los <select> (Especie, Raza, Sexo) */
-.animal-profile select {
-  -webkit-appearance: none; /* Oculta la flecha por defecto en Chrome/Safari */
-  -moz-appearance: none;    /* Oculta la flecha por defecto en Firefox */
-  appearance: none;        /* Oculta la flecha por defecto */
-  
-  /* Añadimos nuestra propia flecha personalizada */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%234a3b35' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  background-size: 16px;
-  padding-right: 40px; /* Dejamos espacio para la flecha */
-}
-
-/* 3. Ajuste para el campo de nombre (que está dentro del título) */
-.page-title input[type="text"] {
-  font-size: inherit; /* Hereda el tamaño del título */
-  font-weight: inherit; /* Hereda el grosor del título */
-  color: inherit;
-  border: none;
-  background: none;
-  box-shadow: none;
-  padding: 0;
-  border-bottom: 3px dashed var(--card); /* Un subrayado para indicar que es editable */
-  border-radius: 0;
-}
-.page-title input[type="text"]:focus {
-  border-bottom-color: var(--peach-strong);
-  box-shadow: none;
-}
-
-
-/* 4. Estilo para el <textarea> de la descripción */
-.desc {
-  /* Quitamos el padding del contenedor para que el textarea lo ocupe todo */
-  padding: 0; 
-  overflow: hidden; /* Evita que el borde del textarea se salga */
-}
-
-.desc textarea {
-  height: 150px; /* Le damos una altura fija o la que prefieras */
-  border: none;  /* Sin borde, para que se fusione con el contenedor */
-  background-color: transparent; /* Fondo transparente */
-  box-shadow: none; /* Sin sombra interior */
-  resize: none; /* Evita que el usuario pueda cambiarle el tamaño */
-  
-  /* Le ponemos el padding que antes tenía el div .desc */
-  padding: clamp(16px, 2.5vw, 22px) clamp(18px, 3vw, 28px);
-}

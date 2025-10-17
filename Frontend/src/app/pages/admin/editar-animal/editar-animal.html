@@ -1,64 +1,85 @@
-<div *ngIf="animal; else cargando">
-  
-  <form [formGroup]="animalForm" (ngSubmit)="guardar()" novalidate>
+<main class="page">
+  <div *ngIf="animal; else cargando">
     
-    <h1 class="page-title">
-      <input type="text" formControlName="nombre" placeholder="Nombre del animal">
-    </h1>
-
-    <main class="animal-profile">
-      <figure class="photo-frame">
-        <img [src]="animalForm.get('foto')?.value || 'assets/placeholder-image.png'" [alt]="animalForm.get('nombre')?.value" class="photo" />
+    <form [formGroup]="animalForm" (ngSubmit)="guardar()" novalidate>
+      
+      <section class="animal-card">
         
-        <label for="foto-url">URL de la Foto:</label>
-        <input id="foto-url" type="url" formControlName="foto" class="form-control" placeholder="https://ejemplo.com/foto.jpg">
-      </figure>
+        <div class="photo-pane">
+            
+            <div class="card-header">
+              <div class="animal-name-edit">
+                <input type="text" formControlName="nombre" placeholder="Nombre del animal">
+              </div>
+            </div>
 
-      <section class="info">
-        <ul class="facts">
-          <li>
-            <strong>Especie:</strong>
-            <select formControlName="especie">
-              <option [ngValue]="null" disabled>Selecciona una especie</option>
-              <option *ngFor="let especie of especies" [value]="especie.id">{{ especie.nombre }}</option>
-            </select>
-          </li>
-          <li>
-            <strong>Raza:</strong>
-            <select formControlName="raza">
-              <option [ngValue]="null" disabled>Selecciona una raza</option>
-              <option *ngFor="let raza of razas" [value]="raza.id">{{ raza.nombre }}</option>
-            </select>
-          </li>
-          <li>
-            <strong>Fecha de nacimiento:</strong>
-            <input type="date" formControlName="fechaNacimiento">
-          </li>
-          <li>
-            <strong>Sexo:</strong>
-            <select formControlName="sexo">
-              <option [ngValue]="null" disabled>Selecciona el sexo</option>
-              <option value="Macho">Macho</option>
-              <option value="Hembra">Hembra</option>
-            </select>
-          </li>
-        </ul>
-
-        <div class="desc">
-          <textarea formControlName="descripcion" rows="5" placeholder="Describe al animal..."></textarea>
+            <div class="photo-frame">
+              <img [src]="animalForm.get('foto')?.value || 'assets/placeholder-image.png'" [alt]="animalForm.get('nombre')?.value" class="photo" />
+            </div>
+            
+            <label for="foto-url" class="photo-help">URL de la Foto:</label>
+            <input id="foto-url" type="url" formControlName="foto" class="form-control photo-url-input" placeholder="https://ejemplo.com/foto.jpg">
         </div>
 
-        <div class="actions-container">
-          <button type="submit" class="btn-primary" [disabled]="animalForm.invalid">GUARDAR CAMBIOS</button>
+        <div class="form-pane">
           
-          <button type="button" class="btn-danger" (click)="eliminar()">ELIMINAR ANIMAL</button>
-        </div>
-      </section>
-    </main>
-    
-  </form>
-</div>
+          <div class="card-header">
+              <h1>Datos de Edición</h1>
+              <p class="card-sub">Actualiza la información del animal.</p>
+          </div>
+          
+          <div class="form-grid info-grid">
+              
+              <label class="field">
+                <span>Especie:</span>
+                <select formControlName="especie">
+                  <option [ngValue]="null" disabled>Selecciona una especie</option>
+                  <option *ngFor="let especie of especies" [value]="especie.id">{{ especie.nombre }}</option>
+                </select>
+              </label>
+              
+              <label class="field">
+                <span>Raza:</span>
+                <select formControlName="raza">
+                  <option [ngValue]="null" disabled>Selecciona una raza</option>
+                  <option *ngFor="let raza of razas" [value]="raza.id">{{ raza.nombre }}</option>
+                </select>
+              </label>
 
-<ng-template #cargando>
-  <p class="loading-message">Cargando perfil del animal...</p>
-</ng-template>
+              <label class="field">
+                <span>Sexo:</span>
+                <select formControlName="sexo">
+                  <option [ngValue]="null" disabled>Selecciona el sexo</option>
+                  <option value="Macho">Macho</option>
+                  <option value="Hembra">Hembra</option>
+                </select>
+              </label>
+              
+              <label class="field">
+                <span>Fecha de nacimiento:</span>
+                <input type="date" formControlName="fechaNacimiento">
+              </label>
+              
+              <label class="field span-2">
+                <span>Descripción:</span>
+                <textarea formControlName="descripcion" rows="5" placeholder="Describe al animal..."></textarea>
+              </label>
+
+          </div>
+          
+          <div class="actions span-2">
+            <button type="submit" class="btn-primary" [disabled]="animalForm.invalid">GUARDAR CAMBIOS</button>
+            <button type="button" class="btn-danger" (click)="eliminar()">ELIMINAR ANIMAL</button>
+          </div>
+          
+        </div>
+        
+      </section>
+      
+    </form>
+  </div>
+  
+  <ng-template #cargando>
+    <p class="loading-message">Cargando perfil del animal...</p>
+  </ng-template>
+</main>
