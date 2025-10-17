@@ -29,7 +29,6 @@ export class Adopcion {
   }
 
   goPerfil(animal: any): void {
-    // Navega a la ruta del perfil, usando el id del animal
     this.router.navigate(['/adopta/animal/', animal.id]);
   }
 }

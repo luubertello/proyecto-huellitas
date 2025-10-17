@@ -113,7 +113,6 @@ export class CrearAnimal implements OnInit {
   }
 
   volverAGestionar(): void {
-    // Aquí ponés la ruta a la que querés que navegue
-    this.router.navigate(['/admin/gestion-animal']); 
+    this.router.navigate(['/admin/animales']); 
   }
 }

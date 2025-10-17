@@ -1,1 +1,64 @@
-<p>editar-animal works!</p>
+<div *ngIf="animal; else cargando">
+  
+  <form [formGroup]="animalForm" (ngSubmit)="guardar()" novalidate>
+    
+    <h1 class="page-title">
+      <input type="text" formControlName="nombre" placeholder="Nombre del animal">
+    </h1>
+
+    <main class="animal-profile">
+      <figure class="photo-frame">
+        <img [src]="animalForm.get('foto')?.value || 'assets/placeholder-image.png'" [alt]="animalForm.get('nombre')?.value" class="photo" />
+        
+        <label for="foto-url">URL de la Foto:</label>
+        <input id="foto-url" type="url" formControlName="foto" class="form-control" placeholder="https://ejemplo.com/foto.jpg">
+      </figure>
+
+      <section class="info">
+        <ul class="facts">
+          <li>
+            <strong>Especie:</strong>
+            <select formControlName="especie">
+              <option [ngValue]="null" disabled>Selecciona una especie</option>
+              <option *ngFor="let especie of especies" [value]="especie.id">{{ especie.nombre }}</option>
+            </select>
+          </li>
+          <li>
+            <strong>Raza:</strong>
+            <select formControlName="raza">
+              <option [ngValue]="null" disabled>Selecciona una raza</option>
+              <option *ngFor="let raza of razas" [value]="raza.id">{{ raza.nombre }}</option>
+            </select>
+          </li>
+          <li>
+            <strong>Fecha de nacimiento:</strong>
+            <input type="date" formControlName="fechaNacimiento">
+          </li>
+          <li>
+            <strong>Sexo:</strong>
+            <select formControlName="sexo">
+              <option [ngValue]="null" disabled>Selecciona el sexo</option>
+              <option value="Macho">Macho</option>
+              <option value="Hembra">Hembra</option>
+            </select>
+          </li>
+        </ul>
+
+        <div class="desc">
+          <textarea formControlName="descripcion" rows="5" placeholder="Describe al animal..."></textarea>
+        </div>
+
+        <div class="actions-container">
+          <button type="submit" class="btn-primary" [disabled]="animalForm.invalid">GUARDAR CAMBIOS</button>
+          
+          <button type="button" class="btn-danger" (click)="eliminar()">ELIMINAR ANIMAL</button>
+        </div>
+      </section>
+    </main>
+    
+  </form>
+</div>
+
+<ng-template #cargando>
+  <p class="loading-message">Cargando perfil del animal...</p>
+</ng-template>

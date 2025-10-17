@@ -22,9 +22,9 @@ export const routes: Routes = [
     path: 'admin',
     component: AdminLayout,
     children: [
-      { path: 'registrar-animal', component: CrearAnimal }, // /admin/registrar-animal
-      { path: 'gestion-animal', component: GestionarAnimales }, // /admin/gestion-animal
-      { path: 'editar-animal', component: EditarAnimal }, // /admin/editar-animal
+      { path: 'animales/registrar', component: CrearAnimal }, // /admin/animales/registrar
+      { path: 'animales', component: GestionarAnimales }, // /admin/animales
+      { path: 'animales/:id', component: EditarAnimal }, // /admin/animales/:id
     ]},
 
   {
@@ -43,7 +43,7 @@ export const routes: Routes = [
           { path: 'perros', component: AdoptaPerros }, // /adopta/perros
           { path: 'requisitos', component: RequisitosAdopcion }, // /adopta/requisitos
           { path: 'formulario', component: FormularioAdopcion }, // /adopta/formulario
-          { path: 'animal/:id', component: PerfilAnimal } // /adopta/perfil-animal
+          { path: 'animal/:id', component: PerfilAnimal } // /adopta/animal/:id
         ],
       },
       {

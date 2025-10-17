@@ -1,10 +1,10 @@
 
 <h1 class="page-title">Todos los animales</h1>
+
 <main class="animals-container">
   <div class="animal-card" *ngFor="let animal of animales">
     <img [src]="animal.foto" [alt]="animal.nombre">
     <div class="name">{{ animal.nombre }}</div>
-    <i class="bi bi-pencil edit-icon"></i>
+    <i class="bi bi-pencil edit-icon"  (click)="goEditar(animal)"></i>
   </div>
 </main>
-

@@ -1,0 +1,421 @@
+:root{
+  --peach:#f7c9ad;
+  --peach-strong:#f3ba98;
+  --bg:#fbf5ef;
+  --card:#eddccf;
+  --text:#4a3b35;
+  --text-muted:#927c72;
+  --white:#ffffff;
+  --shadow: 0 10px 25px rgba(0,0,0,.08);
+  --radius: 18px;
+  --radius-lg: 26px;
+  --gap: 18px;
+}
+
+*{ box-sizing:border-box; }
+/* 0) Reset básico: elimina márgenes externos inesperados */
+html, body { margin: 0; padding: 0; }
+
+/* 1) Evita “colapso” de margen del primer hijo del body */
+body::before { content: ""; display: table; }  /* truco para bloquear colapso */
+
+/* 2) Topbar pegada arriba y sin márgenes */
+header.topbar {
+  position: sticky;   /* o fixed si así la usás */
+  top: 0;
+  z-index: 1000;
+  margin: 0 !important;
+}
+
+/* 3) Cualquier primer bloque no debe empujar hacia abajo */
+body > :first-child { margin-top: 0 !important; }
+
+/* 4) Altura consistente del hero de /inicio (evita que parezca “más chico”) */
+:root { --header-h: 72px; }               /* ajustá si tu topbar mide distinto */
+.hero-carousel {
+  /* si tu topbar es sticky, el hero ocupa el alto visible bajo la barra */
+  min-height: calc(100dvh - var(--header-h));
+  margin-top: 0 !important;
+}
+
+/* 5) Fondo de la página para que no se vea una banda blanca al inicio/scroll */
+body { background: #fff; }                 /* o el color de tu layout */
+
+body{
+  margin:0;
+  font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:var(--text);
+  background:var(--bg);
+}
+
+/* Topbar */
+.topbar{
+  background: var(--peach);
+  position: sticky;
+  top:0;
+  z-index:10;
+  border-bottom: 1px solid rgba(0,0,0,.04);
+  width: 100%;
+}
+
+:root { --edge: clamp(28px, 6vw, 96px);}
+.topbar .container{
+  display:grid;
+  grid-template-columns: auto 1fr auto;
+  align-items:center;
+  gap: 20px;
+  padding-inline: clamp(24px, 6vw, 96px);
+  padding-block: 12px;
+  width:100%;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  color:var(--text);
+}
+.logo{ width:100px; height: 100px; object-fit:contain; }
+@media (min-width: 1200px) {
+  .main-nav ul { gap: 32px; }
+}
+
+.main-nav{ justify-self:center; min-width: 0; }
+.main-nav ul {flex-wrap: nowrap;}
+.main-nav ul{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: clamp(16px, 5vw, 100px);   
+  flex-wrap: wrap;                
+}
+/* Opciones desplegables */
+.main-nav .submenu { 
+  display: none !important;          /* oculta siempre por defecto */
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 220px;
+  background: #f6d3bd;
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.12);
+  padding: 8px 0;
+  z-index: 50;
+}
+.main-nav .has-sub{ position: relative;}
+.main-nav .has-sub:hover > .submenu,
+.main-nav .has-sub:focus.within > .submenu {
+  display: block !important;
+}
+.menu-link{
+  display: inline-flex; align-items: center; gap: 6px;
+  font-weight: 700;
+  font-size: clamp(00.95rem, 1vw + 00.75rem, 1.25rem);
+  text-decoration: none; color: var(--text);
+  padding: 6px 4px;
+}
+.main-link:hover{ color:#5a4038 }
+/* caja del submenú */
+.submenu{
+  position:absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 220px;
+  background: #f6d3bd;               
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.12);
+  padding: 8px 0;
+  list-style: none;
+  display: none;                      
+  z-index: 20;
+}
+
+.has-sub:hover > .submenu,
+.has-sub:focus-within > .submenu{
+  display:block;
+}
+/* items del submenú */
+.submenu li a{
+  display:block;
+  padding: 8px 14px;
+  text-decoration:none;
+  color: #3f2f29;
+  font-weight: 600;
+  white-space: nowrap;                
+}
+.submenu li a:hover{
+  background: rgba(0,0,0,.05);
+}
+/* flechita*/
+.has-sub > .submenu::before{
+  content:"";
+  position:absolute;
+  top: -6px; left: 18px;
+  border: 6px solid transparent;
+  border-bottom-color: #f6d3bd;
+}
+
+.topbar{ position: sticky; z-index: 50; }
+.main-nav a{
+  position: relative;            
+  font-weight: 800;
+  font-size: clamp(0.95rem, 1vw + 0.75rem, 1.25rem); 
+  text-decoration:none;
+  color:var(--text);
+  padding: 6px 4px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+.main-nav a::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: #5a4038;  
+  transition: width 0.25s ease;
+}
+.main-nav a:hover {
+  color: #5a4038;       
+}
+.main-nav a:hover::after {
+  width: 100%;          /* subrayado animado */
+}
+.main-nav i {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  transition: transform 0.2s ease;
+}
+.main-nav a:hover i {
+  transform: rotate(180deg); 
+}
+
+.logo{
+  width: clamp(56px, 7vw, 100px);
+  height: auto;
+  object-fit: contain;
+}
+.user-area .avatar{
+  width: clamp(32px, 4vw, 50px);
+  height: clamp(32px, 4vw, 50px);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Título */
+.page-title{
+  width: min(1100px, 92%);
+  margin: 28px auto 10px;
+  border-top: 4px solid rgba(0,0,0,.08);
+  padding-top: 12px;
+  font-size: clamp(2rem, 3vw + 1rem, 3rem);
+  line-height: 1.1;
+  font-weight: 900;
+  letter-spacing: .4px;
+  color: var(--ink);
+}
+
+/* Layout principal del perfil */
+.animal-profile{
+  width: min(1100px, 92%);
+  margin: 0 auto 64px;
+  color: var(--ink);
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 26px clamp(20px, 4vw, 44px);
+  align-items: start;
+}
+
+@media (max-width: 860px){
+  .animal-profile{
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Foto con marco */
+.photo-frame{
+  margin: 0;
+  padding: 16px;
+  background: var(--accent);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 360px;
+  justify-self: start;
+}
+
+.photo{
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+/* Columna de información */
+.info{
+  display: grid;
+  gap: 14px;
+}
+
+/* Lista de datos (especie, raza, etc.) */
+.facts{
+  list-style: none;
+  padding: 0;
+  margin: 0 0 6px 0;
+  display: grid;
+  gap: 8px;
+  font-size: clamp(1rem, .3vw + 1rem, 1.1rem);
+  color: var(--ink);
+}
+.facts li strong{ font-weight: 800; }
+
+/* Descripción estilo “burbuja” */
+.desc{
+  background: var(--card);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: clamp(16px, 2.5vw, 22px) clamp(18px, 3vw, 28px);
+  line-height: 1.55;
+  font-size: 1rem;
+  color: var(--ink);
+}
+.desc p{ margin: 0 0 10px; }
+.desc p:last-child{ margin-bottom: 0; }
+
+/* Botón CTA */
+.btn-primary{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 26px;
+  font-weight: 800;
+  text-transform: uppercase;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #2f1d12;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(0,0,0,.08);
+  transition: transform .06s ease, box-shadow .2s ease, opacity .2s ease;
+}
+.btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 10px 20px rgba(0,0,0,.12); }
+.btn-primary:active{ transform: translateY(0); box-shadow: 0 6px 12px rgba(0,0,0,.10); }
+.btn-primary[disabled]{ opacity: .6; cursor: not-allowed; }
+
+/* Fondo general (si tu layout no lo setea) */
+body{ background: var(--bg); }
+
+/* En editar-animal.css */
+
+.actions-container {
+  display: flex;
+  gap: 1rem; /* Espacio entre los botones */
+  margin-top: 1.5rem;
+}
+
+.btn-danger {
+  background-color: #dc3545; /* Un color rojo para peligro */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+/* --- ESTILOS PARA EL FORMULARIO DE EDICIÓN --- */
+
+/* 1. Estilo base para todos los campos del formulario */
+.animal-profile input[type="text"],
+.animal-profile input[type="url"],
+.animal-profile input[type="date"],
+.animal-profile select,
+.animal-profile textarea {
+  /* Tamaño y Espaciado */
+  width: 100%; /* Ocupa todo el ancho disponible */
+  padding: 10px 14px;
+  margin: 0;
+
+  /* Tipografía */
+  font-family: "Poppins", sans-serif; /* Usamos la misma fuente del body */
+  font-size: 1rem;
+  color: var(--text);
+
+  /* Apariencia */
+  background-color: var(--white);
+  border: 2px solid var(--card); /* Un borde sutil que combine */
+  border-radius: 12px; /* Bordes redondeados */
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.06); /* Sombra interior sutil */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Efecto al hacer foco (click) en un campo */
+.animal-profile input:focus,
+.animal-profile select:focus,
+.animal-profile textarea:focus {
+  outline: none; /* Quitamos el borde azul por defecto */
+  border-color: var(--peach-strong); /* Resaltamos el borde con un color de la paleta */
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.06), 0 0 0 3px rgba(243, 186, 152, 0.5);
+}
+
+/* 2. Estilo específico para los <select> (Especie, Raza, Sexo) */
+.animal-profile select {
+  -webkit-appearance: none; /* Oculta la flecha por defecto en Chrome/Safari */
+  -moz-appearance: none;    /* Oculta la flecha por defecto en Firefox */
+  appearance: none;        /* Oculta la flecha por defecto */
+  
+  /* Añadimos nuestra propia flecha personalizada */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%234a3b35' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+  padding-right: 40px; /* Dejamos espacio para la flecha */
+}
+
+/* 3. Ajuste para el campo de nombre (que está dentro del título) */
+.page-title input[type="text"] {
+  font-size: inherit; /* Hereda el tamaño del título */
+  font-weight: inherit; /* Hereda el grosor del título */
+  color: inherit;
+  border: none;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  border-bottom: 3px dashed var(--card); /* Un subrayado para indicar que es editable */
+  border-radius: 0;
+}
+.page-title input[type="text"]:focus {
+  border-bottom-color: var(--peach-strong);
+  box-shadow: none;
+}
+
+
+/* 4. Estilo para el <textarea> de la descripción */
+.desc {
+  /* Quitamos el padding del contenedor para que el textarea lo ocupe todo */
+  padding: 0; 
+  overflow: hidden; /* Evita que el borde del textarea se salga */
+}
+
+.desc textarea {
+  height: 150px; /* Le damos una altura fija o la que prefieras */
+  border: none;  /* Sin borde, para que se fusione con el contenedor */
+  background-color: transparent; /* Fondo transparente */
+  box-shadow: none; /* Sin sombra interior */
+  resize: none; /* Evita que el usuario pueda cambiarle el tamaño */
+  
+  /* Le ponemos el padding que antes tenía el div .desc */
+  padding: clamp(16px, 2.5vw, 22px) clamp(18px, 3vw, 28px);
+}

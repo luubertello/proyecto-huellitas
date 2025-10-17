@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-gestionar-animales',
@@ -14,8 +15,9 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 })
 export class GestionarAnimales implements OnInit {
   animales: any[] = [];
-
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router) {}
 
   ngOnInit() {
     this.cargarAnimales();
@@ -26,4 +28,9 @@ export class GestionarAnimales implements OnInit {
       .subscribe(data => this.animales = data, 
                  error => console.error('Error al cargar animales', error));
   }
+
+  goEditar(animal: any): void {
+    this.router.navigate(['/admin/animales/', animal.id]);
+  }
 }
+
