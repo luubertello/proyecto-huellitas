@@ -1,1 +1,58 @@
-<p>dona-insumos works!</p>
+''Creo que ya esta'''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="dona-insumos.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
+<div class="form-container">
+  <h1 class="form-title">DONACIONES DE INSUMOS</h1>
+
+  <div class="form-box">
+    <label for="tipoInsumo">Selecciona el tipo de insumo</label>
+    <select id="tipoInsumo" [(ngModel)]="form.tipoInsumo">
+      <option value="alimentos">Alimentos</option>
+      <option value="accesorios">Accesorios</option>
+      <option value="medicamentos">Medicamentos</option>
+      <option value="higiene">Insumos de higiene</option>
+    </select>
+
+    <label for="especie">Selecciona para qué especie es el alimento a donar</label>
+    <select id="especie" [(ngModel)]="form.especie">
+      <option value="perro">Perro</option>
+      <option value="gato">Gato</option>
+    </select>
+
+    <label for="destinatario">Selecciona para quiénes está dirigido el alimento a donar</label>
+    <select id="destinatario" [(ngModel)]="form.destinatario">
+      <option value="adulto">Adulto</option>
+      <option value="cachorro">Cachorro</option>
+      <option value="castrado">Castrado</option>
+      <option value="cronico">Enfermedad crónica</option>
+    </select>
+    <label>Ingrese cantidad:</label>
+    <div class="input-group">
+  <input type="number" placeholder="1">
+    </div>
+
+    <label for="entrega">Entrega:</label>
+    <select id="entrega" [(ngModel)]="form.entrega">
+      <option value="fundacion">En la fundación</option>
+      <option value="envio">Lo realizo con envío</option>
+    </select>
+
+    <button (click)="donarInsumos()">DONAR INSUMOS</button>
+  </div>
+</div>
