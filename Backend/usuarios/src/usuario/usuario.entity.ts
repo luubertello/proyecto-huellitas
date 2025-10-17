@@ -32,7 +32,7 @@ export class Usuario {
   contraseña: string;
 
   @Column()
-  telefono: number;
+  telefono: string;
   
   @ManyToOne(() => Rol, rol => rol.usuarios)
   rol: Rol;

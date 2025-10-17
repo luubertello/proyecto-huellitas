@@ -36,7 +36,7 @@ export class RegistroDto {
   @MinLength(8, { message: 'La contraseña debe tener al menos 8 caracteres.' })
   readonly contraseña: string;
 
-  @IsNumber({}, { message: 'El teléfono debe ser un número.' })
+  @IsString({ message: 'El teléfono debe ser una cadena de texto.' })
   @IsNotEmpty({ message: 'El teléfono no puede estar vacío.' })
-  readonly telefono: number;
+  readonly telefono: string;
 }

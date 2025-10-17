@@ -16,16 +16,14 @@ export class AuthService {
   ) {}
 
 // Registra un nuevo usuario en el sistema
-  async registro(registroDto: RegistroDto) {
-    // Verificamos si el email ya existe
-    const emailExists = await this.usuarioService.findOneByEmail(registroDto.email);
+async registro(registroDto: RegistroDto) {
+    const emailExists = await this.usuarioService.emailYaRegistrado(registroDto.email); 
+    
     if (emailExists) {
       throw new ConflictException('El email ya está registrado.');
     }
-
     return this.usuarioService.create(registroDto);
   }
-
 
   // Valida las credenciales del usuario y, si son correctas, genera un token JWT.
   async login(loginDto: LoginDto) {
