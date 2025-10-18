@@ -68,9 +68,9 @@ button {
   font-size: 1rem;
   transition: background 0.3s;
   font-family: 'Montserrat', sans-serif; 
-
+}
 button:hover {
-  background-color: #ec9551;
+  background-color: #ec9551; /* Un poco más oscuro que #f8a965 */
 }
 
 @media (max-width: 480px) {
@@ -81,5 +81,4 @@ button:hover {
   .form-title {
     font-size: 1.3rem;
   }
-}
 }

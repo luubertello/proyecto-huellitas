@@ -1,22 +1,25 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-//falta importar ngModel
+
 @Component({
   selector: 'app-dona-insumos',
-  imports: [],
   templateUrl: './dona-insumos.html',
-  styleUrl: './dona-insumos.css'
+  styleUrls: ['./dona-insumos.css']
 })
 export class DonaInsumos {
-form = {
-    tipoInsumo: 'alimentos',
-    especie: 'perro',
-    destinatario: 'adulto',
-    cantidad: 1,
-    entrega: 'fundacion'
+  form: any = {
+    tipoInsumo: '',
+    especie: '',
+    destinatario: '',
+    cantidad: 0,
+    entrega: ''
   };
+
+  onChange(event: Event, field: string) {
+    const target = event.target as HTMLInputElement | HTMLSelectElement;
+    this.form[field] = target.value;
+  }
+
   donarInsumos() {
-    console.log('Datos:', this.form);
+    console.log('Formulario enviado:', this.form);
   }
 }
-
