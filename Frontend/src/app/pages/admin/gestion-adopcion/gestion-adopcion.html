@@ -1,1 +1,30 @@
-<p>gestion-adopcion works!</p>
+<div class="container">
+  <div class="header">
+    <h2>Solicitudes de Adopcion</h2>
+
+    <!-- Contenedor del filtro moderno -->
+    <div class="filtro-container">
+      <select [(ngModel)]="estadoSeleccionado" class="filtro-select">
+        <option value="">Todos los estados</option>
+        <option *ngFor="let estado of estados" [value]="estado">{{ estado }}</option>
+      </select>
+
+      <button class="filter-btn" (click)="filtrarSolicitudes()">
+        <i class="fa fa-filter"></i>
+        <span>Filtrar</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Lista de solicitudes -->
+  <div *ngFor="let solicitud of solicitudesFiltradas" class="solicitud-card">
+    <div class="info">
+      <h3>Solicitud de Adopcion: {{ solicitud.nombreAnimal }}</h3>
+      <p>Estado: {{ solicitud.estado }}</p>
+    </div>
+    <div class="acciones">
+      <button class="ver" (click)="verSolicitud(solicitud)">VER</button>
+      <button class="rechazar" (click)="rechazarSolicitud(solicitud)">RECHAZAR</button>
+    </div>
+  </div>
+</div>

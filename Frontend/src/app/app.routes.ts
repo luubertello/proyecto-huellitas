@@ -16,6 +16,7 @@ import { AdminLayout } from './layout/admin-layout/admin-layout';
 import { UsuarioLayout } from './layout/usuario-layout/usuario-layout';
 import { Adopcion } from './pages/usuario/adopcion/adopcion';
 import { EditarAnimal } from './pages/admin/editar-animal/editar-animal';
+import { GestionAdopcion } from './pages/admin/gestion-adopcion/gestion-adopcion';
 
 export const routes: Routes = [
    { 
@@ -25,6 +26,7 @@ export const routes: Routes = [
       { path: 'animales/registrar', component: CrearAnimal }, // /admin/animales/registrar
       { path: 'animales', component: GestionarAnimales }, // /admin/animales
       { path: 'animales/:id', component: EditarAnimal }, // /admin/animales/:id
+      { path: 'gestion-adopcion', component: GestionAdopcion } // /admin/gestion-adopcion
     ]},
 
   {

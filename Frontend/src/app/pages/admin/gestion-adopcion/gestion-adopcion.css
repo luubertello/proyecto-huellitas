@@ -1,0 +1,148 @@
+/* --- Contenedor general --- */
+.container {
+  background-color: #f9f1e8;
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: "Poppins", sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+h2 {
+  font-size: 1.9rem;
+  color: #1d1d1d;
+  font-weight: 600;
+}
+
+/* --- Filtro mejorado --- */
+.filtro-container {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(to right, #f8e1c3, #f6d4b3);
+  border-radius: 2.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.filtro-container:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+.filtro-select {
+  border: none;
+  background: transparent;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  outline: none;
+  color: #3b3b3b;
+  cursor: pointer;
+  font-weight: 500;
+  appearance: none;
+  width: 175px;
+  transition: color 0.2s ease;
+}
+
+.filtro-select:hover {
+  color: #222;
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: linear-gradient(135deg, #ffaa63, #ff9b42);
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 2.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-btn i {
+  font-size: 1rem;
+}
+
+.filter-btn:hover {
+  background: linear-gradient(135deg, #ff9232, #ff7f1f);
+  transform: scale(1.08);
+}
+
+/* --- Tarjetas de solicitudes --- */
+.solicitud-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ede0d6;
+  padding: 1.5rem;
+  border-radius: 1.5rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.solicitud-card:hover {
+  transform: scale(1.01);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.info h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #222;
+}
+
+.info p {
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+  color: #444;
+}
+
+/* --- Botones --- */
+.acciones {
+  display: flex;
+  gap: 1rem;
+}
+
+.ver {
+  background-color: #ffaa63;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.ver:hover {
+  background-color: #ff9232;
+  transform: scale(1.05);
+}
+
+.rechazar {
+  background-color: #ff5c5c;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  font-weight: bold;
+  color: #111; 
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.rechazar:hover {
+  background-color: #ff7c7c; 
+  transform: scale(1.05);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
