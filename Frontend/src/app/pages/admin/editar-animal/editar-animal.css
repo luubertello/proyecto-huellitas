@@ -209,11 +209,8 @@ body{
   object-fit: cover;
 }
 
-/* ------------------------------------- */
-/* --- NUEVA ESTRUCTURA DE CARD / FICHA --- */
-/* ------------------------------------- */
 
-/* Contenedor principal de la página, similar al .page de la otra vista */
+/* Contenido*/
 main.page {
   min-height: calc(100vh - 92px);
   display: flex;
@@ -228,10 +225,10 @@ main.page {
   background: var(--card);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
-  margin: 36px auto; /* Usamos margin para centrar en vez del flexbox de .page, si lo quisiéramos centrado verticalmente quitamos este margin y centramos el div que contiene al form */
+  margin: 36px auto; 
   padding: clamp(18px, 3vw, 28px);
   display: grid;
-  grid-template-columns: 420px 1fr; /* Columna de foto y columna de formulario */
+  grid-template-columns: 420px 1fr; 
   gap: clamp(18px, 3vw, 36px);
 }
 
@@ -379,8 +376,8 @@ main.page {
   font-weight: 800;
   text-transform: uppercase;
   border: 0;
-  border-radius: 999px; /* Más redondeado */
-  background: #6b5347; /* Marrón principal */
+  border-radius: 999px; 
+  background: #6b5347; 
   color: #fff;
   cursor: pointer;
   box-shadow: 0 6px 14px rgba(0,0,0,.08);

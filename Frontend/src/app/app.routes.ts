@@ -17,6 +17,7 @@ import { UsuarioLayout } from './layout/usuario-layout/usuario-layout';
 import { Adopcion } from './pages/usuario/adopcion/adopcion';
 import { EditarAnimal } from './pages/admin/editar-animal/editar-animal';
 import { GestionAdopcion } from './pages/admin/gestion-adopcion/gestion-adopcion';
+import { PerfilUsuario } from './pages/usuario/perfil-usuario/perfil-usuario';
 
 export const routes: Routes = [
    { 
@@ -36,6 +37,7 @@ export const routes: Routes = [
       { path: 'inicio', component: Inicio },
       { path: 'iniciar-sesion', component: IniciarSesion },
       { path: 'registro', component: Registro },
+      { path: 'perfil', component: PerfilUsuario },
       { path: '', redirectTo: 'inicio', pathMatch: 'full' },
       {
         path: 'adopta',
