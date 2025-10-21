@@ -1,0 +1,15 @@
+
+services:
+  api-gateway:
+    build: .
+    container_name: huellitas_api_gateway
+    restart: always
+    ports:
+      - "3000:3000" 
+    networks:
+      - huellitas-net
+
+networks:
+  huellitas-net:
+    name: huellitas-net
+    driver: bridge

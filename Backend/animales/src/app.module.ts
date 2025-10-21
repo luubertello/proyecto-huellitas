@@ -17,7 +17,7 @@ import { RazaModule } from './raza/raza.module';
       port: parseInt(process.env.DB_PORT || '5432', 10),
       username: process.env.DB_USERNAME || 'admin',
       password: process.env.DB_PASSWORD || '1234',
-      database: process.env.DB_DATABASE || 'usuarios',
+      database: process.env.DB_DATABASE || 'animales',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),

@@ -1,28 +1,31 @@
+// En: src/cambio-estado/cambio-estado.entity.ts
+
 import { Estado } from "src/estado/estado.entity";
 import { SolicitudAdopcion } from "src/solicitud-adopcion/solicitud-adopcion.entity";
-import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from "typeorm";
 
 @Entity('cambio_estado')
 export class CambioEstado {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  fechaHoraInicio: string;
+  @CreateDateColumn({ type: 'timestamp' })
+  fechaCambio: Date;
 
-  @Column()
-  fechaHoraFin: string;
-
-  @Column()
+  @Column({ nullable: true })
   motivo: string;
+  
+  @Column()
+  responsableId: number;
 
   // Relaciones
 
   @ManyToOne(() => SolicitudAdopcion, (solicitud) => solicitud.historialDeEstados)
   solicitud: SolicitudAdopcion;
 
-  @ManyToOne(() => Estado, (estado) => estado.cambiosDeEstado)
-  estado: Estado;
+  @ManyToOne(() => Estado, (estado) => estado.cambiosComoNuevo)
+  estadoNuevo: Estado;
 
-
+  @ManyToOne(() => Estado, (estado) => estado.cambiosComoAnterior)
+  estadoAnterior: Estado;
 }

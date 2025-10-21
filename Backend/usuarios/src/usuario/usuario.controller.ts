@@ -1,6 +1,6 @@
 // En: src/usuario/usuario.controller.ts
 
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
@@ -17,10 +17,10 @@ export class UsuarioController {
     return this.usuarioService.findAll();
   }
 
-  @Get('test')
-  testEndpoint() {
-    console.log('--- ¡LA RUTA DE PRUEBA FUE ALCANZADA! ---');
-    return { message: '¡El controlador de usuarios funciona!' };
+  // GET /usuarios/1
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.usuarioService.findOneById(id);
   }
 
   // GET /usuarios/email/test@example.com

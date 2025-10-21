@@ -18,11 +18,10 @@ export class Estado {
   )
   solicitudes: SolicitudAdopcion[];
 
-  @OneToMany(
-    () => CambioEstado,
-    (cambioEstado) => cambioEstado.estado,
-  )
-  cambiosDeEstado: CambioEstado[];
+  @OneToMany(() => CambioEstado, (cambio) => cambio.estadoNuevo)
+  cambiosComoNuevo: CambioEstado[];
 
+  @OneToMany(() => CambioEstado, (cambio) => cambio.estadoAnterior)
+  cambiosComoAnterior: CambioEstado[];
 
 }

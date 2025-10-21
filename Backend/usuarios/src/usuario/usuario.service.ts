@@ -50,6 +50,15 @@ async emailYaRegistrado(email: string): Promise<boolean> {
   return !!usuario; // Convierte el resultado (objeto o null) en un booleano (true o false)
 }
 
+// Busca un usuario por ID
+async findOneById(id: number): Promise<Usuario> {
+    const usuario = await this.usuarioRepository.findOneBy({ id });
+    if (!usuario) {
+      throw new NotFoundException(`Usuario con ID ${id} no encontrado.`);
+    }
+    return usuario;
+  }
+
 // Devuelve todos los usuarios sin su contraseña
   async findAll(): Promise<Usuario[]> {
     return this.usuarioRepository.find({

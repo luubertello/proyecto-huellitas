@@ -8,8 +8,14 @@ export class SolicitudAdopcion {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  fechaSolicitud: Date;
+
   @Column()
-  fechaInicio: string;
+  adoptanteId: number;
+
+  @Column()
+  animalId: number;
 
   // Relaciones
   @OneToOne(() => FormularioAdopcion, { cascade: true, eager: true })

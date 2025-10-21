@@ -15,25 +15,25 @@ export class FormularioAdopcion {
   @Column()
   tieneOtrosAnimales: boolean;
 
-  @Column()
+  @Column({ nullable: true, default: 0 })
   cantidadPerros: number;
 
-  @Column()
+  @Column({ nullable: true, default: 0 })
   cantidadGatos: number;
 
-  @Column()
+  @Column({ nullable: true })
   otrasEspeciesDescripcion: string;
 
   @Column() 
   tipoVivienda: string; 
 
-  @Column()
+  @Column({ nullable: true })
   tienePatio: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   tieneBalcon: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   balconConProteccion: boolean;
 
   @Column()
