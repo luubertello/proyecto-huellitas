@@ -1,0 +1,322 @@
+/* === Variables y Estilos Globales === */
+:root{
+  --peach:#f7c9ad;
+  --peach-strong:#f3ba98;
+  --bg:#fbf5ef;
+  --card:#eddccf;
+  --text:#4a3b35;
+  --text-muted:#927c72;
+  --white:#ffffff;
+  --shadow: 0 10px 25px rgba(0,0,0,.08);
+  --radius: 18px;
+  --radius-lg: 26px;
+  --gap: 18px;
+}
+
+*{ box-sizing:border-box; }
+/* 0) Reset básico: elimina márgenes externos inesperados */
+html, body { margin: 0; padding: 0; }
+
+/* 1) Evita “colapso” de margen del primer hijo del body */
+body::before { content: ""; display: table; }  /* truco para bloquear colapso */
+
+/* 2) Topbar pegada arriba y sin márgenes */
+header.topbar {
+  position: sticky;   /* o fixed si así la usás */
+  top: 0;
+  z-index: 1000;
+  margin: 0 !important;
+}
+
+/* 3) Cualquier primer bloque no debe empujar hacia abajo */
+body > :first-child { margin-top: 0 !important; }
+
+/* 4) Altura consistente del hero de /inicio (evita que parezca “más chico”) */
+:root { --header-h: 72px; }               /* ajustá si tu topbar mide distinto */
+.hero-carousel {
+  /* si tu topbar es sticky, el hero ocupa el alto visible bajo la barra */
+  min-height: calc(100dvh - var(--header-h));
+  margin-top: 0 !important;
+}
+
+/* 5) Fondo de la página para que no se vea una banda blanca al inicio/scroll */
+body { background: #fff; }                 /* o el color de tu layout */
+
+body{
+  margin:0;
+  font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:var(--text);
+  background:var(--bg);
+}
+
+/* === Layout Principal de la Página === */
+.page {
+  min-height: calc(100vh - 92px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 36px 16px;
+}
+
+.animal-card {
+  width: min(900px, 100%); /* Ancho ajustado para el formulario */
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  margin: 36px auto;
+  padding: clamp(18px, 3vw, 32px);
+}
+
+.form-pane {
+  width: 100%;
+}
+
+.card-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.card-header h1 {
+  margin: 0 0 8px 0;
+  font-size: clamp(1.8rem, 4vw, 2.2rem);
+  color: var(--text);
+}
+
+.card-header .card-sub {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+/* === Estilos Base del Formulario === */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap);
+}
+
+.field {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field span {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Campos de entrada, selects y textareas */
+.field input[type="text"],
+.field input[type="date"],
+.field input[type="number"],
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid rgba(0, 0, 0, 0.06);
+  background: var(--white);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+  color: var(--text);
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: #b6a59e;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--peach-strong);
+  box-shadow: 0 0 0 4px rgba(243, 186, 152, 0.25);
+}
+
+.field textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.field select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%234a3b35' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+.span-2 {
+  grid-column: 1 / -1;
+}
+
+/* Radios y Checkboxes */
+.radio-group,
+.checkbox-group {
+  display: flex;
+  gap: 20px;
+  margin-top: 6px;
+}
+
+.radio-group label,
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.radio-group input[type="radio"],
+.checkbox-group input[type="checkbox"] {
+  accent-color: #6b5347;
+  width: 18px;
+  height: 18px;
+}
+
+/* === Formulario Multi-paso Específico === */
+.progress-bar {
+  display: flex;
+  justify-content: space-between;
+  margin: 30px 0;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--peach);
+}
+
+.progress-step {
+  text-align: center;
+  color: var(--text-muted);
+  font-weight: 600;
+  flex: 1;
+  position: relative;
+  font-size: 0.9rem;
+}
+
+.progress-step span {
+  display: block;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 50%;
+  background-color: var(--peach);
+  margin: 0 auto 8px;
+  transition: background-color 0.3s ease;
+}
+
+.progress-step.active {
+  color: var(--text);
+}
+
+.progress-step.active span {
+  background-color: var(--peach-strong);
+  color: var(--text);
+}
+
+/* === Botones === */
+.actions {
+  display: flex;
+  justify-content: center;
+  grid-column: 1 / -1;
+  margin-top: 12px;
+}
+
+.navigation-buttons {
+  justify-content: space-between; /* Alinea los botones de Anterior/Siguiente */
+}
+
+.btn,
+.btn-primary,
+.btn-brown,
+.btn-peach {
+  padding: 12px 26px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter .2s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover,
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  filter: brightness(1.05);
+}
+
+.btn-primary:disabled {
+  filter: grayscale(0.25) opacity(0.8);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-primary {
+  background: #6b5347;
+  color: #fff;
+}
+
+.btn-peach {
+  background-color: var(--peach);
+  color: #4a3f3a;
+}
+
+.btn-brown {
+  background-color: #775b51;
+  color: #f7f3f2;
+}
+
+/* === Mensaje de Éxito === */
+.success-message {
+  text-align: center;
+  padding: 30px;
+}
+
+.success-message h2 {
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.success-actions {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr; /* Una columna en pantallas pequeñas */
+  }
+
+  .span-2 {
+    grid-column: auto; /* Desactiva la expansión */
+  }
+
+  .progress-step {
+    font-size: 0.8rem; /* Achica el texto de los pasos */
+  }
+
+  .progress-step span {
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    font-size: 0.9rem;
+  }
+}

@@ -1,1 +1,145 @@
-<p>formulario-adopcion works!</p>
+<main class="page">
+  <section class="animal-card">
+    <div class="form-pane" *ngIf="!submissionSuccess">
+      <div class="card-header">
+        <h1>Formulario de Adopción</h1>
+        <p class="card-sub">Tu solicitud nos ayudará a encontrar el mejor hogar para nuestros animales.</p>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-step" [class.active]="currentStep >= 1"><span>1</span> Motivación</div>
+        <div class="progress-step" [class.active]="currentStep >= 2"><span>2</span> Convivencia</div>
+        <div class="progress-step" [class.active]="currentStep >= 3"><span>3</span> Vivienda</div>
+        <div class="progress-step" [class.active]="currentStep >= 4"><span>4</span> Compromisos</div>
+      </div>
+
+      <form class="form" [formGroup]="adoptionForm" (ngSubmit)="onSubmit()">
+        <div [ngSwitch]="currentStep">
+          
+          <div *ngSwitchCase="1">
+            <div class="form-grid">
+              <label class="field span-2">
+                <span>¿Por qué te gustaría adoptar?*</span>
+                <textarea formControlName="motivoAdopcion" rows="4"></textarea>
+              </label>
+              <label class="field span-2">
+                <span>Contanos brevemente tu experiencia previa con animales.*</span>
+                <textarea formControlName="experienciaPrevia" rows="4"></textarea>
+              </label>
+            </div>
+          </div>
+          
+          <div *ngSwitchCase="2">
+            <div class="form-grid">
+              <div class="field span-2">
+                <span>¿Tenés otros animales actualmente?*</span>
+                <div class="radio-group">
+                  <label><input type="radio" formControlName="tieneOtrosAnimales" [value]="true"> Sí</label>
+                  <label><input type="radio" formControlName="tieneOtrosAnimales" [value]="false"> No</label>
+                </div>
+              </div>
+              <ng-container *ngIf="adoptionForm.get('tieneOtrosAnimales')?.value === true">
+                <label class="field">
+                  <span>¿Cuántos perros?*</span>
+                  <input type="number" formControlName="cantidadPerros">
+                </label>
+                <label class="field">
+                  <span>¿Cuántos gatos?*</span>
+                  <input type="number" formControlName="cantidadGatos">
+                </label>
+                <label class="field span-2">
+                  <span>Si tenés otras especies, ¿cuáles?</span>
+                  <textarea formControlName="otrasEspeciesDescripcion" rows="2"></textarea>
+                </label>
+              </ng-container>
+            </div>
+          </div>
+          
+          <div *ngSwitchCase="3">
+            <div class="form-grid">
+              <label class="field span-2">
+                <span>¿En qué tipo de vivienda vivís?*</span>
+                <select formControlName="tipoVivienda">
+                  <option value="" disabled>Seleccione una opción</option>
+                  <option value="Casa">Casa</option>
+                  <option value="Departamento">Departamento</option>
+                  <option value="Quinta">Quinta/Campo</option>
+                </select>
+              </label>
+              <ng-container *ngIf="adoptionForm.get('tipoVivienda')?.value === 'Casa'">
+                <div class="field">
+                  <span>¿La casa tiene patio?*</span>
+                  <div class="radio-group">
+                    <label><input type="radio" formControlName="tienePatio" [value]="true"> Sí</label>
+                    <label><input type="radio" formControlName="tienePatio" [value]="false"> No</label>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="adoptionForm.get('tipoVivienda')?.value === 'Departamento'">
+                <div class="field">
+                  <span>¿El departamento tiene balcón?*</span>
+                  <div class="radio-group">
+                    <label><input type="radio" formControlName="tieneBalcon" [value]="true"> Sí</label>
+                    <label><input type="radio" formControlName="tieneBalcon" [value]="false"> No</label>
+                  </div>
+                </div>
+                <div class="field" *ngIf="adoptionForm.get('tieneBalcon')?.value === true">
+                  <span>¿El balcón tiene protección (red/malla)?*</span>
+                  <div class="radio-group">
+                    <label><input type="radio" formControlName="balconConProteccion" [value]="true"> Sí</label>
+                    <label><input type="radio" formControlName="balconConProteccion" [value]="false"> No</label>
+                  </div>
+                </div>
+              </ng-container>
+              <label class="field span-2">
+                <span>¿Qué medidas de seguridad tenés para evitar que el animal se escape?*</span>
+                <textarea formControlName="medidasDeSeguridad" rows="3"></textarea>
+              </label>
+            </div>
+          </div>
+          
+          <div *ngSwitchCase="4">
+            <div class="form-grid">
+              <label class="field span-2">
+                <span>¿Cuántas horas al día pasaría el animal solo?*</span>
+                <input type="number" formControlName="tiempoAnimalSoloHoras">
+              </label>
+              <div class="field span-2 checkbox-group">
+                <label>
+                  <input type="checkbox" formControlName="compromisoPaseos">
+                  Me comprometo a sacarlo a pasear regularmente con correa y collar.
+                </label>
+                <label>
+                  <input type="checkbox" formControlName="compromisoGastosVet">
+                  Me comprometo a cubrir sus gastos veterinarios y de alimentación.
+                </label>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="actions navigation-buttons">
+          <button type="button" class="btn btn-brown" *ngIf="currentStep > 1" (click)="previousStep()">
+            Anterior
+          </button>
+          <button type="button" class="btn-primary" *ngIf="currentStep < totalSteps" (click)="nextStep()">
+            Siguiente
+          </button>
+          <button type="submit" class="btn-primary" *ngIf="currentStep === totalSteps" [disabled]="!adoptionForm.valid">
+            Enviar Solicitud
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="form-pane success-message" *ngIf="submissionSuccess">
+      <h2>¡Solicitud Enviada con Éxito!</h2>
+      <p>Gracias por tu interés. Nos pondremos en contacto con vos a la brevedad.</p>
+      <div class="success-actions">
+        <button class="btn btn-peach" (click)="reiniciarFormulario()">Enviar otra solicitud</button>
+        <button class="btn btn-brown" routerLink="/">Volver al inicio</button>
+      </div>
+    </div>
+  </section>
+</main>
