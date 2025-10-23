@@ -1,1 +1,180 @@
-<p>ver-solicitud works!</p>
+<!-- Contenedor principal de la página -->
+<main class="page">
+
+  <!-- 1. Estado de Carga -->
+  <div *ngIf="isLoading" class="loading-message">
+    <p>Cargando solicitud...</p>
+    <!-- Aquí podrías poner un spinner animado -->
+  </div>
+
+  <!-- 2. Estado de Error -->
+  <div *ngIf="!isLoading && errorMessage" class="error-message">
+    <p>{{ errorMessage }}</p>
+    <button class="btn-secondary" (click)="volverAtras()">Volver a la lista</button>
+  </div>
+
+  <!-- 3. Contenido Principal (cuando la solicitud está cargada) -->
+  <div *ngIf="!isLoading && solicitud" class="solicitud-container">
+
+    <!-- Encabezado de la solicitud -->
+    <header class="solicitud-header">
+      <div>
+        <button class="btn-back" (click)="volverAtras()">
+          &larr; Volver a la lista
+        </button>
+        <h1>Detalle de la Solicitud</h1>
+        <p>Recibida el: {{ solicitud.fechaSolicitud | date:'dd/MM/yyyy h:mm a' }}</p>
+      </div>
+      <div class="header-meta">
+        <span class="solicitud-id">SOLICITUD #{{ solicitud.id }}</span>
+        <span class="estado-badge estado-{{ solicitud.estadoActual.nombre | lowercase }}">
+          {{ solicitud.estadoActual.nombre }}
+        </span>
+      </div>
+    </header>
+
+    <!-- Resumen de perfiles (Clickeables) -->
+    <section class="summary-grid">
+      
+      <!-- Perfil del Animal -->
+      <div class="profile-card" (click)="abrirModal('animal')">
+        <img [src]="solicitud.animal.foto" [alt]="solicitud.animal.nombre" class="profile-avatar">
+        <div class="profile-info">
+          <h2>Animal en Adopción</h2>
+          <h3>{{ solicitud.animal.nombre }}</h3>
+          <p>{{ solicitud.animal.especie.nombre }} · {{ solicitud.animal.raza.nombre }} · {{ solicitud.animal.sexo }}</p>
+          <span class="ver-mas-link">Ver Perfil Completo &rarr;</span>
+        </div>
+      </div>
+
+      <!-- Perfil del Adoptante -->
+      <div class="profile-card" (click)="abrirModal('adoptante')">
+        <!-- Usamos un placeholder para el adoptante -->
+        <img src="https://placehold.co/100x100/eddccf/4a3b35?text={{solicitud.adoptante.nombre[0]}}" alt="Adoptante" class="profile-avatar">
+        <div class="profile-info">
+          <h2>Adoptante</h2>
+          <h3>{{ solicitud.adoptante.nombre }} {{ solicitud.adoptante.apellido }}</h3>
+          <p>{{ solicitud.adoptante.email }}</p>
+          <span class="ver-mas-link">Ver Perfil Completo &rarr;</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Formulario / Cuestionario -->
+    <section class="formulario-card">
+      <h2>Cuestionario de Adopción</h2>
+      <div class="preguntas-grid">
+        
+        <div class="pregunta-respuesta span-2">
+          <span>Motivo de la adopción:</span>
+          <p>{{ solicitud.formulario.motivoAdopcion }}</p>
+        </div>
+        
+        <div class="pregunta-respuesta span-2">
+          <span>Experiencia previa con animales:</span>
+          <p>{{ solicitud.formulario.experienciaPrevia }}</p>
+        </div>
+        
+        <div class="pregunta-respuesta">
+          <span>¿Tiene otros animales?</span>
+          <p>{{ solicitud.formulario.tieneOtrosAnimales ? 'Sí' : 'No' }}</p>
+        </div>
+        
+        <div class="pregunta-respuesta" *ngIf="solicitud.formulario.tieneOtrosAnimales">
+          <span>¿Cuántos perros/gatos?</span>
+          <p>Perros: {{ solicitud.formulario.cantidadPerros }} · Gatos: {{ solicitud.formulario.cantidadGatos }}</p>
+        </div>
+        
+        <div class="pregunta-respuesta" *ngIf="solicitud.formulario.otrasEspeciesDescripcion">
+          <span>Otras especies:</span>
+          <p>{{ solicitud.formulario.otrasEspeciesDescripcion }}</p>
+        </div>
+        
+        <div class="pregunta-respuesta">
+          <span>Tipo de vivienda:</span>
+          <p>{{ solicitud.formulario.tipoVivienda }}</p>
+        </div>
+
+        <div class="pregunta-respuesta span-2">
+          <span>Medidas de seguridad (balcones, patios):</span>
+          <p>{{ solicitud.formulario.medidasDeSeguridad }}</p>
+        </div>
+        
+        <div class="pregunta-respuesta">
+          <span>Tiempo que pasaría solo (horas):</span>
+          <p>{{ solicitud.formulario.tiempoAnimalSoloHoras }} horas</p>
+        </div>
+        
+        <div class="pregunta-respuesta">
+          <span>Compromiso de paseos:</span>
+          <p>{{ solicitud.formulario.compromisoPaseos ? 'Sí' : 'No' }}</p>
+        </div>
+        
+        <div class="pregunta-respuesta">
+          <span>Compromiso gastos veterinarios:</span>
+          <p>{{ solicitud.formulario.compromisoGastosVet ? 'Sí' : 'No' }}</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Barra de acciones (fija abajo) -->
+    <footer class="action-bar" *ngIf="solicitud.estadoActual.nombre === 'Pendiente' || solicitud.estadoActual.nombre === 'En Proceso'">
+      <span>Decisión final:</span>
+      <div class="action-buttons">
+        <button type="button" class="btn-secondary" (click)="contactarAdoptante()">Contactar Adoptante</button>
+        <button type="button" class="btn-danger" (click)="cambiarEstado('Rechazar')">Rechazar Solicitud</button>
+        <button type="button" class="btn-primary" (click)="cambiarEstado('Aprobar')">Aprobar Solicitud</button>
+      </div>
+    </footer>
+
+    <footer class="action-bar action-bar-disabled" *ngIf="solicitud.estadoActual.nombre === 'Aprobada' || solicitud.estadoActual.nombre === 'Rechazada'">
+      <span>Esta solicitud ya ha sido procesada.</span>
+    </footer>
+
+  </div>
+  
+  
+        <div class="modal-overlay" *ngIf="modalAnimal || modalAdoptante" (click)="cerrarModal()">
+            <div class="modal-content" (click)="$event.stopPropagation()">
+            
+            <header class="modal-header">
+                <h2>{{ modalTitle }}</h2>
+                <button class="btn-close-modal" (click)="cerrarModal()">×</button>
+            </header>
+            
+            <div class="modal-body">
+        
+        <!-- Contenido del Modal de ANIMAL -->
+        <div *ngIf="modalAnimal as animal">
+          <div class="modal-details">
+            <p><strong>ID:</strong> {{ animal.id }}</p>
+            <p><strong>Nombre:</strong> {{ animal.nombre }}</p>
+            <p><strong>Especie:</strong> {{ animal.especie.nombre }}</p>
+            <p><strong>Raza:</strong> {{ animal.raza.nombre }}</p>
+            <p><strong>Sexo:</strong> {{ animal.sexo }}</p>
+            <p><strong>Nacimiento:</strong> {{ animal.fechaNacimiento | date:'dd/MM/yyyy' }}</p>
+            <p><strong>Descripción:</strong></p>
+            <p class="descripcion">{{ animal.descripcion }}</p>
+          </div>
+        </div>
+        
+        <!-- Contenido del Modal de ADOPTANTE -->
+        <div *ngIf="modalAdoptante as adoptante">
+           <div class="modal-details">
+            <p><strong>ID:</strong> {{ adoptante.id }}</p>
+            <p><strong>Nombre:</strong> {{ adoptante.nombre }} {{ adoptante.apellido }}</p>
+            <p><strong>DNI:</strong> {{ adoptante.dni }}</p>
+            <p><strong>Email:</strong> {{ adoptante.email }}</p>
+            <p><strong>Teléfono:</strong> {{ adoptante.telefono }}</p>
+            <p><strong>Dirección:</strong> {{ adoptante.direccion }}</p>
+            <p><strong>Nacimiento:</strong> {{ adoptante.fechaNacimiento | date:'dd/MM/yyyy' }}</p>
+          </div>
+        </div>
+
+      </div>
+      
+    </div>
+  </div>
+
+</main>

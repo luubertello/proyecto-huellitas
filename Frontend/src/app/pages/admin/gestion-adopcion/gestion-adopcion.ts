@@ -32,7 +32,7 @@ export class GestionAdopcion implements OnInit {
 
   solicitudes: Solicitud[] = [];
   solicitudesFiltradas: Solicitud[] = [];
-  estados: string[] = ['Pendiente', 'En Proceso', 'Aprobada', 'Rechazada'];
+  estados: string[] = ['Pendiente', 'Aprobada', 'Rechazada', 'Finalizada'];
   estadoSeleccionado: string = '';
 
   constructor(private http: HttpClient, private router: Router) {}

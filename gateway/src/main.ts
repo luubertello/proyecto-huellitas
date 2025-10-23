@@ -10,7 +10,7 @@ async function bootstrap() {
 
   const proxy = new ProxyMiddleware();
   app.use(proxy.use.bind(proxy));
-
+  app.enableCors();
   await app.listen(3000);
   console.log('Gateway corriendo en http://localhost:3000');
 }
