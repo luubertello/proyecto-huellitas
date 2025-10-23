@@ -5,8 +5,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
-
-// Importa todas las entidades y DTOs necesarios
 import { SolicitudAdopcion } from './solicitud-adopcion.entity';
 import { FormularioAdopcion } from '../formulario-adopcion/formulario-adopcion.entity';
 import { Estado } from '../estado/estado.entity';
@@ -29,18 +27,16 @@ export class SolicitudAdopcionService {
 
   async create(dto: CrearSolicitudDto, adoptanteId: number): Promise<SolicitudAdopcion> {
     const { animalId, ...formData } = dto;
-    
     // Valida que el animal y el usuario existen
     try {
       await firstValueFrom(this.httpService.get(`${this.USUARIOS_SERVICE_URL}/${adoptanteId}`));
       await firstValueFrom(this.httpService.get(`${this.ANIMALES_SERVICE_URL}/${animalId}`));
-    } catch (error) {
+     } catch (error) {
       console.error('--- ERROR ORIGINAL DE LA PETICIÓN HTTP ---');
       console.error(error.response?.data || error.message); 
       console.error('-----------------------------------------');
       throw new NotFoundException('El usuario o el animal especificado no existe.');
     }
-    
     // Obtiene el estado inicial ("Pendiente")
     const estadoInicial = await this.estadoRepo.findOne({ where: { nombre: 'Pendiente' } });
     if (!estadoInicial) {
@@ -63,13 +59,49 @@ export class SolicitudAdopcionService {
     return this.solicitudRepo.save(nuevaSolicitud);
 }
 
-
-  async findAll(): Promise<SolicitudAdopcion[]> {
-    return this.solicitudRepo.find({
-      relations: ['estadoActual'],
+// Busca todas las solicitudes
+  async findAll(): Promise<any[]> { 
+    // 1. Obtenemos todas las solicitudes de nuestra BD
+    const solicitudes = await this.solicitudRepo.find({
+      relations: ['estadoActual'], // Mantenemos las relaciones que tenías
       order: { fechaSolicitud: 'DESC' },
     });
+
+    const solicitudesEnriquecidas = await Promise.all(
+      solicitudes.map(async (solicitud) => {
+      
+        let adoptanteData = { nombre: 'Adoptante no encontrado' };
+        let animalData = { nombre: 'Animal no encontrado' };
+
+        try {
+          const animalRes = await firstValueFrom(
+      this.httpService.get(`${this.ANIMALES_SERVICE_URL}/${solicitud.animalId}`)
+          );
+          animalData = animalRes.data; // Guardamos el objeto completo del animal
+        } catch (e) {
+          console.error(`[findAll] Error al buscar animal ${solicitud.animalId}:`, e.message);
+        }
+
+        try {
+          const adoptanteRes = await firstValueFrom(
+      this.httpService.get(`${this.USUARIOS_SERVICE_URL}/${solicitud.adoptanteId}`)
+          );
+          adoptanteData = adoptanteRes.data; // Guardamos el objeto completo del adoptante
+        } catch (e) {
+          console.error(`[findAll] Error al buscar adoptante ${solicitud.adoptanteId}:`, e.message);
+        }
+
+        return {
+          ...solicitud,
+          animal: animalData, 
+          adoptante: adoptanteData 
+        };
+      })
+    );
+
+    return solicitudesEnriquecidas;
   }
+
 
   async findOne(id: number): Promise<any> {
     // Obtener la solicitud de la base de datos local

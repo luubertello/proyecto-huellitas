@@ -19,8 +19,8 @@
   <!-- Lista de solicitudes -->
   <div *ngFor="let solicitud of solicitudesFiltradas" class="solicitud-card">
     <div class="info">
-      <h3>Solicitud de Adopcion: {{ solicitud.nombreAnimal }}</h3>
-      <p>Estado: {{ solicitud.estado }}</p>
+      <h3>Solicitud de Adopcion: {{ solicitud.animal.nombre }}</h3>
+      <p>Estado: {{ solicitud.estadoActual.nombre }}</p>
     </div>
     <div class="acciones">
       <button class="ver" (click)="verSolicitud(solicitud)">VER</button>

@@ -18,6 +18,7 @@ import { Adopcion } from './pages/usuario/adopcion/adopcion';
 import { EditarAnimal } from './pages/admin/editar-animal/editar-animal';
 import { GestionAdopcion } from './pages/admin/gestion-adopcion/gestion-adopcion';
 import { PerfilUsuario } from './pages/usuario/perfil-usuario/perfil-usuario';
+import { VerSolicitud } from './pages/admin/ver-solicitud/ver-solicitud';
 
 export const routes: Routes = [
    { 
@@ -27,7 +28,8 @@ export const routes: Routes = [
       { path: 'animales/registrar', component: CrearAnimal }, // /admin/animales/registrar
       { path: 'animales', component: GestionarAnimales }, // /admin/animales
       { path: 'animales/:id', component: EditarAnimal }, // /admin/animales/:id
-      { path: 'gestion-adopcion', component: GestionAdopcion } // /admin/gestion-adopcion
+      { path: 'solicitudes', component: GestionAdopcion }, // /admin/solicitudes
+      { path: 'solicitudes/:id', component: VerSolicitud } // /admin/solicitudes/:id
     ]},
 
   {

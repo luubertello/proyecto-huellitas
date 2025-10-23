@@ -1,33 +1,56 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';   // ✅ Necesario para *ngFor y *ngIf
-import { FormsModule } from '@angular/forms';     // ✅ Necesario para [(ngModel)]
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common'; 
+import { FormsModule } from '@angular/forms';     
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 interface Solicitud {
   id: number;
-  nombreAnimal: string;
-  estado: string;
+  estadoActual: {
+    id: number;
+    nombre: string;
+  };
+  animal: {
+    id: number;
+    nombre: string;
+  };
+  adoptante: {
+    id: number;
+    nombre: string;
+  };
 }
-
 @Component({
   selector: 'app-gestion-adopcion',
   standalone: true,                // ✅
-  imports: [CommonModule, FormsModule], // ✅
+  imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './gestion-adopcion.html',
-  styleUrls: ['./gestion-adopcion.css']
+  styleUrls: ['./gestion-adopcion.css'],
 })
 export class GestionAdopcion implements OnInit {
+
+  private apiUrl = 'http://localhost:3000/solicitudes'; 
+
   solicitudes: Solicitud[] = [];
   solicitudesFiltradas: Solicitud[] = [];
   estados: string[] = ['Pendiente', 'En Proceso', 'Aprobada', 'Rechazada'];
   estadoSeleccionado: string = '';
 
+  constructor(private http: HttpClient, private router: Router) {}
+
   ngOnInit(): void {
-    this.solicitudes = [
-      { id: 1, nombreAnimal: 'Michi', estado: 'Pendiente' },
-      { id: 2, nombreAnimal: 'Luna', estado: 'En Proceso' },
-      { id: 3, nombreAnimal: 'Firulais', estado: 'Pendiente' }
-    ];
-    this.solicitudesFiltradas = this.solicitudes;
+    this.cargarSolicitudes();
+  }
+
+  cargarSolicitudes() {
+    this.http.get<Solicitud[]>(this.apiUrl).subscribe({
+      next: (data) => {
+        this.solicitudes = data;
+        this.solicitudesFiltradas = data;
+      },
+      error: (err) => {
+        console.error('Error al cargar las solicitudes', err);
+      }
+    });
   }
 
   filtrarSolicitudes() {
@@ -35,19 +58,31 @@ export class GestionAdopcion implements OnInit {
       this.solicitudesFiltradas = this.solicitudes;
     } else {
       this.solicitudesFiltradas = this.solicitudes.filter(
-        s => s.estado === this.estadoSeleccionado
+        s => s.estadoActual.nombre === this.estadoSeleccionado
       );
     }
   }
 
   verSolicitud(solicitud: Solicitud) {
-    alert(`Ver detalles de ${solicitud.nombreAnimal}`);
+    this.router.navigate(['/admin/solicitudes', solicitud.id]);
   }
 
   rechazarSolicitud(solicitud: Solicitud) {
-    if (confirm(`¿Rechazar solicitud de ${solicitud.nombreAnimal}?`)) {
-      solicitud.estado = 'Rechazada';
-      this.filtrarSolicitudes();
-    }
+    const url = `${this.apiUrl}/${solicitud.id}`;
+    
+    // Asumo que tu endpoint PATCH espera un DTO simple como { estado: "Rechazada" }
+    // Si espera un ID, deberías cambiarlo (ej: { estadoId: 4 })
+    this.http.patch<Solicitud>(url, { estado: 'Rechazada' }).subscribe({
+      next: (solicitudActualizada) => {
+
+        solicitud.estadoActual = solicitudActualizada.estadoActual;
+        
+        this.filtrarSolicitudes();
+      },
+      error: (err) => {
+        console.error('Error al rechazar la solicitud', err);
+      }
+    });
   }
 }
+

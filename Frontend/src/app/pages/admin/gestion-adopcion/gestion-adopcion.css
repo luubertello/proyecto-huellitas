@@ -1,3 +1,4 @@
+
 /* --- Contenedor general --- */
 .container {
   background-color: #f9f1e8;
@@ -17,6 +18,7 @@ h2 {
   font-size: 1.9rem;
   color: #1d1d1d;
   font-weight: 600;
+  margin-top: 0;
 }
 
 /* --- Filtro mejorado --- */
