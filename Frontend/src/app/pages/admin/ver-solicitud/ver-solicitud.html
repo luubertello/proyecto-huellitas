@@ -119,20 +119,32 @@
     </section>
 
     <!-- Barra de acciones (fija abajo) -->
-    <footer class="action-bar" *ngIf="solicitud.estadoActual.nombre === 'Pendiente' || solicitud.estadoActual.nombre === 'En Proceso'">
-      <span>Decisión final:</span>
-      <div class="action-buttons">
-        <button type="button" class="btn-secondary" (click)="contactarAdoptante()">Contactar Adoptante</button>
-        <button type="button" class="btn-danger" (click)="cambiarEstado('Rechazar')">Rechazar Solicitud</button>
-        <button type="button" class="btn-primary" (click)="cambiarEstado('Aprobar')">Aprobar Solicitud</button>
-      </div>
-    </footer>
+<!-- CASO 1: Si está Pendiente, mostrar Aprobar/Rechazar -->
+  <footer class="action-bar" *ngIf="solicitud.estadoActual.nombre === 'Pendiente'">
+    <span>Decisión inicial:</span>
+    <div class="action-buttons">
+      <button type="button" class="btn-secondary">Contactar Adoptante</button>
+      <button type="button" class="btn-danger" (click)="cambiarEstado('Rechazar')">Rechazar Solicitud</button>
+      <button type="button" class="btn-primary" (click)="cambiarEstado('Aprobar')">Aprobar Solicitud</button>
+    </div>
+  </footer>
 
-    <footer class="action-bar action-bar-disabled" *ngIf="solicitud.estadoActual.nombre === 'Aprobada' || solicitud.estadoActual.nombre === 'Rechazada'">
-      <span>Esta solicitud ya ha sido procesada.</span>
-    </footer>
+  <!-- CASO 2: Si está Aprobada (esperando retiro), mostrar Finalizar -->
+  <footer class="action-bar" *ngIf="solicitud.estadoActual.nombre === 'Aprobada'">
+    <span>Esperando retiro del animal:</span>
+    <div class="action-buttons">
+      <button type="button" class="btn-secondary">Contactar Adoptante</button>
+      <!-- Llamamos a la nueva acción 'Finalizar' -->
+      <button type="button" class="btn-primary" (click)="cambiarEstado('Finalizar')">Marcar como Finalizada (Retirado)</button>
+    </div>
+  </footer>
 
-  </div>
+  <!-- CASO 3: Si está Finalizada o Rechazada, no mostrar acciones -->
+  <footer class="action-bar action-bar-disabled" *ngIf="solicitud.estadoActual.nombre === 'Finalizada' || solicitud.estadoActual.nombre === 'Rechazada'">
+    <span>Esta solicitud ya ha sido procesada.</span>
+  </footer>
+
+</div>
   
   
         <div class="modal-overlay" *ngIf="modalAnimal || modalAdoptante" (click)="cerrarModal()">

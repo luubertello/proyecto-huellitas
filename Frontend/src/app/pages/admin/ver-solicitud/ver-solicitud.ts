@@ -152,38 +152,42 @@ ngOnInit(): void {
 
   // --- Lógica de Acciones ---
   cambiarEstado(nuevoEstado: string): void {
-    if (!this.solicitud || !confirm(`¿Estás seguro de que deseas ${nuevoEstado} esta solicitud?`)) return;
+    if (!this.solicitud || !confirm(`¿Estás seguro de que deseas "${nuevoEstado}" esta solicitud?`)) return;
 
     const id = this.solicitud.id;
-    // Asumimos los IDs de tus estados (¡Ajusta estos IDs si son incorrectos!)
     let nuevoEstadoId: number;
+
     switch (nuevoEstado.toLowerCase()) {
       case 'aprobar': 
-        nuevoEstadoId = 2;
+        nuevoEstadoId = 2; 
         break; 
       case 'rechazar': 
         nuevoEstadoId = 3; 
         break; 
+      case 'finalizar':
+        nuevoEstadoId = 4;
+        break;
       default: 
         return;
     }
     
-    // Este es el DTO que espera tu backend (según tu servicio)
-    const dto = { nuevoEstadoId: nuevoEstadoId, motivo: `Estado cambiado desde admin` };
+    const dto = { nuevoEstadoId: nuevoEstadoId, motivo: `Estado cambiado a ${nuevoEstado} desde admin` };
+    const url = `${this.apiUrl}/${id}/estado`; 
 
-    this.http.patch<SolicitudCompleta>(`${this.apiUrl}/estado/${id}`, dto).subscribe({
+    this.http.patch<SolicitudCompleta>(url, dto).subscribe({
       next: (solicitudActualizada) => {
-        // El backend devuelve la solicitud actualizada (con el nuevo estado)
         this.solicitud!.estadoActual = solicitudActualizada.estadoActual;
-        alert(`Solicitud ${nuevoEstado} con éxito.`);
+        alert(`Solicitud actualizada a "${solicitudActualizada.estadoActual.nombre}" con éxito.`);
       },
       error: (err) => {
         console.error('Error al cambiar estado:', err);
-        alert('Error al actualizar el estado.');
+        // El error 404 por la URL incorrecta debería desaparecer
+        alert('Error al actualizar el estado: ' + err.message);
       }
     });
   }
 
+  /*
   contactarAdoptante(): void {
     if (this.solicitud?.adoptante.email) {
       window.location.href = `mailto:${this.solicitud.adoptante.email}?subject=Sobre tu solicitud de adopción para ${this.solicitud.animal.nombre}`;
@@ -191,7 +195,7 @@ ngOnInit(): void {
       alert('Este adoptante no tiene un email registrado.');
     }
   }
-
+*/
   // --- Navegación ---
   volverAtras(): void {
     this.router.navigate(['/admin/solicitudes']);
