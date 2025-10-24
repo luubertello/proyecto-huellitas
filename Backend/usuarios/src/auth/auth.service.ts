@@ -27,13 +27,13 @@ async registro(registroDto: RegistroDto) {
 
   // Valida las credenciales del usuario y, si son correctas, genera un token JWT.
   async login(loginDto: LoginDto) {
-    const { email, contraseña } = loginDto;
+    const { email, contrasena } = loginDto;
     
     // Usamos un método especial que nos trae la contraseña para comparar
     const user = await this.usuarioService.findOneByEmailWithPassword(email);
 
     // Si no hay usuario o la contraseña no coincide, da error
-    if (!user || !(await bcrypt.compare(contraseña, user.contraseña))) {
+    if (!user || !(await bcrypt.compare(contrasena, user.contraseña))) {
       throw new UnauthorizedException('Credenciales incorrectas.');
     }
 

@@ -21,7 +21,7 @@ export class UsuarioService {
 
 // Crea nuevo usuario
    async create(registroDto: RegistroDto): Promise<UsuarioSinContraseña> {
-    const { contraseña, ...userData } = registroDto;
+    const { contrasena, ...userData } = registroDto;
 
     const defaultRol = await this.rolRepository.findOne({ where: { nombre: 'interesado' } });
     
@@ -31,7 +31,7 @@ export class UsuarioService {
 
     const nuevoUsuario = this.usuarioRepository.create({
         ...userData,
-        contraseña: await bcrypt.hash(contraseña, 10),
+        contraseña: await bcrypt.hash(contrasena, 10),
         rol: defaultRol,
     });
 

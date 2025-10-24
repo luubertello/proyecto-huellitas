@@ -3,10 +3,6 @@ import { IsNotEmpty, IsBoolean, IsNumber, IsString, IsOptional, Min, Max } from 
 export class CrearSolicitudDto {
 
   @IsNumber()
-  @IsNotEmpty()
-  adoptanteId: number;
-
-  @IsNumber()
   @IsNotEmpty({ message: 'El ID del animal es obligatorio.' })
   animalId: number;
 

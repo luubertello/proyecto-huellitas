@@ -1,63 +1,103 @@
-import { Component, OnInit} from '@angular/core';
-import { FormGroup, FormControl, Validators, ReactiveFormsModule, FormBuilder } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { ViewEncapsulation } from '@angular/core';
+// Archivo: inicio-sesion.ts
 
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterLink } from '@angular/router'; 
+import { CommonModule } from '@angular/common'; 
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http'; 
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
+
+interface LoginFormModel {
+  email: FormControl<string | null>;
+  contrasena: FormControl<string | null>; 
+}
+
+interface LoginResponse {
+  message: string;
+  access_token: string;
+}
+
+// --- Componente ---
 @Component({
   selector: 'app-iniciar-sesion',
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './iniciar-sesion.html',
-  styleUrl: './iniciar-sesion.css',
-  encapsulation: ViewEncapsulation.None
+  standalone: true,
+  imports: [
+    CommonModule, 
+    RouterLink,
+    ReactiveFormsModule,
+    HttpClientModule
+  ],
+  templateUrl: './iniciar-sesion.html', 
+  styleUrls: ['./iniciar-sesion.css']
 })
 export class IniciarSesion implements OnInit {
-  inicioSesionClienteform!: FormGroup;
-  loading = false;
-  submitted = false;
-  showPassword = false;
-  errorMsg: string | null = null;
 
-  constructor(private fb: FormBuilder, private router: Router) {}
-  
-  goRegistro() {
-      this.router.navigate(['/registro']);
+  loginForm: FormGroup<LoginFormModel>;
+  isLoading = false;
+  errorMessage = '';
+
+  private apiUrl = 'http://localhost:3000/auth'; 
+
+  constructor(
+    private router: Router,
+    private fb: FormBuilder,
+    private http: HttpClient
+  ) {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      contrasena: ['', [Validators.required]] // SIN ñ
+    });
+  }
+
+  ngOnInit(): void {}
+
+  // --- Envío al Backend ---
+  onSubmit() {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
     }
+    
+    this.isLoading = true;
+    this.errorMessage = '';
 
-  goAdopcionGatos() {
-    this.router.navigate(['/adopcion/gatos']);
+    const formData = this.loginForm.value;
+
+    this.http.post<LoginResponse>(`${this.apiUrl}/login`, formData).pipe(
+      catchError(err => {
+        this.isLoading = false;
+        this.errorMessage = err.error?.message || 'Error al iniciar sesión. Intente más tarde.';
+        return of(null); 
+      })
+    ).subscribe(response => {
+      if (response && response.access_token) {
+        this.isLoading = false;
+        
+        localStorage.setItem('authToken', response.access_token);
+        
+        // 2. Opcional: Decodificar token para saber el rol y redirigir
+        // const decodedToken = jwt_decode(response.access_token); // Necesitarías instalar jwt-decode
+        // if (decodedToken.rol === 'admin') { this.router.navigate(['/admin/dashboard']); } else { ... }
+
+        alert('¡Inicio de sesión exitoso!');
+        this.router.navigate(['/inicio']); 
+
+      } else if (response === null) {
+      } else {
+        this.isLoading = false;
+        this.errorMessage = 'Respuesta inesperada del servidor.';
+      }
+    });
   }
 
-  goAdopcionPerros() {
-    this.router.navigate(['/adopcion/perros']);
+  // --- Navegación ---
+  goRegistro() {
+    this.router.navigate(['/registro']);
   }
-
-  goAdopcionFormulario() {
-    this.router.navigate(['/adopcion/formulario']);
+  
+  // --- Getters para facilitar el acceso en el HTML ---
+  get f() {
+    return this.loginForm.controls;
   }
-
-  goAdopcionRequisitos() {
-    this.router.navigate(['/adopcion/requisitos']);
-  }
-
-  goAdopcion() {
-    this.router.navigate(['/adopcion']);
-  }
-
-  goDonar() {
-    this.router.navigate(['/donaciones']);
-  }
-
-  goInicio() {
-    this.router.navigate(['/inicio]']);
-  }
-
-  ngOnInit(): void {
-    this.inicioSesionClienteform = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.minLength(3)]),
-      password: new FormControl('', [Validators.required, Validators.minLength(6)])
-    })
-
-  }
-
 }

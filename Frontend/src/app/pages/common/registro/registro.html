@@ -1,39 +1,215 @@
-
-  <!-- Contenido -->
-  <main class="page">
-    <section class="auth">
-      <div class="card">
-        <h1>Crea tu cuenta</h1>
-
-        <form class="form" action="#" method="post" novalidate>
-          <label class="field">
-            <span>Email*</span>
-            <input type="email" name="email" placeholder="tu@email.com" required />
-            <small class="muted">A este mail te llegarán notificaciones</small>
-          </label>
-
-          <label class="field">
-            <span>Contraseña*</span>
-            <input type="password" name="password" placeholder="••••••••" required />
-          </label>
-
-           <label class="field">
-            <span>Confirmar contraseña*</span>
-            <input type="password" name="password_confirm" placeholder="••••••••" required />
-            <small class="muted">Por favor ingrese nuevamente la contraseña</small>
-          </label>
-
-          <button type="submit" class="btn-primary">CREAR CUENTA</button>
-
-          <div class="help-links">
-            <p class="muted">
-              ¿Ya tienes cuenta? <a (click)="goInicioSesion()">Inicia sesión</a>
-            </p>
-          </div>
-        </form>
+<!-- Contenido -->
+<main class="page">
+  <section class="auth">
+    <div class="card">
+      
+      <!-- Título dinámico (AHORA CON @if) -->
+      @if (step === 1) {
+        <h1>Paso 1: Tu cuenta</h1>
+      }
+      @if (step === 2) {
+        <h1>Paso 2: Datos personales</h1>
+      }
+      @if (step === 3) {
+        <h1>Paso 3: Contacto</h1>
+      }
+      
+      <!-- Barra de Progreso simple -->
+      <div class="progress-bar">
+        <div class="progress-step" [class.active]="step >= 1">1</div>
+        <div class="progress-step" [class.active]="step >= 2">2</div>
+        <div class="progress-step" [class.active]="step >= 3">3</div>
       </div>
-    </section>
-  </main>
 
-  <footer class="footer" aria-hidden="true"></footer>
+      <!-- Usamos [formGroup] y (ngSubmit) -->
+      <form class="form" [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
 
+        <!-- ==================== PASO 1: CUENTA ==================== -->
+        @if (step === 1) {
+          <div class="form-step">
+            
+            <label class="field">
+              <span>Email*</span>
+              <input type="email" formControlName="email" placeholder="tu@email.com" />
+              <!-- CORRECCIÓN: @if -->
+              @if (f.email.invalid && f.email.touched) {
+                <div class="error-msg">
+                  @if (f.email.errors?.['required']) {
+                    <small>El email es obligatorio.</small>
+                  }
+                  @if (f.email.errors?.['email']) {
+                    <small>Debe ser un email válido.</small>
+                  }
+                </div>
+              }
+            </label>
+
+            <label class="field">
+              <!-- CORRECCIÓN: Renombrado a 'contrasena' -->
+              <span>Contraseña*</span>
+              <input type="password" formControlName="contrasena" placeholder="••••••••" />
+              <!-- CORRECCIÓN: @if y 'contrasena' -->
+              @if (f.contrasena.invalid && f.contrasena.touched) {
+                <div class="error-msg">
+                  @if (f.contrasena.errors?.['required']) {
+                    <small>La contraseña es obligatoria.</small>
+                  }
+                  @if (f.contrasena.errors?.['minlength']) {
+                    <small>Debe tener al menos 8 caracteres.</small>
+                  }
+                </div>
+              }
+            </label>
+
+            <label class="field">
+              <!-- CORRECCIÓN: Renombrado a 'confirmarContrasena' -->
+              <span>Confirmar contraseña*</span>
+              <input type="password" formControlName="confirmarContrasena" placeholder="••••••••" />
+              <!-- CORRECCIÓN: @if y 'confirmarContrasena' y el error sin 'ñ' -->
+              @if (f.confirmarContrasena.touched && registerForm.hasError('contrasenasNoCoinciden')) {
+                <div class="error-msg">
+                  <small>Las contraseñas no coinciden.</small>
+                </div>
+              }
+            </label>
+
+            <div class="step-nav">
+              <button type="button" class="btn-primary" (click)="nextStep()">Siguiente &rarr;</button>
+            </div>
+          </div>
+        }
+
+        <!-- ==================== PASO 2: DATOS PERSONALES ==================== -->
+        @if (step === 2) {
+          <div class="form-step">
+            
+            <label class="field">
+              <span>Nombre*</span>
+              <input type="text" formControlName="nombre" placeholder="Juan" />
+              @if (f.nombre.invalid && f.nombre.touched) {
+                <div class="error-msg">
+                  <small>Tu nombre es obligatorio.</small>
+                </div>
+              }
+            </label>
+
+            <label class="field">
+              <span>Apellido*</span>
+              <input type="text" formControlName="apellido" placeholder="Pérez" />
+              @if (f.apellido.invalid && f.apellido.touched) {
+                <div class="error-msg">
+                  <small>Tu apellido es obligatorio.</small>
+                </div>
+              }
+            </label>
+            
+            <label class="field">
+              <span>DNI*</span>
+              <input type="text" formControlName="dni" placeholder="12345678" />
+              @if (f.dni.invalid && f.dni.touched) {
+                <div class="error-msg">
+                  @if (f.dni.errors?.['required']) {
+                    <small>El DNI es obligatorio.</small>
+                  }
+                  @if (f.dni.errors?.['pattern']) {
+                    <small>DNI inválido (solo números, 7-8 dígitos).</small>
+                  }
+                </div>
+              }
+            </label>
+            
+            <label class="field">
+              <span>Sexo*</span>
+              <select formControlName="sexo">
+                <option value="" disabled>Selecciona una opción...</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Otro">Otro</option>
+              </select>
+              @if (f.sexo.invalid && f.sexo.touched) {
+                <div class="error-msg">
+                  <small>Debes seleccionar tu sexo.</small>
+                </div>
+              }
+            </label>
+
+            <label class="field">
+              <span>Fecha de Nacimiento*</span>
+              <input type="date" formControlName="fechaNacimiento" />
+              @if (f.fechaNacimiento.invalid && f.fechaNacimiento.touched) {
+                <div class="error-msg">
+                  <small>Tu fecha de nacimiento es obligatoria.</small>
+                </div>
+              }
+            </label>
+
+            <div class="step-nav">
+              <button type="button" class="btn-secondary" (click)="prevStep()">&larr; Anterior</button>
+              <button type="button" class="btn-primary" (click)="nextStep()">Siguiente &rarr;</button>
+            </div>
+          </div>
+        }
+
+        <!-- ==================== PASO 3: CONTACTO ==================== -->
+        @if (step === 3) {
+          <div class="form-step">
+            
+            <label class="field">
+              <span>Dirección*</span>
+              <input type="text" formControlName="direccion" placeholder="Calle Falsa 123, Ciudad" />
+              @if (f.direccion.invalid && f.direccion.touched) {
+                <div class="error-msg">
+                  <small>Tu dirección es obligatoria.</small>
+                </div>
+              }
+            </label>
+
+            <label class="field">
+              <span>Teléfono*</span>
+              <input type="tel" formControlName="telefono" placeholder="3511234567" />
+              @if (f.telefono.invalid && f.telefono.touched) {
+                <div class="error-msg">
+                  @if (f.telefono.errors?.['required']) {
+                    <small>El teléfono es obligatorio.</small>
+                  }
+                  @if (f.telefono.errors?.['pattern']) {
+                    <small>Teléfono inválido (solo números).</small>
+                  }
+                </div>
+              }
+            </label>
+
+            <!-- Mensaje de error general del backend -->
+            @if (errorMessage) {
+              <div class="error-msg global-error">
+                {{ errorMessage }}
+              </div>
+            }
+
+            <!-- Spinner de carga -->
+            @if (isLoading) {
+              <div class="loading-spinner">
+                <p>Creando cuenta...</p>
+              </div>
+            }
+            
+            <div class="step-nav">
+              <button type="button" class="btn-secondary" (click)="prevStep()">&larr; Anterior</button>
+              <button type="submit" class="btn-primary" [disabled]="registerForm.invalid || isLoading">
+                {{ isLoading ? 'ENVIANDO...' : 'CREAR CUENTA' }}
+              </button>
+            </div>
+          </div>
+        }
+        
+        <!-- Link a Iniciar Sesión -->
+        <div class="help-links">
+          <p class="muted">
+            ¿Ya tienes cuenta? <a (click)="goInicioSesion()">Inicia sesión</a>
+          </p>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+<footer class="footer" aria-hidden="true"></footer>
