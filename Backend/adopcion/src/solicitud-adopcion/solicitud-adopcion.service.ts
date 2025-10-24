@@ -1,8 +1,8 @@
 // En: src/solicitud-adopcion/solicitud-adopcion.service.ts
 
-import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, NotFoundException, InternalServerErrorException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { SolicitudAdopcion } from './solicitud-adopcion.entity';
@@ -16,6 +16,9 @@ import { CambiarEstadoDto } from '../DTO/cambiar-estado.DTO';
 export class SolicitudAdopcionService {
   private readonly USUARIOS_SERVICE_URL = 'http://usuarios-api:3000/usuarios';
   private readonly ANIMALES_SERVICE_URL = 'http://animales-api:3000/animales';
+  // servicio de notificaciones x mail
+
+  private readonly logger = new Logger(SolicitudAdopcionService.name);
 
   constructor(
     @InjectRepository(SolicitudAdopcion) private solicitudRepo: Repository<SolicitudAdopcion>,
@@ -132,6 +135,8 @@ export class SolicitudAdopcionService {
   }
 
   async cambiarEstado(id: number, dto: CambiarEstadoDto, adminId: number): Promise<SolicitudAdopcion> {
+    
+    // Buscamos la solicitud y el nuevo estado
     const solicitud = await this.solicitudRepo.findOne({
         where: { id },
         relations: ['estadoActual'],
@@ -141,11 +146,13 @@ export class SolicitudAdopcionService {
     if (!solicitud || !nuevoEstado) {
       throw new NotFoundException('La solicitud o el nuevo estado no fueron encontrados.');
     }
+    
+    const estadoAnterior = solicitud.estadoActual;
 
-    // Guardar el historial del cambio de estado
+    // Guardar el historial del cambio
     const cambio = this.cambioEstadoRepo.create({
       solicitud,
-      estadoAnterior: solicitud.estadoActual,
+      estadoAnterior: estadoAnterior,
       estadoNuevo: nuevoEstado,
       responsableId: adminId,
       motivo: dto.motivo,
@@ -154,6 +161,127 @@ export class SolicitudAdopcionService {
 
     // Actualizar el estado actual en la solicitud
     solicitud.estadoActual = nuevoEstado;
-    return this.solicitudRepo.save(solicitud);
+    const solicitudGuardada = await this.solicitudRepo.save(solicitud);
+
+    try {
+      switch (nuevoEstado.nombre) {
+        case 'Aprobada':
+          this.logger.log(`Disparando efectos para Solicitud ${id} Aprobada...`);
+          await this.handleSolicitudAprobada(solicitudGuardada);
+          break;
+        
+        case 'Finalizada':
+          this.logger.log(`Disparando efectos for Solicitud ${id} Finalizada...`);
+          await this.handleSolicitudFinalizada(solicitudGuardada, estadoAnterior, adminId);
+          break;
+        
+        case 'Rechazada':
+          // enviar notificaicon por mail
+          break;
+      }
+    } catch (error) {
+      this.logger.error(`Fallo al ejecutar efectos secundarios para solicitud ${id}: ${error.message}`, error.stack);
+    }
+    
+    // Devolver la solicitud actualizada
+    return solicitudGuardada;
+  }
+
+  // Logica para solicitud aprobada
+  private async handleSolicitudAprobada(solicitud: SolicitudAdopcion): Promise<void> {
+    const { animalId, adoptanteId } = solicitud;
+
+    // Cambiar estado del animal
+    try {
+      // ASUMO que tu endpoint de animales es: PATCH /animales/:id/estado
+      const url = `${this.ANIMALES_SERVICE_URL}/${animalId}/estado`;
+      const dto = { nuevoEstado: 'pendienteAdopcion' };
+      await firstValueFrom(this.httpService.patch(url, dto));
+      this.logger.log(`Animal ${animalId} actualizado a 'Pendiente Adopcion'`);
+    } catch (error) {
+      this.logger.error(`No se pudo actualizar el estado del animal ${animalId}`, error.message);
+    }
+  }
+
+    /* Enviar email de notificación
+    try {
+      // Necesitamos los datos del adoptante (email) y animal (nombre)
+      const adoptante = (await firstValueFrom(this.httpService.get(`${this.USUARIOS_SERVICE_URL}/${adoptanteId}`))).data;
+      const animal = (await firstValueFrom(this.httpService.get(`${this.ANIMALES_SERVICE_URL}/${animalId}`))).data;
+
+      const emailDto = {
+        to: adoptante.email,
+        subject: `¡Tu solicitud de adopción para ${animal.nombre} fue aprobada!`,
+        body: `Hola ${adoptante.nombre}, ¡felicidades! Tu solicitud ha sido aprobada. Por favor, contáctanos para coordinar la reunión y el retiro.`
+      };
+      
+      // Llamamos al (hipotético) servicio de notificaciones
+      await firstValueFrom(this.httpService.post(this.NOTIFICACIONES_SERVICE_URL, emailDto));
+      this.logger.log(`Email de aprobación enviado a ${adoptante.email}`);
+
+    } catch (error) {
+      this.logger.error(`No se pudo enviar el email de aprobación a ${adoptanteId}`, error.message);
+    }
+  }
+    */
+
+    // Logica para solicitud finalizada
+  private async handleSolicitudFinalizada(solicitud: SolicitudAdopcion, estadoAnterior: Estado, adminId: number): Promise<void> {
+    const { animalId } = solicitud;
+
+    // Cambiar estado del animal a "Adoptado"
+    try {
+      const url = `${this.ANIMALES_SERVICE_URL}/${animalId}/estado`;
+      const dto = { nuevoEstado: 'adoptado' };
+      await firstValueFrom(this.httpService.patch(url, dto));
+      this.logger.log(`Animal ${animalId} actualizado a 'Adoptado'`);
+    } catch (error) {
+      this.logger.error(`No se pudo actualizar el estado del animal ${animalId} a 'Adoptado'`, error.message);
+    }
+
+    // Rechazar otras solicitudes pendientes para este animal
+    try {
+      // Buscamos los estados "Pendiente" y "Rechazada"
+      const estadoPendiente = await this.estadoRepo.findOneBy({ nombre: 'Pendiente' });
+      const estadoRechazada = await this.estadoRepo.findOneBy({ nombre: 'Rechazada' });
+      
+      if (!estadoPendiente || !estadoRechazada) {
+        throw new InternalServerErrorException('Faltan estados "Pendiente" o "Rechazada" en la BD.');
+      }
+
+      // Buscamos TODAS las solicitudes de ESTE animal, que NO SEAN esta solicitud,
+      // y que estén en estado "Pendiente".
+      const otrasSolicitudes = await this.solicitudRepo.find({
+        where: {
+          animalId: animalId,
+          id: Not(solicitud.id),
+          estadoActual: { id: estadoPendiente.id }
+        }
+      });
+      
+      this.logger.log(`Se encontraron ${otrasSolicitudes.length} solicitudes pendientes para rechazar.`);
+
+      const promesasRechazo = otrasSolicitudes.map(async (sol) => {
+        // Creamos el historial
+        const cambio = this.cambioEstadoRepo.create({
+          solicitud: sol,
+          estadoAnterior: estadoPendiente,
+          estadoNuevo: estadoRechazada,
+          responsableId: adminId,
+          motivo: 'Rechazada automáticamente porque el animal ya fue adoptado.',
+        });
+        await this.cambioEstadoRepo.save(cambio);
+        
+        // Actualizamos la solicitud
+        sol.estadoActual = estadoRechazada;
+        return this.solicitudRepo.save(sol);
+      });
+
+      // Ejecutamos todas las actualizaciones en paralelo
+      await Promise.all(promesasRechazo);
+      
+    } catch (error) {
+      this.logger.error(`Fallo al rechazar automáticamente otras solicitudes para ${animalId}`, error.message);
+    }
   }
 }

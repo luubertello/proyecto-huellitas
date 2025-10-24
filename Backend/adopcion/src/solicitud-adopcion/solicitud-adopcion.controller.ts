@@ -43,7 +43,7 @@ export class SolicitudAdopcionController {
     @Body() cambiarEstadoDto: CambiarEstadoDto,
     @Request() req,
   ) {
-    const adminId = req.user.id; // Registramos qué admin hizo el cambio
+      const adminId = req.user ? req.user.id : 0;
     return this.solicitudService.cambiarEstado(id, cambiarEstadoDto, adminId);
   }
 }

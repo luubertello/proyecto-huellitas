@@ -1,7 +1,8 @@
-import { Controller, Post, Get, Param, Body, Put, Patch, Delete } from '@nestjs/common';
+import { Controller, Post, Get, Param, Body, Put, Patch, Delete, ParseIntPipe } from '@nestjs/common';
 import { AnimalService } from './animal.service';
 import { CrearAnimalDto } from 'src/DTO/crearAnimal.dto';
 import { Animal } from './animal.entity';
+import { CambiarEstadoAnimalDto } from 'src/DTO/cambiarEstadoAnimal.dto';
 
 @Controller('animales')
 export class AnimalController {
@@ -36,6 +37,16 @@ export class AnimalController {
   @Patch(':id')
   partialUpdate(@Param('id') id: string, @Body() dto: Partial<CrearAnimalDto>): Promise<Animal> {
     return this.animalService.update(+id, dto);
+  }
+
+  // Cambiar estado del animal
+  @Patch(':id/estado')
+  cambiarEstado(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: CambiarEstadoAnimalDto, // Usamos el DTO
+  ): Promise<Animal> {
+    // Llamamos al nuevo método en tu servicio
+    return this.animalService.cambiarEstado(id, dto.nuevoEstado);
   }
 
   // Eliminar animal

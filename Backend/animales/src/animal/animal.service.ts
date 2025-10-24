@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Animal } from './animal.entity';
@@ -67,6 +67,29 @@ export class AnimalService {
     // Actualizamos solo los campos que vienen en dto
     Object.assign(animal, dto);
 
+    return this.animalRepo.save(animal);
+  }
+
+  // Cambiar estado
+  async cambiarEstado(id: number, nombreNuevoEstado: string): Promise<Animal> {
+    
+    // Buscar el animal
+    const animal = await this.animalRepo.findOneBy({ id });
+    if (!animal) {
+      throw new NotFoundException(`Animal con ID ${id} no encontrado.`);
+    }
+
+    // Buscar la entidad del nuevo estado por su nombre
+    const nuevoEstado = await this.estadoRepo.findOneBy({ nombre: nombreNuevoEstado });
+    if (!nuevoEstado) {
+      throw new InternalServerErrorException(`El estado "${nombreNuevoEstado}" no está configurado en la base de datos de Animales.`);
+    }
+
+    // agregar logica para guardar cambio de estado
+
+    // Asignar el nuevo estado y guardar
+    animal.estadoActual = nuevoEstado;
+    
     return this.animalRepo.save(animal);
   }
 
