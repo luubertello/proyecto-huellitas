@@ -28,11 +28,18 @@ export class Usuario {
   @Column()
   email: string;
 
-  @Column()
-  contraseña: string;
+  @Column({ 
+    type: "varchar",
+    nullable: true 
+  }) 
+  contraseña: string | null;
 
   @Column()
   telefono: string;
+
+  @Index({ unique: true, where: '"googleId" IS NOT NULL' })
+  @Column({ type: 'varchar', nullable: true, unique: false })
+  googleId: string | null;
   
   @ManyToOne(() => Rol, rol => rol.usuarios)
   rol: Rol;

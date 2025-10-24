@@ -19,8 +19,11 @@ import { EditarAnimal } from './pages/admin/editar-animal/editar-animal';
 import { GestionAdopcion } from './pages/admin/gestion-adopcion/gestion-adopcion';
 import { PerfilUsuario } from './pages/usuario/perfil-usuario/perfil-usuario';
 import { VerSolicitud } from './pages/admin/ver-solicitud/ver-solicitud';
+import { AuthCallbackComponent } from './auth/callback/callback';
 
 export const routes: Routes = [
+
+  { path: 'auth/callback', component: AuthCallbackComponent },
    { 
     path: 'admin',
     component: AdminLayout,

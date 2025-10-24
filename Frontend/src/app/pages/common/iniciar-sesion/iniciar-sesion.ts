@@ -91,6 +91,11 @@ export class IniciarSesion implements OnInit {
     });
   }
 
+  // Inicio sesion con Google
+  loginWithGoogle(): void {
+    window.location.href = `${this.apiUrl}/google`; 
+  }
+
   // --- Navegación ---
   goRegistro() {
     this.router.navigate(['/registro']);

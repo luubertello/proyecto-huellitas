@@ -8,6 +8,17 @@ import { RegistroDto } from 'src/DTO/registro.dto';
 import * as bcrypt from 'bcrypt';
 import { Rol } from 'src/rol/rol.entity';
 
+interface GoogleProfileData {
+  googleId: string;
+  email: string;
+  nombre: string;
+  apellido: string;
+  sexo?: string;
+  fechaNacimiento?: Date;
+  direccion?: string;
+  telefono?: string;
+}
+
 type UsuarioSinContraseña = Omit<Usuario, 'contraseña'>;
 
 @Injectable()
@@ -39,6 +50,69 @@ export class UsuarioService {
 
     const { contraseña: _, ...result } = usuarioGuardado;
     return result;
+  }
+
+// Encuentra un usuario por su google ID.
+  async findOneByGoogleId(googleId: string): Promise<Usuario | null> {
+    return this.usuarioRepository.findOne({ 
+      where: { googleId },
+      relations: ['rol'] // Carga el rol también
+    });
+  }
+
+// Vincula Google ID a un usuario ya existente
+  async linkGoogleId(userId: number, googleId: string): Promise<void> {
+    const user = await this.usuarioRepository.findOneBy({ id: userId });
+    if (!user) {
+      throw new NotFoundException(`Usuario con ID ${userId} no encontrado para vincular Google ID.`);
+    }
+    if (user.googleId && user.googleId !== googleId) {
+        console.warn(`Usuario ${userId} ya tiene un Google ID (${user.googleId}), intentando vincular ${googleId}`);
+    }
+    
+    await this.usuarioRepository.update(userId, { googleId });
+  }
+
+  // Crea un nuevo usuario desde el perfil de Google
+  async createFromGoogle(profileData: GoogleProfileData): Promise<Usuario> {
+    
+    // Verificamos si ya existe por email o googleId (doble chequeo)
+    const existingUser = await this.usuarioRepository.findOne({
+        where: [
+            { googleId: profileData.googleId },
+            { email: profileData.email }
+        ]
+    });
+    if (existingUser) {
+        return existingUser; 
+    }
+
+    const defaultRol = await this.rolRepository.findOne({ where: { nombre: 'interesado' } });
+    if (!defaultRol) {
+      throw new InternalServerErrorException('El rol por defecto "interesado" no fue encontrado.');
+    }
+
+    // Creamos el usuario SIN contraseña
+    const nuevoUsuario = this.usuarioRepository.create({
+    // Datos de Google
+      googleId: profileData.googleId,
+      email: profileData.email,
+      nombre: profileData.nombre,
+      apellido: profileData.apellido,
+      
+      // --- VALORES POR DEFECTO ---
+      dni: 0, 
+      sexo: 'No especificado', 
+      fechaNacimiento: new Date('1900-01-01'), 
+      direccion: 'No especificada', 
+      telefono: '00000000', 
+      // --- FIN VALORES POR DEFECTO ---
+      
+      contraseña: null, 
+      rol: defaultRol,
+    });
+
+    return this.usuarioRepository.save(nuevoUsuario);
   }
 
 // Verifica si un email ya existe y devuelve un booleano. No lanza error si no lo encuentra.
@@ -82,17 +156,13 @@ async findOneById(id: number): Promise<Usuario> {
   }
   
   // Buscar usuario por email y SI devuelve contrasena. (solo para valiadacion del Auth)
-async findOneByEmailWithPassword(email: string): Promise<Usuario> {
+async findOneByEmailWithPassword(email: string): Promise<Usuario | null> { 
     const user = await this.usuarioRepository.findOne({ 
       where: { email },
       relations: ['rol'],
-      select: ['id', 'nombre', 'apellido', 'dni', 'sexo', 'fechaNacimiento', 'direccion', 'email', 'telefono', 'contraseña', 'rol'],
+      select: ["id", "nombre", "apellido", "email", "contraseña", "googleId", "rol"] 
     });
     
-    if (!user) {
-      throw new NotFoundException(`Usuario con email ${email} no encontrado.`);
-    }
-
-    return user;
+    return user || null; 
   }
 }
