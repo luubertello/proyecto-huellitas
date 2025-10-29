@@ -1,8 +1,8 @@
 import { Controller, Post, Get, Param, Body, Put, Patch, Delete, ParseIntPipe } from '@nestjs/common';
 import { AnimalService } from './animal.service';
-import { CrearAnimalDto } from 'src/DTO/crearAnimal.dto';
+import { CrearAnimalDto } from '../DTO/crearAnimal.dto';
 import { Animal } from './animal.entity';
-import { CambiarEstadoAnimalDto } from 'src/DTO/cambiarEstadoAnimal.dto';
+import { CambiarEstadoAnimalDto } from '../DTO/cambiarEstadoAnimal.dto';
 
 @Controller('animales')
 export class AnimalController {
