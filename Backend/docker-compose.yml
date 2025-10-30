@@ -1,0 +1,168 @@
+
+services:
+
+  # ==========================================================
+  # --- SERVICIO API GATEWAY ---
+  # ==========================================================
+  api-gateway:
+    build: ./gateway 
+    container_name: huellitas_api_gateway
+    restart: always
+    ports:
+      - "3000:3000" 
+    depends_on:
+      - usuarios-api
+      - adopcion-api
+      - animales-api
+    environment:
+      USUARIOS_SERVICE_URL: http://usuarios-api:3000
+      ADOPCION_SERVICE_URL: http://adopcion-api:3000
+      ANIMALES_SERVICE_URL: http://animales-api:3000
+      
+      JWT_SECRET: ${JWT_SECRET}
+    networks:
+      - huellitas-net
+
+  # ==========================================================
+  # --- SERVICIO DE USUARIOS (1/3) ---
+  # ==========================================================
+  usuarios-api:
+    build: ./usuarios 
+    container_name: huellitas_usuarios_api
+    restart: always
+    depends_on:
+      usuarios_pg:
+        condition: service_healthy
+    environment:
+      DB_HOST: ${DB_HOST_USUARIOS}
+      DB_PORT: ${DB_PORT_USUARIOS}
+      DB_USERNAME: ${DB_USER_USUARIOS}
+      DB_PASSWORD: ${DB_PASSWORD_USUARIOS}
+      DB_DATABASE: ${DB_NAME_USUARIOS}
+      
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      JWT_SECRET: ${JWT_SECRET} 
+    networks:
+      - huellitas-net
+
+  # --- Servicio DB de Usuarios ---
+  usuarios_pg:
+    image: postgres:15-alpine
+    container_name: usuarios_pg
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME_USUARIOS}
+      POSTGRES_USER: ${DB_USER_USUARIOS}
+      POSTGRES_PASSWORD: ${DB_PASSWORD_USUARIOS}
+    volumes:
+      - usuarios_data:/var/lib/postgresql/data
+      - ./usuarios/init-usuarios.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER_USUARIOS} -d ${DB_NAME_USUARIOS}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - huellitas-net
+
+  # ==========================================================
+  # --- SERVICIO DE ADOPCIONES (2/3) ---
+  # ==========================================================
+  adopcion-api:
+    build: ./adopcion
+    container_name: huellitas_adopcion_api
+    restart: always
+    depends_on:
+      adopcion_pg:
+        condition: service_healthy
+      usuarios-api:
+        condition: service_started
+      animales-api:
+        condition: service_started
+    environment:
+      DB_HOST: ${DB_HOST_ADOPCIONES}
+      DB_PORT: ${DB_PORT_ADOPCIONES}
+      DB_USERNAME: ${DB_USER_ADOPCIONES}
+      DB_PASSWORD: ${DB_PASSWORD_ADOPCIONES}
+      DB_DATABASE: ${DB_NAME_ADOPCIONES}
+
+      JWT_SECRET: ${JWT_SECRET}
+
+      USUARIOS_SERVICE_URL: http://usuarios-api:3000/usuarios
+      ANIMALES_SERVICE_URL: http://animales-api:3000/animales
+    networks:
+      - huellitas-net
+
+  # --- Servicio DB de Adopciones ---
+  adopcion_pg:
+    image: postgres:15-alpine
+    container_name: adopcion_pg
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME_ADOPCIONES}
+      POSTGRES_USER: ${DB_USER_ADOPCIONES}
+      POSTGRES_PASSWORD: ${DB_PASSWORD_ADOPCIONES}
+    volumes:
+      - adopcion_data:/var/lib/postgresql/data
+      - ./adopcion/init-adopcion.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER_ADOPCIONES} -d ${DB_NAME_ADOPCIONES}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - huellitas-net
+  
+  # ==========================================================
+  # --- SERVICIO DE ANIMALES (3/3) ---
+  # ==========================================================
+  animales-api:
+    build: ./animales 
+    container_name: huellitas_animales_api
+    restart: always
+    depends_on:
+      animales_pg:
+        condition: service_healthy
+    environment:
+      DB_HOST: ${DB_HOST_ANIMALES}
+      DB_PORT: ${DB_PORT_ANIMALES}
+      DB_USERNAME: ${DB_USER_ANIMALES}
+      DB_PASSWORD: ${DB_PASSWORD_ANIMALES}
+      DB_DATABASE: ${DB_NAME_ANIMALES}
+      
+      JWT_SECRET: ${JWT_SECRET}
+    networks:
+      - huellitas-net
+
+  # --- Servicio DB de Animales ---
+  animales_pg:
+    image: postgres:15-alpine
+    container_name: animales_pg
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME_ANIMALES}
+      POSTGRES_USER: ${DB_USER_ANIMALES}
+      POSTGRES_PASSWORD: ${DB_PASSWORD_ANIMALES}
+    volumes:
+      - animales_data:/var/lib/postgresql/data
+      - ./animales/init-animales.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER_ANIMALES} -d ${DB_NAME_ANIMALES}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - huellitas-net
+
+# Volumenes de datos
+volumes:
+  usuarios_data:
+  adopcion_data:
+  animales_data:
+
+# Red compartida
+networks:
+  huellitas-net:
+    driver: bridge
+

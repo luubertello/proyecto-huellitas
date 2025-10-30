@@ -72,10 +72,8 @@ describe('Animales Service (Component Test)', () => {
 
   // --- 2. LIMPIEZA ---
   beforeEach(async () => {
-    // 1. Borrar la tabla "hija" (la que tiene el FK hacia animal)
     await cambioEstadoRepo.query('DELETE FROM "cambio_estado"');
     
-    // 2. Borrar la tabla "madre" (la referenciada)
     await animalRepo.query('DELETE FROM "animal"');
   });
 
@@ -103,7 +101,6 @@ describe('Animales Service (Component Test)', () => {
       expect(res.body.id).toBeDefined();
       expect(res.body.nombre).toBe('Mora');
       expect(res.body.sexo).toBe('Hembra');
-      // Verifica las relaciones anidadas
       expect(res.body.estadoActual.id).toBe(estadoEnAdopcionId);
       expect(res.body.estadoActual.nombre).toBe('EnAdopcion');
       expect(res.body.raza.id).toBe(razaMestizoId);
@@ -116,12 +113,10 @@ describe('Animales Service (Component Test)', () => {
     });
 
     it('(400) debe fallar si faltan campos requeridos o el tipo es incorrecto', async () => {
-      // Enviamos un tipo de dato incorrecto (nombre: numero)
-      // para forzar el fallo del class-validator
       const dto = {
-        nombre: 'Test de Sexo',
-        sexo: 'Invalido', // <--- ESTO DEBE CAUSAR 400
-        descripcion: 'Test',
+        nombre: 'Luna',
+        sexo: 'Invalido',
+        descripcion: 'Cachorra juguetona',
         foto: 'foto.jpg',
         razaId: razaMestizoId,
         especieId: especiePerroId,
@@ -131,7 +126,7 @@ describe('Animales Service (Component Test)', () => {
       await request(app.getHttpServer())
         .post('/animales')
         .send(dto)
-        .expect(400); // <-- Este test fallará (dará 201) hasta que arregles la validación en tu app
+        .expect(400);
     });
   });
 
@@ -139,8 +134,6 @@ describe('Animales Service (Component Test)', () => {
     let animalCreado;
 
     beforeEach(async () => {
-      // --- ¡ESTA ES LA CORRECCIÓN 1! ---
-      // Usamos el formato de objeto anidado para 'save'
       animalCreado = await animalRepo.save({
         nombre: 'Rocky',
         sexo: 'Macho',
@@ -160,12 +153,10 @@ describe('Animales Service (Component Test)', () => {
 
       expect(res.body.id).toBe(animalCreado.id);
       expect(res.body.nombre).toBe('Rocky');
-      // Este test asume que tu GET /:id devuelve las relaciones (por 'eager: true')
       expect(res.body.estadoActual.nombre).toBe('EnAdopcion');
     });
 
     it('(404) debe fallar si el animal no existe', async () => {
-      // Este test asume que tu servicio lanza NotFoundException
       await request(app.getHttpServer()).get('/animales/99999').expect(404);
     });
   });
@@ -174,8 +165,6 @@ describe('Animales Service (Component Test)', () => {
     let animalCreado;
 
     beforeEach(async () => {
-      // --- ¡ESTA ES LA CORRECCIÓN 2! ---
-      // Usamos el formato de objeto anidado para 'save'
       animalCreado = await animalRepo.save({
         nombre: 'Luna',
         sexo: 'Hembra',
@@ -199,26 +188,22 @@ describe('Animales Service (Component Test)', () => {
         .send(dtoUpdate)
         .expect(200);
 
-      // Verificamos la respuesta de la API
       expect(res.body.id).toBe(animalCreado.id);
       expect(res.body.descripcion).toBe('Ahora es muy sociable');
       
-      // Asume que tu PATCH devuelve la entidad con relaciones
       if (res.body.estadoActual) {
          expect(res.body.estadoActual.nombre).toBe('PendienteAdopcion');
       }
 
-      // Verificamos en la DB
       const animalEnDB = await animalRepo.findOne({
         where: { id: animalCreado.id },
-        relations: ['estadoActual'], // Cargamos la relación para verificar
+        relations: ['estadoActual'],
       });
       expect(animalEnDB?.descripcion).toBe('Ahora es muy sociable');
       expect(animalEnDB?.estadoActual.nombre).toBe('PendienteAdopcion');
     });
 
     it('(404) debe fallar al intentar actualizar un animal que no existe', async () => {
-      // Este test asume que tu servicio lanza NotFoundException
       await request(app.getHttpServer())
         .patch('/animales/99999')
         .send({ nombre: 'Fantasma' })
@@ -230,8 +215,6 @@ describe('Animales Service (Component Test)', () => {
     let animalCreado;
 
     beforeEach(async () => {
-      // --- ¡ESTA ES LA CORRECCIÓN 3! ---
-      // Usamos el formato de objeto anidado para 'save'
       animalCreado = await animalRepo.save({
         nombre: 'Zeus',
         sexo: 'Macho',
@@ -245,16 +228,13 @@ describe('Animales Service (Component Test)', () => {
     });
 
     it('(200) debe eliminar un animal existente', async () => {
-      // 1. Verificamos que existe
       const animalAntes = await animalRepo.findOneBy({ id: animalCreado.id });
       expect(animalAntes).toBeDefined();
 
-      // 2. Ejecutamos el DELETE
       await request(app.getHttpServer())
         .delete(`/animales/${animalCreado.id}`)
         .expect(200);
 
-      // 3. Verificamos que ya no existe en la DB
       const animalDespues = await animalRepo.findOneBy({ id: animalCreado.id });
       expect(animalDespues).toBeNull();
 

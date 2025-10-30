@@ -20,6 +20,7 @@ import { GestionAdopcion } from './pages/admin/gestion-adopcion/gestion-adopcion
 import { PerfilUsuario } from './pages/usuario/perfil-usuario/perfil-usuario';
 import { VerSolicitud } from './pages/admin/ver-solicitud/ver-solicitud';
 import { AuthCallbackComponent } from './auth/callback/callback';
+import { authGuard } from './auth/auth.guard';
 
 export const routes: Routes = [
 
@@ -51,7 +52,7 @@ export const routes: Routes = [
           { path: 'gatos', component: AdoptaGatos },   // /adopta/gatos
           { path: 'perros', component: AdoptaPerros }, // /adopta/perros
           { path: 'requisitos', component: RequisitosAdopcion }, // /adopta/requisitos
-          { path: 'formulario', component: FormularioAdopcion }, // /adopta/formulario
+          { path: 'animal/:id/formulario', component: FormularioAdopcion }, // /adopta/animal/:id/formulario
           { path: 'animal/:id', component: PerfilAnimal } // /adopta/animal/:id
         ],
       },

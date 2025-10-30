@@ -1,5 +1,7 @@
+// --- ARCHIVO: apps/animales-service/test/component/animales-test.helper.ts ---
+
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import {
   PostgreSqlContainer,
@@ -9,7 +11,7 @@ import { AppModule } from '../../src/app.module';
 import { HttpService } from '@nestjs/axios';
 import { Request } from 'express';
 
-// --- Tus Entidades ---
+// --- Entidades ---
 import { Animal } from '../../src/animal/animal.entity';
 import { Estado } from '../../src/estado/estado.entity';
 import { Raza } from '../../src/raza/raza.entity';
@@ -23,7 +25,6 @@ const DB_USER = 'admin';
 const DB_PASS = '1234';
 const DB_NAME = 'animales_test';
 
-// (bootPostgresContainer sigue igual)
 export async function bootPostgresContainer() {
   const container: StartedPostgreSqlContainer =
     await new PostgreSqlContainer('postgres:16-alpine')
@@ -55,24 +56,18 @@ export async function createAnimalsTestApp(opts?: {
     username: pg.user,
     password: pg.pass,
     database: pg.db,
-    entities: entities, // <--- Lista completa de entidades
-
-    // --- ¡ESTA ES LA CORRECCIÓN! ---
-    synchronize: true, // true: Crea tablas desde las entidades
-    dropSchema: true, // true: Borra todo antes de sincronizar (tests limpios)
-    // --- Fin de la corrección ---
+    entities: entities,
+    synchronize: true, 
+    dropSchema: true, 
   });
 
-  // Esto ahora creará las tablas 'estado', 'animal', 'raza', etc.
-  await appDataSource.initialize(); 
-
-  // Eliminamos toda la lógica de `runMigrations` que ya no es necesaria
+  await appDataSource.initialize();
 
   const moduleRef: TestingModule = await Test.createTestingModule({
     imports: [AppModule],
   })
     .overrideProvider(DataSource)
-    .useValue(appDataSource) // Reemplaza la DB de la app con la nuestra
+    .useValue(appDataSource)
     .overrideProvider(HttpService)
     .useValue({
       get: jest.fn(),
@@ -82,6 +77,19 @@ export async function createAnimalsTestApp(opts?: {
 
   const app: INestApplication = moduleRef.createNestApplication();
 
+  // (El ValidationPipe está perfecto)
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
+
+  // (El middleware de usuario fake sigue igual)
   app.use((req: Request & { user: any }, _res, next) => {
     req.user = opts?.fakeUser || { id: 1, roles: ['admin'] };
     next();
@@ -89,8 +97,7 @@ export async function createAnimalsTestApp(opts?: {
 
   await app.init();
 
-  // --- SEEDING (Creación de datos base) ---
-  // Esto ahora funcionará porque `appDataSource.initialize()` ya creó las tablas.
+  // (El Seeding sigue igual)
   const estadoRepo = appDataSource.getRepository(Estado);
   if ((await estadoRepo.count()) === 0) {
     await estadoRepo.save([
@@ -99,24 +106,26 @@ export async function createAnimalsTestApp(opts?: {
       { nombre: 'Adoptado' },
     ]);
   }
-
   const razaRepo = appDataSource.getRepository(Raza);
   if ((await razaRepo.count()) === 0) {
     await razaRepo.save([{ nombre: 'Mestizo' }, { nombre: 'Puro' }]);
   }
-
   const especieRepo = appDataSource.getRepository(Especie);
   if ((await especieRepo.count()) === 0) {
     await especieRepo.save([{ nombre: 'Perro' }, { nombre: 'Gato' }]);
   }
 
+  // --- (EL CIERRE CORREGIDO) ---
   const close = async () => {
     await app.close();
-    await appDataSource.destroy(); 
+    
+    if (appDataSource.isInitialized) {
+      await appDataSource.destroy();
+    }
+    // ---------------------------------
+    
     await pg.container.stop();
   };
 
-  // Esto ahora tiene todo lo que el spec.ts necesita
   return { app, moduleRef, close, appDataSource };
 }
-

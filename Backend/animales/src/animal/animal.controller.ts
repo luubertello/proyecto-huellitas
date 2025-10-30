@@ -26,7 +26,6 @@ export class AnimalController {
     return this.animalService.create(dto);
   }
 
-
 // Actualizar todos los datos de animal
   @Put(':id')
   update(@Param('id') id: string, @Body() dto: CrearAnimalDto): Promise<Animal> {

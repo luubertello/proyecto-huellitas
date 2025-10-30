@@ -2,9 +2,9 @@ import { Controller, Post, Get, Patch, Body, Param, UseGuards, Request, ParseInt
 import { SolicitudAdopcionService } from './solicitud-adopcion.service';
 import { CrearSolicitudDto } from 'src/DTO/crear-solicitud.DTO';
 import { CambiarEstadoDto } from 'src/DTO/cambiar-estado.DTO';
-import { JwtAuthGuard } from 'src/common/auth/jwt-auth.guard';
-import { RolesGuard } from 'src/common/auth/roles.guard';
-import { Roles } from 'src/common/auth/roles.decorator';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/roles.guard';
+import { Roles } from 'src/auth/roles.decorator';
 
 @Controller('solicitudes')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -15,7 +15,7 @@ export class SolicitudAdopcionController {
   @Post()
   @Roles('interesado')
   crearSolicitud(@Body() crearSolicitudDto: CrearSolicitudDto, @Request() req) {
-    const adoptanteId = req.user.id;
+    const adoptanteId = req.user.sub; 
     return this.solicitudService.create(crearSolicitudDto, adoptanteId);
   }
 
@@ -41,7 +41,7 @@ export class SolicitudAdopcionController {
     @Body() cambiarEstadoDto: CambiarEstadoDto,
     @Request() req,
   ) {
-      const adminId = req.user.id;
+      const adminId = req.user.sub;
     return this.solicitudService.cambiarEstado(id, cambiarEstadoDto, adminId);
   }
 }

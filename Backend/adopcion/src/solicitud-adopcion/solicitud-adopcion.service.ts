@@ -37,7 +37,6 @@ export class SolicitudAdopcionService {
      } catch (error) {
       console.error('--- ERROR ORIGINAL DE LA PETICIÓN HTTP ---');
       console.error(error.response?.data || error.message); 
-      console.error('-----------------------------------------');
       throw new NotFoundException('El usuario o el animal especificado no existe.');
     }
     // Obtiene el estado inicial ("Pendiente")

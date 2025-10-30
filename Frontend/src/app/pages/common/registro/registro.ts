@@ -50,8 +50,8 @@ export class Registro implements OnInit {
     this.registerForm = this.fb.group({
       // Paso 1
       email: ['', [Validators.required, Validators.email]],
-      contrasena: ['', [Validators.required, Validators.minLength(8)]], // <-- RENOMBRADO
-      confirmarContrasena: ['', [Validators.required]], // <-- RENOMBRADO
+      contrasena: ['', [Validators.required, Validators.minLength(8)]],
+      confirmarContrasena: ['', [Validators.required]],
       // Paso 2
       nombre: ['', [Validators.required]],
       apellido: ['', [Validators.required]],
@@ -62,7 +62,7 @@ export class Registro implements OnInit {
       direccion: ['', [Validators.required]],
       telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10,15}$')]] 
     }, {
-      validators: this.passwordMatcher // 3. CORRECCIÓN EN EL VALIDADOR (ver abajo)
+      validators: this.passwordMatcher
     });
   }
 

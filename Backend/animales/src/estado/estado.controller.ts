@@ -1,9 +1,9 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, ParseIntPipe } from '@nestjs/common';
 import { Estado } from './estado.entity';
 import { EstadoService } from './estado.service';
+import { CrearEstadoDto } from '../DTO/crearEstado.dto';
 
-
-@Controller('Estado')
+@Controller('estados')
 export class EstadoController {
   constructor(private readonly estadoService: EstadoService) {}
 
@@ -13,12 +13,12 @@ export class EstadoController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Estado> {
-    return this.estadoService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<Estado> {
+    return this.estadoService.findOne(id);
   }
 
   @Post()
-  create(@Body() body: { nombre: string}): Promise<Estado> {
-    return this.estadoService.create(body.nombre);
+  create(@Body() dto: CrearEstadoDto): Promise<Estado> { 
+    return this.estadoService.create(dto.nombre);
   }
 }

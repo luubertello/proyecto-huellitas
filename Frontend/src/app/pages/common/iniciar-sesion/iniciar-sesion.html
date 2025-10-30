@@ -1,43 +1,60 @@
+<!-- Contenido -->
+<main class="page">
+  <section class="auth">
+    <div class="card">
+      <h1>Ingresa a tu cuenta</h1>
 
-  <!-- Contenido -->
-  <main class="page">
-    <section class="auth">
-      <div class="card">
-        <h1>Ingresa a tu cuenta</h1>
+      <form class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+        
+        <label class="field">
+          <span>Email*</span>
+          <input type="email" formControlName="email" placeholder="tu@email.com" />
+          @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+            <div class="error-msg">
+              @if (loginForm.get('email')?.errors?.['required']) { <small>El email es obligatorio.</small> }
+              @if (loginForm.get('email')?.errors?.['email']) { <small>Debe ser un email válido.</small> }
+            </div>
+          }
+        </label>
 
-        <form class="form" action="#" method="post" novalidate>
-          <label class="field">
-            <span>Email*</span>
-            <input type="email" name="email" placeholder="tu@email.com" required />
-          </label>
+        <label class="field">
+          <span>Contraseña*</span>
+          <input type="password" formControlName="contrasena" placeholder="••••••••" />
+          @if (loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched) {
+            <div class="error-msg">
+              @if (loginForm.get('contrasena')?.errors?.['required']) { <small>La contraseña es obligatoria.</small> }
+            </div>
+          }
+        </label>
 
-          <label class="field">
-            <span>Contraseña*</span>
-            <input type="password" name="password" placeholder="••••••••" required />
-          </label>
-
-          <button type="submit" class="btn-primary">INGRESAR</button>
-
-            <div class="separator">o</div>
-          
-          <button type="button" class="btn-google" (click)="loginWithGoogle()">
-            <img src="/assets/logo-google.png" alt="Google logo" width="20" height="20"> 
-            <span>Ingresar con Google</span>
-          </button>
-
-          <div class="help-links">
-            <p class="muted">
-              ¿No tienes cuenta? <a (click)="goRegistro()">Crea una</a>
-            </p>
-            <p class="muted">
-              ¿Olvidaste tu contraseña? <a routerLink="/registro">Cambia tu contraseña</a>
-            </p>
+        <!-- Mensaje de error general del backend -->
+        @if (errorMessage) {
+          <div class="error-msg global-error">
+            {{ errorMessage }}
           </div>
-        </form>
-      </div>
-    </section>
-  </main>
+        }
 
-  <footer class="footer" aria-hidden="true"></footer>
+        <button type="submit" class="btn-primary" [disabled]="isLoading">
+          {{ isLoading ? 'INGRESANDO...' : 'INGRESAR' }}
+        </button>
 
+        <!-- Botón de Google -->
+        <div class="separator">o</div>
+        <button type="button" class="btn-google" (click)="loginWithGoogle()">
+          <img src="/assets/google-logo.svg" alt="Google logo" width="20" height="20"> 
+          <span>Ingresar con Google</span>
+        </button>
 
+        <div class="help-links">
+          <p class="muted">
+            <!--  Usamos [routerLink] -->
+            ¿No tienes cuenta? <a [routerLink]="['/registro']">Crea una</a>
+          <p class="muted">
+            ¿Olvidaste tu contraseña? <a routerLink="/registro">Cambia tu contraseña</a>
+          </p>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+<footer class="footer" aria-hidden="true"></footer>

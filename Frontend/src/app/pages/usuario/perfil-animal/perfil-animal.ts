@@ -66,6 +66,6 @@ export class PerfilAnimal implements OnInit {
     });
   }
   registrarSolicitudAdopcion(animal:any):void {
-   this.router.navigate(['/adopta/formulario']); 
+   this.router.navigate(['/adopta', 'animal', animal.id, 'formulario']);
   }
 }

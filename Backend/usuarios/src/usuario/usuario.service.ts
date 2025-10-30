@@ -160,7 +160,7 @@ async findOneByEmailWithPassword(email: string): Promise<Usuario | null> {
     const user = await this.usuarioRepository.findOne({ 
       where: { email },
       relations: ['rol'],
-      select: ["id", "nombre", "apellido", "email", "contraseña", "googleId", "rol"] 
+      select: ["id", "email", "nombre", "apellido", "rol", "contraseña", "googleId"] 
     });
     
     return user || null; 

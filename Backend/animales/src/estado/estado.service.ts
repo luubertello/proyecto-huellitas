@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Estado } from './estado.entity';
@@ -14,16 +14,16 @@ export class EstadoService {
     return this.estadoRepo.find();
   }
 
-    async findOne(id: number): Promise<Estado> {
-    const estado = await this.estadoRepo.findOne({ where: { id }});
+  async findOne(id: number): Promise<Estado> {
+    const estado = await this.estadoRepo.findOne({ where: { id } });
     if (!estado) {
-        throw new Error(`Estado con id ${id} no encontrada`);
+      throw new NotFoundException(`Estado con id ${id} no encontrado`);
     }
     return estado;
-    }
+  }
 
   create(nombre: string): Promise<Estado> {
-    const nuevoEstado = this.estadoRepo.create({ nombre});
+    const nuevoEstado = this.estadoRepo.create({ nombre });
     return this.estadoRepo.save(nuevoEstado);
   }
 }

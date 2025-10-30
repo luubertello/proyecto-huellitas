@@ -1,145 +1,238 @@
 <main class="page">
-  <section class="animal-card">
-    <div class="form-pane" *ngIf="!submissionSuccess">
-      <div class="card-header">
-        <h1>Formulario de Adopción</h1>
-        <p class="card-sub">Tu solicitud nos ayudará a encontrar el mejor hogar para nuestros animales.</p>
-      </div>
-
-      <div class="progress-bar">
-        <div class="progress-step" [class.active]="currentStep >= 1"><span>1</span> Motivación</div>
-        <div class="progress-step" [class.active]="currentStep >= 2"><span>2</span> Convivencia</div>
-        <div class="progress-step" [class.active]="currentStep >= 3"><span>3</span> Vivienda</div>
-        <div class="progress-step" [class.active]="currentStep >= 4"><span>4</span> Compromisos</div>
-      </div>
-
-      <form class="form" [formGroup]="adoptionForm" (ngSubmit)="onSubmit()">
-        <div [ngSwitch]="currentStep">
-          
-          <div *ngSwitchCase="1">
-            <div class="form-grid">
-              <label class="field span-2">
-                <span>¿Por qué te gustaría adoptar?*</span>
-                <textarea formControlName="motivoAdopcion" rows="4"></textarea>
-              </label>
-              <label class="field span-2">
-                <span>Contanos brevemente tu experiencia previa con animales.*</span>
-                <textarea formControlName="experienciaPrevia" rows="4"></textarea>
-              </label>
-            </div>
-          </div>
-          
-          <div *ngSwitchCase="2">
-            <div class="form-grid">
-              <div class="field span-2">
-                <span>¿Tenés otros animales actualmente?*</span>
-                <div class="radio-group">
-                  <label><input type="radio" formControlName="tieneOtrosAnimales" [value]="true"> Sí</label>
-                  <label><input type="radio" formControlName="tieneOtrosAnimales" [value]="false"> No</label>
-                </div>
-              </div>
-              <ng-container *ngIf="adoptionForm.get('tieneOtrosAnimales')?.value === true">
-                <label class="field">
-                  <span>¿Cuántos perros?*</span>
-                  <input type="number" formControlName="cantidadPerros">
-                </label>
-                <label class="field">
-                  <span>¿Cuántos gatos?*</span>
-                  <input type="number" formControlName="cantidadGatos">
-                </label>
-                <label class="field span-2">
-                  <span>Si tenés otras especies, ¿cuáles?</span>
-                  <textarea formControlName="otrasEspeciesDescripcion" rows="2"></textarea>
-                </label>
-              </ng-container>
-            </div>
-          </div>
-          
-          <div *ngSwitchCase="3">
-            <div class="form-grid">
-              <label class="field span-2">
-                <span>¿En qué tipo de vivienda vivís?*</span>
-                <select formControlName="tipoVivienda">
-                  <option value="" disabled>Seleccione una opción</option>
-                  <option value="Casa">Casa</option>
-                  <option value="Departamento">Departamento</option>
-                  <option value="Quinta">Quinta/Campo</option>
-                </select>
-              </label>
-              <ng-container *ngIf="adoptionForm.get('tipoVivienda')?.value === 'Casa'">
-                <div class="field">
-                  <span>¿La casa tiene patio?*</span>
-                  <div class="radio-group">
-                    <label><input type="radio" formControlName="tienePatio" [value]="true"> Sí</label>
-                    <label><input type="radio" formControlName="tienePatio" [value]="false"> No</label>
-                  </div>
-                </div>
-              </ng-container>
-              <ng-container *ngIf="adoptionForm.get('tipoVivienda')?.value === 'Departamento'">
-                <div class="field">
-                  <span>¿El departamento tiene balcón?*</span>
-                  <div class="radio-group">
-                    <label><input type="radio" formControlName="tieneBalcon" [value]="true"> Sí</label>
-                    <label><input type="radio" formControlName="tieneBalcon" [value]="false"> No</label>
-                  </div>
-                </div>
-                <div class="field" *ngIf="adoptionForm.get('tieneBalcon')?.value === true">
-                  <span>¿El balcón tiene protección (red/malla)?*</span>
-                  <div class="radio-group">
-                    <label><input type="radio" formControlName="balconConProteccion" [value]="true"> Sí</label>
-                    <label><input type="radio" formControlName="balconConProteccion" [value]="false"> No</label>
-                  </div>
-                </div>
-              </ng-container>
-              <label class="field span-2">
-                <span>¿Qué medidas de seguridad tenés para evitar que el animal se escape?*</span>
-                <textarea formControlName="medidasDeSeguridad" rows="3"></textarea>
-              </label>
-            </div>
-          </div>
-          
-          <div *ngSwitchCase="4">
-            <div class="form-grid">
-              <label class="field span-2">
-                <span>¿Cuántas horas al día pasaría el animal solo?*</span>
-                <input type="number" formControlName="tiempoAnimalSoloHoras">
-              </label>
-              <div class="field span-2 checkbox-group">
-                <label>
-                  <input type="checkbox" formControlName="compromisoPaseos">
-                  Me comprometo a sacarlo a pasear regularmente con correa y collar.
-                </label>
-                <label>
-                  <input type="checkbox" formControlName="compromisoGastosVet">
-                  Me comprometo a cubrir sus gastos veterinarios y de alimentación.
-                </label>
-              </div>
-            </div>
+  <section class="animal-card"> 
+    
+    @if (isLoggedIn) {
+      
+      @if (!submissionSuccess) {
+        <div class="form-pane">
+          <div class="card-header">
+            <h1>Formulario de Adopción</h1>
+            <p class="card-sub">Tu solicitud nos ayudará a encontrar el mejor hogar para nuestros animales.</p>
+            @if (errorMessage) {
+              <div class="error-msg global-error">{{ errorMessage }}</div>
+            }
           </div>
 
+          <!-- Barra de Progreso -->
+          <div class="progress-bar">
+            <div class="progress-step" [class.active]="currentStep >= 1"><span>1</span> Motivación</div>
+            <div class="progress-step" [class.active]="currentStep >= 2"><span>2</span> Convivencia</div>
+            <div class="progress-step" [class.active]="currentStep >= 3"><span>3</span> Vivienda</div>
+            <div class="progress-step" [class.active]="currentStep >= 4"><span>4</span> Compromisos</div>
+          </div>
+
+          <!-- Formulario -->
+          <form class="form" [formGroup]="adoptionForm" (ngSubmit)="onSubmit()">
+            
+            @switch (currentStep) {
+              
+              <!-- PASO 1: Motivación -->
+              @case (1) {
+                <div class="form-grid">
+                  <label class="field span-2">
+                    <span>¿Por qué te gustaría adoptar?*</span>
+                    <textarea formControlName="motivoAdopcion" rows="4" placeholder="Cuéntanos tus razones..."></textarea>
+                    @if (adoptionForm.get('motivoAdopcion')?.invalid && adoptionForm.get('motivoAdopcion')?.touched) {
+                      <div class="error-msg">
+                        @if (adoptionForm.get('motivoAdopcion')?.errors?.['required']) { <small>Este campo es obligatorio.</small> }
+                        @if (adoptionForm.get('motivoAdopcion')?.errors?.['minlength']) { <small>Debe tener al menos 10 caracteres.</small> }
+                      </div>
+                    }
+                  </label>
+                  <label class="field span-2">
+                    <span>Contanos brevemente tu experiencia previa con animales.*</span>
+                    <textarea formControlName="experienciaPrevia" rows="4" placeholder="¿Tuviste mascotas antes? ¿Cuáles?"></textarea>
+                    @if (adoptionForm.get('experienciaPrevia')?.invalid && adoptionForm.get('experienciaPrevia')?.touched) {
+                      <div class="error-msg">
+                        @if (adoptionForm.get('experienciaPrevia')?.errors?.['required']) { <small>Este campo es obligatorio.</small> }
+                        @if (adoptionForm.get('experienciaPrevia')?.errors?.['minlength']) { <small>Debe tener al menos 10 caracteres.</small> }
+                      </div>
+                    }
+                  </label>
+                </div>
+              }
+              
+              <!-- PASO 2: Convivencia -->
+              @case (2) {
+                <div class="form-grid">
+                  <div class="field span-2"> 
+                    <span>¿Tenés otros animales actualmente?*</span>
+                    <div class="radio-group">
+                      <label><input type="radio" formControlName="tieneOtrosAnimales" [value]="true"> Sí</label>
+                      <label><input type="radio" formControlName="tieneOtrosAnimales" [value]="false"> No</label>
+                    </div>
+                     @if (adoptionForm.get('tieneOtrosAnimales')?.invalid && adoptionForm.get('tieneOtrosAnimales')?.touched) {
+                       <div class="error-msg"><small>Debes seleccionar una opción.</small></div>
+                    }
+                  </div>
+                  
+                  @if (adoptionForm.get('tieneOtrosAnimales')?.value === true) {
+                    <label class="field">
+                      <span>¿Cuántos perros?*</span>
+                      <input type="number" formControlName="cantidadPerros" min="0">
+                       @if (adoptionForm.get('cantidadPerros')?.invalid && adoptionForm.get('cantidadPerros')?.touched) {
+                         <div class="error-msg"><small>Campo obligatorio (mínimo 0).</small></div>
+                      }
+                    </label>
+                    <label class="field">
+                      <span>¿Cuántos gatos?*</span>
+                      <input type="number" formControlName="cantidadGatos" min="0">
+                       @if (adoptionForm.get('cantidadGatos')?.invalid && adoptionForm.get('cantidadGatos')?.touched) {
+                         <div class="error-msg"><small>Campo obligatorio (mínimo 0).</small></div>
+                      }
+                    </label>
+                    <label class="field span-2">
+                      <span>Si tenés otras especies, ¿cuáles? (Opcional)</span>
+                      <textarea formControlName="otrasEspeciesDescripcion" rows="2" placeholder="Ej: Conejo, Hamster..."></textarea>
+                    </label>
+                  }
+                </div>
+              }
+              
+              <!-- PASO 3: Vivienda -->
+              @case (3) {
+                <div class="form-grid">
+                  <label class="field span-2">
+                    <span>¿En qué tipo de vivienda vivís?*</span>
+                    <select formControlName="tipoVivienda">
+                      <option value="" disabled>Seleccione una opción</option>
+                      <option value="Casa">Casa</option>
+                      <option value="Departamento">Departamento</option>
+                      <option value="Quinta">Quinta/Campo</option>
+                    </select>
+                     @if (adoptionForm.get('tipoVivienda')?.invalid && adoptionForm.get('tipoVivienda')?.touched) {
+                       <div class="error-msg"><small>Debes seleccionar tu tipo de vivienda.</small></div>
+                    }
+                  </label>
+                  
+                  @if (adoptionForm.get('tipoVivienda')?.value === 'Casa') {
+                    <div class="field">
+                      <span>¿La casa tiene patio?*</span>
+                      <div class="radio-group">
+                        <label><input type="radio" formControlName="tienePatio" [value]="true"> Sí</label>
+                        <label><input type="radio" formControlName="tienePatio" [value]="false"> No</label>
+                      </div>
+                       @if (adoptionForm.get('tienePatio')?.invalid && adoptionForm.get('tienePatio')?.touched) {
+                         <div class="error-msg"><small>Campo obligatorio.</small></div>
+                      }
+                    </div>
+                  }
+                  
+                  @if (adoptionForm.get('tipoVivienda')?.value === 'Departamento') {
+                    <div class="field">
+                      <span>¿El departamento tiene balcón?*</span>
+                      <div class="radio-group">
+                        <label><input type="radio" formControlName="tieneBalcon" [value]="true"> Sí</label>
+                        <label><input type="radio" formControlName="tieneBalcon" [value]="false"> No</label>
+                      </div>
+                       @if (adoptionForm.get('tieneBalcon')?.invalid && adoptionForm.get('tieneBalcon')?.touched) {
+                         <div class="error-msg"><small>Campo obligatorio.</small></div>
+                      }
+                    </div>
+                    
+                    @if (adoptionForm.get('tieneBalcon')?.value === true) {
+                      <div class="field"> <!-- CORRECCIÓN: class="field" -->
+                        <span>¿El balcón tiene protección (red/malla)?*</span>
+                        <div class="radio-group">
+                          <label><input type="radio" formControlName="balconConProteccion" [value]="true"> Sí</label>
+                          <label><input type="radio" formControlName="balconConProteccion" [value]="false"> No</label>
+                        </div>
+                         @if (adoptionForm.get('balconConProteccion')?.invalid && adoptionForm.get('balconConProteccion')?.touched) {
+                           <div class="error-msg"><small>Campo obligatorio.</small></div>
+                        }
+                      </div>
+                    }
+                  }
+                  
+                  <label class="field span-2">
+                    <span>¿Qué medidas de seguridad tenés para evitar que el animal se escape?*</span>
+                    <textarea formControlName="medidasDeSeguridad" rows="3" placeholder="Ej: Redes en ventanas, cerco perimetral..."></textarea>
+                     @if (adoptionForm.get('medidasDeSeguridad')?.invalid && adoptionForm.get('medidasDeSeguridad')?.touched) {
+                      <div class="error-msg">
+                        @if (adoptionForm.get('medidasDeSeguridad')?.errors?.['required']) { <small>Este campo es obligatorio.</small> }
+                        @if (adoptionForm.get('medidasDeSeguridad')?.errors?.['minlength']) { <small>Describe un poco más.</small> }
+                      </div>
+                    }
+                  </label>
+                </div>
+              }
+              
+              <!-- PASO 4: Compromisos -->
+              @case (4) {
+                <div class="form-grid">
+                  <label class="field span-2">
+                    <span>¿Cuántas horas al día pasaría el animal solo aproximadamente?*</span>
+                    <input type="number" formControlName="tiempoAnimalSoloHoras" min="0" max="24">
+                     @if (adoptionForm.get('tiempoAnimalSoloHoras')?.invalid && adoptionForm.get('tiempoAnimalSoloHoras')?.touched) {
+                      <div class="error-msg">
+                         @if (adoptionForm.get('tiempoAnimalSoloHoras')?.errors?.['required']) { <small>Campo obligatorio.</small> }
+                         @if (adoptionForm.get('tiempoAnimalSoloHoras')?.errors?.['min'] || adoptionForm.get('tiempoAnimalSoloHoras')?.errors?.['max']) { <small>Debe ser entre 0 y 24.</small> }
+                      </div>
+                    }
+                  </label>
+                  <div class="field span-2 checkbox-group">
+                    <label [class.invalid]="adoptionForm.get('compromisoPaseos')?.invalid && adoptionForm.get('compromisoPaseos')?.touched">
+                      <input type="checkbox" formControlName="compromisoPaseos">
+                      Me comprometo a sacarlo a pasear regularmente con correa y collar.*
+                    </label>
+                    <label [class.invalid]="adoptionForm.get('compromisoGastosVet')?.invalid && adoptionForm.get('compromisoGastosVet')?.touched">
+                      <input type="checkbox" formControlName="compromisoGastosVet">
+                      Me comprometo a cubrir sus gastos veterinarios y de alimentación.*
+                    </label>
+                     @if ((adoptionForm.get('compromisoPaseos')?.invalid && adoptionForm.get('compromisoPaseos')?.touched) || (adoptionForm.get('compromisoGastosVet')?.invalid && adoptionForm.get('compromisoGastosVet')?.touched)) {
+                       <div class="error-msg"><small>Debes aceptar ambos compromisos.</small></div>
+                    }
+                  </div>
+                </div>
+              }
+            } <!-- Fin del @switch -->
+
+            <!-- Botones de Navegación -->
+            <div class="actions navigation-buttons">
+              @if (currentStep > 1) {
+                <button type="button" class="btn-secondary" (click)="previousStep()">
+                  &larr; Anterior
+                </button>
+              }
+              @if (currentStep < totalSteps) {
+                <button type="button" class="btn-primary" (click)="nextStep()">
+                  Siguiente &rarr;
+                </button>
+              }
+              @if (currentStep === totalSteps) {
+                <button type="submit" class="btn-primary" [disabled]="!adoptionForm.valid || isLoading">
+                   {{ isLoading ? 'Enviando...' : 'Enviar Solicitud' }}
+                </button>
+              }
+            </div>
+          </form>
         </div>
+      } @else {
+        <div class="form-pane success-message">
+          <h2>¡Solicitud Enviada con Éxito!</h2>
+          <p>Gracias por tu interés en adoptar. Hemos recibido tu formulario y nos pondremos en contacto contigo a la brevedad para continuar con el proceso.</p>
+          <div class="success-actions">
+            <button type="button" class="btn-secondary" routerLink="/adopta">Ver otros animales</button> 
+            <button type="button" class="btn-primary" routerLink="/inicio">Volver al inicio</button>
+          </div>
+        </div>
+      }
+    } @else {
 
-        <div class="actions navigation-buttons">
-          <button type="button" class="btn btn-brown" *ngIf="currentStep > 1" (click)="previousStep()">
-            Anterior
+      <div class="form-pane auth-warning">
+        <h2>Acceso Requerido</h2>
+        <p>Para poder enviar un formulario de adopción, primero necesitas iniciar sesión o crear una cuenta.</p>
+        <p>¡Es rápido y nos ayuda a gestionar tu solicitud de forma segura!</p>
+        <div class="success-actions">
+          <button type="button" class="btn-primary" routerLink="/iniciar-sesion">
+            Iniciar Sesión
           </button>
-          <button type="button" class="btn-primary" *ngIf="currentStep < totalSteps" (click)="nextStep()">
-            Siguiente
-          </button>
-          <button type="submit" class="btn-primary" *ngIf="currentStep === totalSteps" [disabled]="!adoptionForm.valid">
-            Enviar Solicitud
+          <button type="button" class="btn-secondary" routerLink="/registro">
+            Crear Cuenta
           </button>
         </div>
-      </form>
-    </div>
-
-    <div class="form-pane success-message" *ngIf="submissionSuccess">
-      <h2>¡Solicitud Enviada con Éxito!</h2>
-      <p>Gracias por tu interés. Nos pondremos en contacto con vos a la brevedad.</p>
-      <div class="success-actions">
-        <button class="btn btn-peach" (click)="reiniciarFormulario()">Enviar otra solicitud</button>
-        <button class="btn btn-brown" routerLink="/">Volver al inicio</button>
       </div>
-    </div>
+    }
+
   </section>
 </main>
