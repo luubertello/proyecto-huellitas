@@ -1,61 +1,69 @@
+<header class="topbar">
+  <div class="container">
+    
+    <a class="brand" (click)="goInicioAdmin()">
+      <img src="/assets/logo completo.png" alt="Huellitas logo" class="logo" />
+    </a>
 
-  <!-- Topbar -->
-  <header class="topbar">
-    <div class="container">
-      <a class="brand">
-        <img src="/assets/logo completo.png" alt="Huellitas logo" class="logo" />
-      </a>
+    <nav class="main-nav" aria-label="Principal">
+      <ul>
+        <li class="has-sub">
+          <a class="menu-link">
+            Animales <i class="bi bi-caret-down-fill"></i>
+          </a>
+          <ul class="submenu">
+            <li><a (click)="goAnimales()">Gestión de Animales</a></li> 
+            <li><a (click)="goRegistrarAnimal()">Registrar nuevo animal</a></li>
+          </ul>
+        </li>
 
-      <nav class="main-nav" aria-label="Principal">
-        <ul>
-          <!-- Animales -->
-          <li class="has-sub">
-            <a class="menu-link">
-              Animales <i class="bi bi-caret-down-fill"></i>
-            </a>
-            <ul class="submenu">
-              <li (click)="goAnimales()"><a>Gestión de Aniamles</a></li>
-              <li (click)="goRegistrar()"><a>Registrar nuevo animal</a></li>
-            </ul>
-          </li>
+        <li class="has-sub">
+          <a class="menu-link">
+            Solicitudes <i class="bi bi-caret-down-fill"></i>
+          </a>
+          <ul class="submenu">
+            <li><a (click)="goSolicitudes()">Todas las solicitudes</a></li>
+          </ul>
+        </li>
 
-          <!-- Solicitudes de adopcion -->
-          <li class="has-sub">
-            <a class="menu-link">
-              Solicitudes <i class="bi bi-caret-down-fill"></i>
-            </a>
-            <ul class="submenu">
-              <li><a>Todas</a></li>
-            </ul>
-          </li>
+        <li class="has-sub">
+          <a class="menu-link">
+            Inventario <i class="bi bi-caret-down-fill"></i>
+          </a>
+          <ul class="submenu">
+            <li><a (click)="goInventarioStock()">Stock disponible</a></li>
+            <li><a (click)="goRegistrarInsumo()">Registrar nuevo insumo</a></li>
+          </ul>
+        </li>
 
-          <!-- Inventario -->
-          <li class="has-sub">
-            <a class="menu-link">
-              Inventario <i class="bi bi-caret-down-fill"></i>
-            </a>
-            <ul class="submenu">
-              <li><a >Stock disponible</a></li>
-              <li><a >Registrar nuevo insumo</a></li>
-            </ul>
-          </li>
+        <li class="has-sub">
+          <a class="menu-link" >
+            Estadísticas <i class="bi bi-caret-down-fill"></i>
+          </a>
+          <ul class="submenu">
+            <li><a (click)="goEstadisticasDonaciones()">Donaciones</a></li>
+            <li><a (click)="goEstadisticasAnimales()">Animales</a></li>
+            <li><a (click)="goEstadisticasInsumos()">Insumos</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
 
-          <!-- Estadisticas -->
-          <li class="has-sub">
-            <a class="menu-link" >
-              Estadísticas <i class="bi bi-caret-down-fill"></i>
-            </a>
-            <ul class="submenu">
-              <li><a >Donaciones</a></li>
-              <li><a >Animales</a></li>
-              <li><a >Insumos</a></li>
-            </ul>
-          </li>
-        </ul>
-      </nav>
-
-      <div class="user-area">
+    <div class="user-area has-sub" aria-label="Cuenta de usuario">
+      <button class="avatar-btn" aria-haspopup="true" aria-expanded="false">
         <img src="/assets/logoInicioSesion.png" alt="Usuario" class="avatar" />
-      </div>
+      </button>
+
+      <ul class="submenu user-submenu" role="menu">
+      
+          <li role="none">
+            <a role="menuitem" (click)="goPerfil()">Mi perfil</a>
+          </li>
+          <li role="none">
+            <a role="menuitem" (click)="logout()">Cerrar sesión</a>
+          </li>
+
+      </ul>
     </div>
-  </header>
+  </div>
+</header>

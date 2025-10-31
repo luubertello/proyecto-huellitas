@@ -1,63 +1,52 @@
 
-.topbar {
-  /* Usamos la variable global --peach */
-  background: var(--peach); 
+
+/* Topbar */
+.topbar{
+  background: var(--peach);
   position: sticky;
-  top: 0;
-  z-index: 10;
-  border-bottom: 1px solid rgba(0, 0, 0, .04);
+  top:0;
+  z-index:10;
+  border-bottom: 1px solid rgba(0,0,0,.04);
   width: 100%;
-  /* Definimos la altura del header para que la use la variable global */
-  min-height: var(--header-h); 
 }
 
-.topbar .container {
-  display: grid;
+:root { --edge: clamp(28px, 6vw, 96px);}
+.topbar .container{
+  display:grid;
   grid-template-columns: auto 1fr auto;
-  align-items: center;
+  align-items:center;
   gap: 20px;
   padding-inline: clamp(24px, 6vw, 96px);
   padding-block: 12px;
-  width: 100%;
+  width:100%;
 }
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  color: var(--text);
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  color:var(--text);
 }
-
-.logo { 
-  width: clamp(56px, 7vw, 100px);
-  height: auto;
-  object-fit: contain;
-}
-
+.logo{ width:100px; height: 100px; object-fit:contain; }
 @media (min-width: 1200px) {
   .main-nav ul { gap: 32px; }
 }
 
-.main-nav { 
-  justify-self: center; 
-  min-width: 0; 
+.main-nav{ justify-self:center; min-width: 0; }
+.main-nav ul {flex-wrap: nowrap;}
+.main-nav ul{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: clamp(16px, 5vw, 100px);   
+  flex-wrap: wrap;                
 }
-
-.main-nav ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(16px, 5vw, 100px);
-  flex-wrap: nowrap;
-}
-
 /* Opciones desplegables */
 .main-nav .submenu { 
-  display: none !important;
+  display: none !important;          /* oculta siempre por defecto */
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
@@ -69,88 +58,73 @@
   padding: 8px 0;
   z-index: 50;
 }
-
-.main-nav .has-sub { 
-  position: relative;
-}
-
+.main-nav .has-sub{ position: relative;}
 .main-nav .has-sub:hover > .submenu,
 .main-nav .has-sub:focus.within > .submenu {
   display: block !important;
 }
-
-.menu-link {
-  display: inline-flex; 
-  align-items: center; 
-  gap: 6px;
+.menu-link{
+  display: inline-flex; align-items: center; gap: 6px;
   font-weight: 700;
   font-size: clamp(00.95rem, 1vw + 00.75rem, 1.25rem);
-  text-decoration: none; 
-  color: var(--text);
+  text-decoration: none; color: var(--text);
   padding: 6px 4px;
 }
-
-.main-link:hover { 
-  color: #5a4038;
-}
-
+.main-link:hover{ color:#5a4038 }
 /* caja del submenú */
-.submenu {
-  position: absolute;
+.submenu{
+  position:absolute;
   top: calc(100% + 8px);
   left: 0;
   min-width: 220px;
-  background: #f6d3bd;
+  background: #f6d3bd;               
   border: 1px solid rgba(0,0,0,.06);
   border-radius: 10px;
   box-shadow: 0 10px 25px rgba(0,0,0,.12);
   padding: 8px 0;
   list-style: none;
-  display: none;
+  display: none;                      
   z-index: 20;
 }
 
 .has-sub:hover > .submenu,
-.has-sub:focus-within > .submenu {
-  display: block;
+.has-sub:focus-within > .submenu{
+  display:block;
 }
-
 /* items del submenú */
-.submenu li a {
-  display: block;
+.submenu li a{
+  display:block;
   padding: 8px 14px;
-  text-decoration: none;
+  text-decoration:none;
   color: #3f2f29;
   font-weight: 600;
-  white-space: nowrap;
+  white-space: nowrap;                
 }
-
-.submenu li a:hover {
-  background: rgba(0, 0, 0, .05);
+.submenu li a:hover{
+  background: rgba(0,0,0,.05);
 }
-
 /* flechita*/
-.has-sub > .submenu::before {
-  content: "";
-  position: absolute;
-  top: -6px; 
-  left: 18px;
+.has-sub > .submenu::before{
+  content:"";
+  position:absolute;
+  top: -6px; left: 18px;
   border: 6px solid transparent;
   border-bottom-color: #f6d3bd;
 }
 
-.main-nav a {
-  position: relative;
+/* asegura que nada tape el submenú */
+.topbar{ position: sticky; z-index: 50; }
+.main-nav a{
+  position: relative;            
   font-weight: 800;
   font-size: clamp(0.95rem, 1vw + 0.75rem, 1.25rem); 
-  text-decoration: none;
-  color: var(--text);
+  text-decoration:none;
+  color:var(--text);
   padding: 6px 4px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
 }
-
 .main-nav a::after {
   content: "";
   position: absolute;
@@ -158,31 +132,108 @@
   left: 0;
   width: 0%;
   height: 2px;
-  background: #5a4038;
+  background: #5a4038;  
   transition: width 0.25s ease;
 }
-
 .main-nav a:hover {
-  color: #5a4038;
+  color: #5a4038;       
 }
-
 .main-nav a:hover::after {
-  width: 100%; /* subrayado animado */
+  width: 100%;          /* subrayado animado */
 }
-
 .main-nav i {
   font-size: 0.75rem;
   opacity: 0.7;
   transition: transform 0.2s ease;
 }
-
 .main-nav a:hover i {
   transform: rotate(180deg); 
 }
 
-.user-area .avatar {
+.logo{
+  width: clamp(56px, 7vw, 100px);
+  height: auto;
+  object-fit: contain;
+}
+.user-area .avatar{
   width: clamp(32px, 4vw, 50px);
   height: clamp(32px, 4vw, 50px);
   border-radius: 50%;
   object-fit: cover;
 }
+
+/* --- Accesibilidad utilitaria --- */
+.visually-hidden{
+  position:absolute!important;
+  width:1px;height:1px;
+  margin:-1px;border:0;padding:0;
+  white-space:nowrap;clip-path:inset(50%);clip:rect(0 0 0 0);overflow:hidden;
+}
+
+/* --- Área de usuario --- */
+.user-area{
+  position:relative;
+  justify-self:end;       /* alinea a la derecha en la grilla de la topbar */
+}
+
+.avatar-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  margin:0;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  border-radius:50%;
+  outline-offset: 4px;    /* foco visible sin mover layout */
+}
+
+.user-area .avatar{
+  width: clamp(32px, 4vw, 50px);
+  height: clamp(32px, 4vw, 50px);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Submenú del usuario (reutiliza tu estilo .submenu) */
+.user-submenu{
+  left: auto;               /* lo anclamos al borde derecho del avatar */
+  right: 0;
+  top: calc(100% + 10px);
+  min-width: 200px;
+  z-index: 60;              /* por encima de la topbar (50) y otros submenús (20) */
+  background: #f6d3bd;      /* coherente con tu paleta */
+}
+
+/* Mostrar al hover/focus (mouse y teclado) */
+.user-area.has-sub:hover > .user-submenu,
+.user-area.has-sub:focus-within > .user-submenu{
+  display:block;
+}
+
+/* Detalles de items */
+.user-submenu li a{
+  display:block;
+  padding:10px 14px;
+  text-decoration:none;
+  color:#3f2f29;
+  font-weight:600;
+  white-space:nowrap;
+}
+.user-submenu li a:hover,
+.user-submenu li a:focus{
+  background: rgba(0,0,0,.06);
+}
+
+/* Flechita del popover */
+.user-submenu::before{
+  content:"";
+  position:absolute;
+  top:-6px; right: 18px;
+  border:6px solid transparent;
+  border-bottom-color:#f6d3bd;
+}
+
+.brand { cursor: pointer; }
+

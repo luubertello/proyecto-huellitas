@@ -59,20 +59,34 @@
       </nav>
 
       <!--Usuario-->
-      <div class="user-area has-sub" aria-label="Cuenta de usuario">
+    <div class="user-area has-sub" aria-label="Cuenta de usuario">
       <button class="avatar-btn" aria-haspopup="true" aria-expanded="false">
         <img src="/assets/logoInicioSesion.png" alt="Usuario" class="avatar" />
         <span class="visually-hidden">Abrir opciones de cuenta</span>
       </button>
+
       <ul class="submenu user-submenu" role="menu">
-      <li role="none">
-        <a role="menuitem" (click)="goRegistro()">Crear cuenta</a>
-      </li>
-      <li role="none">
-        <a role="menuitem" (click)="goInicioSesion()">Iniciar sesión</a>
-      </li>
-    </ul>
-  </div>
+        
+        <ng-container *ngIf="isAuthenticated; else notLoggedInMenu">
+          <li role="none">
+            <a role="menuitem" (click)="goPerfil()">Mi perfil</a>
+          </li>
+          <li role="none">
+            <a role="menuitem" (click)="logout()">Cerrar sesión</a>
+          </li>
+        </ng-container>
+
+        <ng-template #notLoggedInMenu>
+          <li role="none">
+            <a role="menuitem" (click)="goRegistro()">Crear cuenta</a>
+          </li>
+          <li role="none">
+            <a role="menuitem" (click)="goInicioSesion()">Iniciar sesión</a>
+          </li>
+        </ng-template>
+
+      </ul>
+    </div>
   </div>
   </header>
 

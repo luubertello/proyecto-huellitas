@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { HttpClient, HttpClientModule } from '@angular/common/http'; 
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { AuthService } from '../../../auth/auth.service';
 
 
 interface LoginResponse {
@@ -32,20 +33,19 @@ export class IniciarSesion implements OnInit {
   loginForm: FormGroup; 
   isLoading = false;
   errorMessage = '';
-
-  private apiUrl = 'http://localhost:3000/auth'; 
   
   // Para SSR
   private platformId = inject(PLATFORM_ID); 
+  private apiUrl = 'http://localhost:3000/auth'; 
 
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private http: HttpClient
+    private authService: AuthService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      contrasena: ['', [Validators.required]]
+      contrasena: ['', [Validators.required]] 
     });
   }
 
@@ -61,29 +61,18 @@ export class IniciarSesion implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    const formData = this.loginForm.value;
-
-    this.http.post<LoginResponse>(`${this.apiUrl}/login`, formData).pipe(
+    this.authService.login(this.loginForm.value).pipe(
       catchError(err => {
         this.isLoading = false;
         this.errorMessage = err.error?.message || 'Error al iniciar sesión. Intente más tarde.';
-        return of(null); 
+        return of(null);
       })
     ).subscribe(response => {
-      if (response && response.access_token) {
-        this.isLoading = false;
-        
-        if (isPlatformBrowser(this.platformId)) {
-          localStorage.setItem('authToken', response.access_token);
-        }
-        
+      this.isLoading = false;
+      
+      if (response) {
         alert('¡Inicio de sesión exitoso!');
         this.router.navigate(['/inicio']); 
-
-      } else if (response === null) {
-      } else {
-        this.isLoading = false;
-        this.errorMessage = 'Respuesta inesperada del servidor.';
       }
     });
   }
@@ -98,5 +87,4 @@ export class IniciarSesion implements OnInit {
   goRegistro() {
     this.router.navigate(['/registro']);
   }
-  
 }

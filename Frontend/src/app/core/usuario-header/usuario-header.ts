@@ -1,20 +1,43 @@
-import { Component } from '@angular/core';
+// Archivo: usuario-header.ts
+
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common'; // 
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-usuario-header',
-  imports: [],
+  standalone: true, 
+  imports: [
+    CommonModule 
+  ],
   templateUrl: './usuario-header.html',
   styleUrl: './usuario-header.css'
 })
 export class UsuarioHeader {
-  constructor(private router: Router) {}
+  
+  private router = inject(Router);
+  private authService = inject(AuthService);
 
-  goInicio(): void {
-    this.router.navigate(['/inicio']);   // 🔸 redirige al inicio
+  get isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
   }
 
-goAdopcionGatos() {
+  logout(): void {
+    this.authService.logout();
+  }
+
+
+  goPerfil(): void {
+    this.router.navigate(['/mi-perfil']);
+  }
+
+
+  goInicio(): void {
+    this.router.navigate(['/inicio']); 
+  }
+
+  goAdopcionGatos() {
     this.router.navigate(['/adopta/gatos']);
   }
 
@@ -40,9 +63,9 @@ goAdopcionGatos() {
 
   goRegistro() {
       this.router.navigate(['/registro']);
-    }
+  }
 
   goInicioSesion() {
       this.router.navigate(['/iniciar-sesion']);
-    }
+  }
 }
