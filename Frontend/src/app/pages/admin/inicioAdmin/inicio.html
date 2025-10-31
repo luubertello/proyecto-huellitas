@@ -1,0 +1,44 @@
+<div class="admin-dashboard">
+  
+  <header class="dashboard-header">
+    <h2>¡Hola, {{ userName || 'Admin' }}!</h2>
+    <p>Bienvenido a tu panel de control de Huellitas.</p>
+  </header>
+
+  <section class="widget-container">
+
+    <div *ngIf="canSeeAnimales" class="widget widget-animales">
+      <h3>Gestión de Animales</h3>
+      <p>Registra nuevos animales y administra los perfiles existentes.</p>
+      <div class="widget-actions">
+        <button (click)="goAnimales()">Ver Todos</button>
+        <button (click)="goRegistrarAnimal()">Registrar Nuevo</button>
+      </div>
+    </div>
+
+    <div *ngIf="canSeeAdopciones" class="widget widget-adopciones">
+      <h3>Gestión de Solicitudes</h3>
+      <p>Revisa y aprueba las solicitudes de adopción pendientes.</p>
+      <div class="widget-actions">
+        <button (click)="goSolicitudes()">Ver Solicitudes</button>
+      </div>
+    </div>
+
+    <div *ngIf="canSeeInventario" class="widget widget-inventario">
+      <h3>Gestión de Inventario</h3>
+      <p>Administra el stock de insumos y donaciones materiales.</p>
+      <div class="widget-actions">
+        <button (click)="goInventario()">Ver Stock</button>
+      </div>
+    </div>
+
+    <div *ngIf="canSeeDonaciones" class="widget widget-donaciones">
+      <h3>Gestión de Donaciones</h3>
+      <p>Revisa el historial de donaciones monetarias.</p>
+      <div class="widget-actions">
+        <button (click)="goDonaciones()">Ver Estadísticas</button>
+      </div>
+    </div>
+
+  </section>
+</div>

@@ -21,6 +21,7 @@ import { PerfilUsuario } from './pages/usuario/perfil-usuario/perfil-usuario';
 import { VerSolicitud } from './pages/admin/ver-solicitud/ver-solicitud';
 import { AuthCallbackComponent } from './auth/callback/callback';
 import { authGuard } from './auth/auth.guard';
+import { InicioAdmin } from './pages/admin/inicioAdmin/inicio';
 
 export const routes: Routes = [
 
@@ -29,6 +30,7 @@ export const routes: Routes = [
     path: 'admin',
     component: AdminLayout,
     children: [
+      { path: 'inicio', component: InicioAdmin }, // /admin/inicio
       { path: 'animales/registrar', component: CrearAnimal }, // /admin/animales/registrar
       { path: 'animales', component: GestionarAnimales }, // /admin/animales
       { path: 'animales/:id', component: EditarAnimal }, // /admin/animales/:id

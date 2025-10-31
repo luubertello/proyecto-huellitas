@@ -36,7 +36,7 @@ export class AdminHeader {
   // --- Métodos de navegación del Admin ---
 
   goInicioAdmin(): void {
-    this.router.navigate(['/admin/dashboard']); 
+    this.router.navigate(['/admin/inicio']); 
   }
 
   goAnimales(): void {

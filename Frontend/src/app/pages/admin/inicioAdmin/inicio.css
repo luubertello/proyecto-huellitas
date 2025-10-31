@@ -1,0 +1,161 @@
+/* --- Contenedor Principal del Dashboard --- */
+.admin-dashboard {
+  /* Usamos las variables de tu CSS guía */
+  padding: 2rem clamp(1rem, 6vw, 4rem);
+  /* Usamos 'var(--bg)' si el dashboard está dentro de 'main.page'. 
+    Si esta es la página principal, descomenta estas líneas:
+  */
+  /* background: var(--bg); 
+  min-height: calc(100vh - var(--header-h)); 
+  */
+}
+
+/* --- Encabezado de Bienvenida --- */
+.dashboard-header {
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  /* Estilo del header de tu guía */
+  border-bottom: 2px solid var(--card); 
+}
+
+.dashboard-header h2 {
+  margin: 0 0 0.25rem;
+  color: var(--text);
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.dashboard-header p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+}
+
+/* --- Contenedor de Widgets (La Magia Reactiva) --- */
+.widget-container {
+  display: grid;
+  /* Aquí está la reactividad:
+    - 'repeat' para repetir columnas.
+    - 'auto-fit' para que se ajusten automáticamente.
+    - 'minmax(340px, 1fr)' significa: 
+      Crea columnas que midan MÍNIMO 340px.
+      Si hay espacio, estíralas para que ocupen 1 fracción (1fr) del espacio.
+    En un móvil (< 700px), solo cabe una. En una tablet (~800px), caben dos.
+  */
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+/* --- Estilo de cada Widget (Card) --- */
+.widget {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  
+  /* Para alinear el contenido y los botones */
+  display: flex;
+  flex-direction: column;
+
+  /* Sutil acento de color para cada widget */
+  border-top: 4px solid var(--text-muted);
+
+  /* La parte "dinámica": transiciones */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Efecto hover de tu guía */
+.widget:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(0,0,0,.1);
+}
+
+/* --- Colores de acento para cada widget --- */
+.widget-animales { border-top-color: #007bff; /* Azul */ }
+.widget-adopciones { border-top-color: #28a745; /* Verde (de tu guía) */ }
+.widget-inventario { border-top-color: #ffc107; /* Amarillo */ }
+.widget-donaciones { border-top-color: #dc3545; /* Rojo (de tu guía) */ }
+
+/* Títulos de los widgets */
+.widget h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  color: var(--text);
+}
+
+/* Texto de los widgets */
+.widget p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.5;
+  /* Esto empuja los botones al final de la card */
+  flex-grow: 1; 
+}
+
+/* --- Sección de Botones --- */
+.widget-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+/* Estilo base para botones, inspirado en tu guía */
+.widget-actions button {
+  padding: 10px 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+  flex-grow: 1; /* Hacemos que los botones compartan el espacio */
+}
+
+/* Estilo del botón primario (el primero) */
+.widget-actions button:first-child {
+  background: var(--peach-strong); /* Color de tu guía */
+  color: var(--text);
+}
+.widget-actions button:first-child:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 6px 14px rgba(0,0,0,.08);
+}
+
+/* Estilo del botón secundario (el resto) */
+.widget-actions button:not(:first-child) {
+  background: var(--bg); /* O var(--card) si prefieres */
+  color: var(--text-muted);
+  border: 1px solid var(--text-muted);
+}
+.widget-actions button:not(:first-child):hover {
+  background: var(--text-muted);
+  color: var(--card);
+}
+
+/* --- Adaptación a Móviles --- */
+@media (max-width: 768px) {
+  .admin-dashboard {
+    padding: 1rem;
+  }
+
+  .dashboard-header h2 {
+    font-size: 1.75rem;
+  }
+  .dashboard-header p {
+    font-size: 1rem;
+  }
+
+  /* En móviles, los botones se apilan uno sobre otro 
+    para ahorrar espacio horizontal.
+  */
+  .widget-actions {
+    flex-direction: column;
+  }
+
+  .widget-actions button {
+    width: 100%;
+  }
+}
