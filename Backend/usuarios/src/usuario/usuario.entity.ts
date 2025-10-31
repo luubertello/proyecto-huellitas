@@ -32,7 +32,7 @@ export class Usuario {
     type: "varchar",
     nullable: true 
   }) 
-  contraseña: string | null;
+  contrasena: string | null;
 
   @Column()
   telefono: string;

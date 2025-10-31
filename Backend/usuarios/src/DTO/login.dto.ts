@@ -4,7 +4,7 @@ import { Transform } from 'class-transformer';
 export class LoginDto {
   @IsEmail({}, { message: 'El formato del email no es válido.' })
   @IsNotEmpty({ message: 'El email no puede estar vacío.' })
-  @Transform(({ value }) => value.toLowerCase()) // Convierte el email a minúsculas
+  @Transform(({ value }) => value.toLowerCase())
   readonly email: string;
 
   @IsString()

@@ -6,11 +6,10 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
-// 1. CORRECCIÓN EN LA INTERFAZ
 interface RegisterFormModel {
   email: FormControl<string | null>;
-  contrasena: FormControl<string | null>; // <-- RENOMBRADO
-  confirmarContrasena: FormControl<string | null>; // <-- RENOMBRADO
+  contrasena: FormControl<string | null>;
+  confirmarContrasena: FormControl<string | null>; 
   nombre: FormControl<string | null>;
   apellido: FormControl<string | null>;
   dni: FormControl<string | null>;

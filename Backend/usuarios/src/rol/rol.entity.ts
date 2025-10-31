@@ -8,7 +8,7 @@ export class Rol {
     id: number;
 
     @Index({unique:true})
-    @Column()
+    @Column({ nullable: false, default: 'Sin nombre' })
     nombre: string;
 
     @ManyToMany(() => Permisos, permisos => permisos.rol)

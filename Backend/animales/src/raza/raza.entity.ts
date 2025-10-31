@@ -7,7 +7,7 @@ export class Raza {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: false, default: 'Sin nombre' })
   nombre: string;
 
   @ManyToOne(() => Especie, especie => especie.razas)

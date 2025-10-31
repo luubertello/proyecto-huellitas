@@ -27,7 +27,7 @@ import { AuthModule } from './auth/auth.module';
     PermisosModule,
     AuthModule,
   ],
-  controllers: [AppController], // El AppModule solo debe tener su propio controller
-  providers: [AppService],   // Y su propio service
+  controllers: [AppController],
+  providers: [AppService],  
 })
 export class AppModule {}

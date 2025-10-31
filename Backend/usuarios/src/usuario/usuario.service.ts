@@ -19,7 +19,7 @@ interface GoogleProfileData {
   telefono?: string;
 }
 
-type UsuarioSinContraseña = Omit<Usuario, 'contraseña'>;
+type UsuarioSincontrasena = Omit<Usuario, 'contrasena'>;
 
 @Injectable()
 export class UsuarioService {
@@ -31,7 +31,7 @@ export class UsuarioService {
   ) {}
 
 // Crea nuevo usuario
-   async create(registroDto: RegistroDto): Promise<UsuarioSinContraseña> {
+   async create(registroDto: RegistroDto): Promise<UsuarioSincontrasena> {
     const { contrasena, ...userData } = registroDto;
 
     const defaultRol = await this.rolRepository.findOne({ where: { nombre: 'interesado' } });
@@ -42,13 +42,13 @@ export class UsuarioService {
 
     const nuevoUsuario = this.usuarioRepository.create({
         ...userData,
-        contraseña: await bcrypt.hash(contrasena, 10),
+        contrasena: await bcrypt.hash(contrasena, 10),
         rol: defaultRol,
     });
 
     const usuarioGuardado = await this.usuarioRepository.save(nuevoUsuario);
 
-    const { contraseña: _, ...result } = usuarioGuardado;
+    const { contrasena: _, ...result } = usuarioGuardado;
     return result;
   }
 
@@ -92,7 +92,7 @@ export class UsuarioService {
       throw new InternalServerErrorException('El rol por defecto "interesado" no fue encontrado.');
     }
 
-    // Creamos el usuario SIN contraseña
+    // Creamos el usuario SIN contrasena
     const nuevoUsuario = this.usuarioRepository.create({
     // Datos de Google
       googleId: profileData.googleId,
@@ -108,7 +108,7 @@ export class UsuarioService {
       telefono: '00000000', 
       // --- FIN VALORES POR DEFECTO ---
       
-      contraseña: null, 
+      contrasena: null, 
       rol: defaultRol,
     });
 
@@ -133,7 +133,7 @@ async findOneById(id: number): Promise<Usuario> {
     return usuario;
   }
 
-// Devuelve todos los usuarios sin su contraseña
+// Devuelve todos los usuarios sin su contrasena
   async findAll(): Promise<Usuario[]> {
     return this.usuarioRepository.find({
         relations: ['rol'],
@@ -141,7 +141,7 @@ async findOneById(id: number): Promise<Usuario> {
   }
 
   // Buscar usuario por email y NO devuelve la contrasena.
-  async findOneByEmail(email: string): Promise<UsuarioSinContraseña> {
+  async findOneByEmail(email: string): Promise<UsuarioSincontrasena> {
     const user = await this.usuarioRepository.findOne({ 
       where: { email },
       relations: ['rol'],
@@ -151,7 +151,7 @@ async findOneById(id: number): Promise<Usuario> {
         throw new NotFoundException(`Usuario con email ${email} no encontrado.`);
     }
 
-    const { contraseña, ...result } = user;
+    const { contrasena, ...result } = user;
     return result;
   }
   
@@ -160,7 +160,7 @@ async findOneByEmailWithPassword(email: string): Promise<Usuario | null> {
     const user = await this.usuarioRepository.findOne({ 
       where: { email },
       relations: ['rol'],
-      select: ["id", "email", "nombre", "apellido", "rol", "contraseña", "googleId"] 
+      select: ["id", "email", "nombre", "apellido", "rol", "contrasena", "googleId"] 
     });
     
     return user || null; 

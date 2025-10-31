@@ -57,7 +57,6 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD_USUARIOS}
     volumes:
       - usuarios_data:/var/lib/postgresql/data
-      - ./usuarios/init-usuarios.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER_USUARIOS} -d ${DB_NAME_USUARIOS}"]
       interval: 10s
@@ -105,7 +104,6 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD_ADOPCIONES}
     volumes:
       - adopcion_data:/var/lib/postgresql/data
-      - ./adopcion/init-adopcion.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER_ADOPCIONES} -d ${DB_NAME_ADOPCIONES}"]
       interval: 10s
@@ -146,7 +144,6 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD_ANIMALES}
     volumes:
       - animales_data:/var/lib/postgresql/data
-      - ./animales/init-animales.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER_ANIMALES} -d ${DB_NAME_ANIMALES}"]
       interval: 10s

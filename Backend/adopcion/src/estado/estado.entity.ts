@@ -7,7 +7,7 @@ export class Estado {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: false, default: 'Sin nombre' })
   nombre: string;
 
   // Relaciones

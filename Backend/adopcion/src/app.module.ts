@@ -6,6 +6,9 @@ import { EstadoModule } from './estado/estado.module';
 import { CambioEstadoModule } from './cambio-estado/cambio-estado.module';
 import { FormularioAdopcionModule } from './formulario-adopcion/formulario-adopcion.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from './auth/jwt.strategy';
 
 @Module({
   imports: [
@@ -19,12 +22,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
+      PassportModule.register({ defaultStrategy: 'jwt' }),
+      JwtModule.register({
+        secret: process.env.JWT_SECRET || 'huellitas123',
+        signOptions: { expiresIn: '1h' },
+    }),
    FormularioAdopcionModule,
    SolicitudAdopcionModule,
    EstadoModule,
    CambioEstadoModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, JwtStrategy],
+  exports: [PassportModule, JwtModule],
 })
 export class AppModule {}

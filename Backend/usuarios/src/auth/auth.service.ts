@@ -32,15 +32,15 @@ async registro(registroDto: RegistroDto) {
     
     const user = await this.usuarioService.findOneByEmailWithPassword(email);
 
-    if (!user || user.contraseña === null) { 
-          this.logger.warn(`Intento de login fallido para ${email} - Usuario no encontrado o sin contraseña.`);
+    if (!user || user.contrasena === null) { 
+          this.logger.warn(`Intento de login fallido para ${email} - Usuario no encontrado o sin contrasena.`);
           throw new UnauthorizedException('Credenciales incorrectas.');
         }
         
-        const passwordMatches = await bcrypt.compare(contrasena, user.contraseña);
+        const passwordMatches = await bcrypt.compare(contrasena, user.contrasena);
 
         if (!passwordMatches) {
-          this.logger.warn(`Intento de login fallido para ${email} - Contraseña incorrecta.`);
+          this.logger.warn(`Intento de login fallido para ${email} - contrasena incorrecta.`);
           throw new UnauthorizedException('Credenciales incorrectas.');
         }
 

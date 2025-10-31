@@ -13,7 +13,7 @@ export class SolicitudAdopcionController {
 
 // Interesado crea una nueva solicitud de adopcion
   @Post()
-  @Roles('interesado')
+  @Roles('Interesado')
   crearSolicitud(@Body() crearSolicitudDto: CrearSolicitudDto, @Request() req) {
     const adoptanteId = req.user.sub; 
     return this.solicitudService.create(crearSolicitudDto, adoptanteId);
@@ -21,21 +21,21 @@ export class SolicitudAdopcionController {
 
 // Admin puede ver todas las solicitudes
   @Get()
-  @Roles('responsable de adopciones', 'admin general')
+  @Roles('Responsable de Adopciones', 'Admin General')
   findAll() {
     return this.solicitudService.findAll();
   }
 
 // Ver detalle completo de una solicitud
   @Get(':id')
-  @Roles('responsable de adopciones', 'admin general')
+  @Roles('Responsable de Adopciones', 'Admin General')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.solicitudService.findOne(id);
   }
 
 // Cambiar estado de la solicitud
   @Patch(':id/estado')
-  @Roles('responsable de adopciones', 'admin general')
+  @Roles('Responsable de Adopciones', 'Admin General')
   cambiarEstado(
     @Param('id', ParseIntPipe) id: number,
     @Body() cambiarEstadoDto: CambiarEstadoDto,
