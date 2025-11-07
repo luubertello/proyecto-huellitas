@@ -9,31 +9,49 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './auth/jwt.strategy';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT || '5432', 10),
-      username: process.env.DB_USERNAME || 'admin',
-      password: process.env.DB_PASSWORD || '1234',
-      database: process.env.DB_DATABASE || 'adopcion',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
-      PassportModule.register({ defaultStrategy: 'jwt' }),
-      JwtModule.register({
-        secret: process.env.JWT_SECRET || 'huellitas123',
+
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule], 
+      inject: [ConfigService], 
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('DB_HOST', 'localhost'), 
+        port: configService.get<number>('DB_PORT', 5432),       
+        username: configService.get<string>('DB_USERNAME', 'admin'),
+        password: configService.get<string>('DB_PASSWORD', '1234'),
+        database: configService.get<string>('DB_DATABASE', 'adopcion'),
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: true,
+      }),
+    }),
+
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+
+    JwtModule.registerAsync({
+      imports: [ConfigModule], 
+      inject: [ConfigService],  
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
         signOptions: { expiresIn: '1h' },
+      }),
     }),
-   FormularioAdopcionModule,
-   SolicitudAdopcionModule,
-   EstadoModule,
-   CambioEstadoModule
+    FormularioAdopcionModule,
+    SolicitudAdopcionModule,
+    EstadoModule,
+    CambioEstadoModule
   ],
   controllers: [AppController],
-  providers: [AppService, JwtStrategy],
+  providers: [
+    AppService,
+    JwtStrategy, 
+  ],
   exports: [PassportModule, JwtModule],
 })
 export class AppModule {}

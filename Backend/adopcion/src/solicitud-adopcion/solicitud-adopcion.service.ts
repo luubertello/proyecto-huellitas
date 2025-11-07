@@ -30,6 +30,8 @@ export class SolicitudAdopcionService {
 
   async create(dto: CrearSolicitudDto, adoptanteId: number): Promise<SolicitudAdopcion> {
     const { animalId, ...formData } = dto;
+    this.logger.log(`[DEBUG] Iniciando 'create' para adoptanteId: ${adoptanteId}`);
+    this.logger.log(`[DEBUG] El animalId del DTO es: ${animalId}`);
     // Valida que el animal y el usuario existen
     try {
       await firstValueFrom(this.httpService.get(`${this.USUARIOS_SERVICE_URL}/${adoptanteId}`));

@@ -15,7 +15,7 @@ export class SolicitudAdopcionController {
   @Post()
   @Roles('Interesado')
   crearSolicitud(@Body() crearSolicitudDto: CrearSolicitudDto, @Request() req) {
-    const adoptanteId = req.user.sub; 
+    const adoptanteId = req.user.userId; 
     return this.solicitudService.create(crearSolicitudDto, adoptanteId);
   }
 
@@ -41,7 +41,7 @@ export class SolicitudAdopcionController {
     @Body() cambiarEstadoDto: CambiarEstadoDto,
     @Request() req,
   ) {
-      const adminId = req.user.sub;
+      const adminId  = req.user.userId;
     return this.solicitudService.cambiarEstado(id, cambiarEstadoDto, adminId);
   }
 }

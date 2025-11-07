@@ -57,7 +57,6 @@ export class AuthController {
     const accessToken = this.authService.generateJwtToken(user);
 
     // Redirigimos al frontend pasándole el token en la URL
-    // ¡ASEGÚRATE de que /auth/callback exista en tu routing de Angular!
     res.redirect(`http://localhost:4200/auth/callback?token=${accessToken}`);
   }
 }

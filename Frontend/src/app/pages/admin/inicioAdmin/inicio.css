@@ -148,9 +148,6 @@
     font-size: 1rem;
   }
 
-  /* En móviles, los botones se apilan uno sobre otro 
-    para ahorrar espacio horizontal.
-  */
   .widget-actions {
     flex-direction: column;
   }
