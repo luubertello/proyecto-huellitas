@@ -72,7 +72,22 @@ export class IniciarSesion implements OnInit {
       
       if (response) {
         alert('¡Inicio de sesión exitoso!');
-        this.router.navigate(['/inicio']); 
+        const adminRoles = [
+          'admin general',
+          'responsable de adopciones',
+          'responsable de animales',
+          'responsable de donaciones',
+          'responsable de inventarios'
+        ];
+
+        const esAdmin = adminRoles.some(role => this.authService.hasRole(role));
+
+        if (esAdmin) {
+          this.router.navigate(['/admin/inicio']);
+        } else {
+          this.router.navigate(['/inicio']); 
+        }
+        
       }
     });
   }
