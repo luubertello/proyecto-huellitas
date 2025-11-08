@@ -22,21 +22,13 @@ import { VerSolicitud } from './pages/admin/ver-solicitud/ver-solicitud';
 import { AuthCallbackComponent } from './auth/callback/callback';
 import { authGuard } from './auth/auth.guard';
 import { InicioAdmin } from './pages/admin/inicioAdmin/inicio';
+import { NoAutorizado } from './pages/common/no-autorizado/no-autorizado';
+import { adminGuard } from './auth/admin.guard';
 
 export const routes: Routes = [
 
   { path: 'auth/callback', component: AuthCallbackComponent },
-   { 
-    path: 'admin',
-    component: AdminLayout,
-    children: [
-      { path: 'inicio', component: InicioAdmin }, // /admin/inicio
-      { path: 'animales/registrar', component: CrearAnimal }, // /admin/animales/registrar
-      { path: 'animales', component: GestionarAnimales }, // /admin/animales
-      { path: 'animales/:id', component: EditarAnimal }, // /admin/animales/:id
-      { path: 'solicitudes', component: GestionAdopcion }, // /admin/solicitudes
-      { path: 'solicitudes/:id', component: VerSolicitud } // /admin/solicitudes/:id
-    ]},
+  { path: 'no-autorizado', component: NoAutorizado },
 
   {
     path: '',
@@ -68,6 +60,19 @@ export const routes: Routes = [
       },
     ],
   },
+
+    { 
+    path: 'admin',
+    component: AdminLayout,
+    canActivate: [adminGuard],
+    children: [
+      { path: 'inicio', component: InicioAdmin }, // /admin/inicio
+      { path: 'animales/registrar', component: CrearAnimal }, // /admin/animales/registrar
+      { path: 'animales', component: GestionarAnimales }, // /admin/animales
+      { path: 'animales/:id', component: EditarAnimal }, // /admin/animales/:id
+      { path: 'solicitudes', component: GestionAdopcion }, // /admin/solicitudes
+      { path: 'solicitudes/:id', component: VerSolicitud } // /admin/solicitudes/:id
+    ]},
 
 
   

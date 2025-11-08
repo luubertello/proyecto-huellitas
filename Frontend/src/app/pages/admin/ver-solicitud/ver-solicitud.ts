@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, Location } from '@angular/common'; // Importar Location
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { CommonModule, Location } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, catchError } from 'rxjs';
-
-// --- Interfaces basadas en tu JSON ---
 
 interface Estado {
   id: number;
@@ -58,7 +56,6 @@ interface Formulario {
   compromisoGastosVet: boolean;
 }
 
-// Esta es la interfaz principal que tu API devuelve
 interface SolicitudCompleta {
   id: number;
   fechaSolicitud: string;
@@ -75,7 +72,7 @@ interface SolicitudCompleta {
 @Component({
   selector: 'app-ver-solicitud',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule],
   templateUrl: './ver-solicitud.html',
   styleUrls: ['./ver-solicitud.css']
 })

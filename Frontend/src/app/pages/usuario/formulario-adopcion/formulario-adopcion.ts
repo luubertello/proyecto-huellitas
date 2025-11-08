@@ -4,14 +4,14 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core'; 
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router'; 
-import { HttpClient, HttpClientModule } from '@angular/common/http'; 
+import { HttpClient } from '@angular/common/http'; 
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 @Component({
   selector: 'app-formulario-adopcion',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './formulario-adopcion.html',
   styleUrls: ['./formulario-adopcion.css']
 

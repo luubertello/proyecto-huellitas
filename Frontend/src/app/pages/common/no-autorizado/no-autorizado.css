@@ -1,0 +1,70 @@
+/* Centra todo el contenedor en la página */
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  
+  /* Ajusta '70vh' si quieres que esté más arriba o abajo */
+  min-height: 70vh; 
+  padding: 2rem;
+  color: var(--text); 
+}
+
+/* Estilo para la imagen (si decides poner una) */
+.error-imagen {
+  width: 150px;
+  height: auto;
+  margin-bottom: 2rem;
+  opacity: 0.6;
+}
+
+.error-container h1 {
+  font-size: 2.5rem; /* 40px */
+  font-weight: 800;
+  margin: 0 0 1rem 0;
+  color: var(--text); /* O un color de "error" si tienes */
+}
+
+.error-container p {
+  font-size: 1.25rem; /* 20px */
+  color: var(--text-muted); /* Asumiendo que tienes esta variable */
+  margin-bottom: 2.5rem;
+  max-width: 450px; /* Evita que el texto sea demasiado ancho */
+  line-height: 1.6;
+}
+
+/* Estilo para los botones (basado en tu CSS anterior) */
+.error-container button {
+  padding: 12px 28px;
+  font-weight: 800;
+  text-transform: uppercase;
+  border: 0;
+  border-radius: 999px; 
+  background: #6b5347; /* Color primario de tu otro CSS */
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(0,0,0,.08);
+  transition: transform .1s ease, box-shadow .2s ease;
+  min-width: 280px;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.error-container button:hover {
+   transform: translateY(-2px); 
+   box-shadow: 0 10px 20px rgba(0,0,0,.12);
+}
+
+/* Botón secundario para la otra opción */
+.error-container .btn-secundario {
+  background-color: var(--card); 
+  color: var(--text);
+  border: 1px solid var(--text-muted); /* Asumiendo variables */
+}
+
+.error-container .btn-secundario:hover {
+  background-color: var(--peach-strong); 
+  border-color: var(--peach-strong);
+}
