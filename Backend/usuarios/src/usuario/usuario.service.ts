@@ -7,6 +7,7 @@ import { Usuario } from './usuario.entity';
 import { RegistroDto } from 'src/DTO/registro.dto';
 import * as bcrypt from 'bcrypt';
 import { Rol } from 'src/rol/rol.entity';
+import { ActualizarPerfilDto } from 'src/DTO/actualizar-perfil.dto';
 
 interface GoogleProfileData {
   googleId: string;
@@ -125,12 +126,16 @@ async emailYaRegistrado(email: string): Promise<boolean> {
 }
 
 // Busca un usuario por ID
-async findOneById(id: number): Promise<Usuario> {
-    const usuario = await this.usuarioRepository.findOneBy({ id });
+async findOneById(id: number): Promise<UsuarioSincontrasena> {
+    const usuario = await this.usuarioRepository.findOne({
+      where: { id },
+      relations: ['rol'] 
+    });
     if (!usuario) {
       throw new NotFoundException(`Usuario con ID ${id} no encontrado.`);
-    }
-    return usuario;
+     }
+    const { contrasena, ...result } = usuario;
+    return result;
   }
 
 // Devuelve todos los usuarios sin su contrasena
@@ -164,5 +169,20 @@ async findOneByEmailWithPassword(email: string): Promise<Usuario | null> {
     });
     
     return user || null; 
+  }
+
+  async actualizarPerfil(id: number, dto: ActualizarPerfilDto): Promise<UsuarioSincontrasena> {
+
+    const usuario = await this.usuarioRepository.findOneBy({ id });
+    if (!usuario) {
+      throw new NotFoundException(`Usuario con ID ${id} no encontrado.`);
+    }
+
+    this.usuarioRepository.merge(usuario, dto);
+
+    const usuarioActualizado = await this.usuarioRepository.save(usuario);
+
+    const { contrasena, ...result } = usuarioActualizado;
+    return result;
   }
 }

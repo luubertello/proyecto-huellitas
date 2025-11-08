@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Patch, Body, Param, UseGuards, Request, ParseIntPipe } from '@nestjs/common';
+import { Controller, Post, Get, Patch, Body, Param, UseGuards, Request, ParseIntPipe, Req } from '@nestjs/common';
 import { SolicitudAdopcionService } from './solicitud-adopcion.service';
 import { CrearSolicitudDto } from 'src/DTO/crear-solicitud.DTO';
 import { CambiarEstadoDto } from 'src/DTO/cambiar-estado.DTO';
@@ -17,6 +17,14 @@ export class SolicitudAdopcionController {
   crearSolicitud(@Body() crearSolicitudDto: CrearSolicitudDto, @Request() req) {
     const adoptanteId = req.user.userId; 
     return this.solicitudService.create(crearSolicitudDto, adoptanteId);
+  }
+
+// Interesado ve sus solicitudes
+  @Get('mis-solicitudes')
+  @Roles('Interesado') 
+  async findMisSolicitudes(@Request() req) {
+    const adoptanteId = (req.user as any).userId;
+    return this.solicitudService.findByAdoptanteId(adoptanteId);
   }
 
 // Admin puede ver todas las solicitudes

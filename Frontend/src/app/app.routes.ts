@@ -17,7 +17,7 @@ import { UsuarioLayout } from './layout/usuario-layout/usuario-layout';
 import { Adopcion } from './pages/usuario/adopcion/adopcion';
 import { EditarAnimal } from './pages/admin/editar-animal/editar-animal';
 import { GestionAdopcion } from './pages/admin/gestion-adopcion/gestion-adopcion';
-import { PerfilUsuario } from './pages/usuario/perfil-usuario/perfil-usuario';
+import { PerfilUsuario } from './pages/common/perfil-usuario/perfil-usuario';
 import { VerSolicitud } from './pages/admin/ver-solicitud/ver-solicitud';
 import { AuthCallbackComponent } from './auth/callback/callback';
 import { authGuard } from './auth/auth.guard';

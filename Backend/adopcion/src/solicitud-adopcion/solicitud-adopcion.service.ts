@@ -285,4 +285,41 @@ export class SolicitudAdopcionService {
       this.logger.error(`Fallo al rechazar automáticamente otras solicitudes para ${animalId}`, error.message);
     }
   }
+
+  async findByAdoptanteId(adoptanteId: number): Promise<any[]> {
+    this.logger.log(`Buscando solicitudes para adoptanteId: ${adoptanteId}`);
+
+    const solicitudes = await this.solicitudRepo.find({
+      where: { adoptanteId: adoptanteId },
+      relations: ['estadoActual'], 
+      order: { fechaSolicitud: 'DESC' }, 
+    });
+
+    if (solicitudes.length === 0) {
+      return []; 
+    }
+
+    const solicitudesEnriquecidas = await Promise.all(
+      solicitudes.map(async (solicitud) => {
+        
+        let animalData = { nombre: 'Animal no encontrado' };
+        
+        try {
+          const animalRes = await firstValueFrom(
+            this.httpService.get(`${this.ANIMALES_SERVICE_URL}/${solicitud.animalId}`)
+          );
+          animalData = animalRes.data; 
+        } catch (e) {
+          this.logger.error(`[findByAdoptanteId] Error al buscar animal ${solicitud.animalId}:`, e.message);
+        }
+
+        return {
+          ...solicitud,
+          animal: animalData, 
+        };
+      })
+    );
+
+    return solicitudesEnriquecidas;
+  }
 }

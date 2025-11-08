@@ -1,0 +1,112 @@
+<div class="perfil-container">
+  
+  <header class="perfil-header">
+    <h1>Mi Perfil</h1>
+    <p>Administra tu información personal, solicitudes y donaciones.</p>
+  </header>
+
+  <div class="perfil-grid">
+    
+    <aside class="perfil-menu">
+      <nav>
+        <ul>
+          <li><a (click)="seleccionarPestana('datos')" [class.active]="pestanaActual === 'datos'"><i class="bi bi-person-fill"></i> Datos Personales</a></li>
+          <li><a (click)="seleccionarPestana('solicitudes')" [class.active]="pestanaActual === 'solicitudes'"><i class="bi bi-file-earmark-text-fill"></i> Mis Solicitudes</a></li>
+          <li><a (click)="seleccionarPestana('donaciones')" [class.active]="pestanaActual === 'donaciones'"><i class="bi bi-heart-fill"></i> Mis Donaciones</a></li>
+        </ul>
+        <a class="logout-link" (click)="logout()"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a>
+      </nav>
+    </aside>
+
+    <main class="perfil-content">
+
+      <section *ngIf="pestanaActual === 'datos'">
+        
+        <div *ngIf="isLoadingDatos" class="loading-state">
+          <p>Cargando tus datos...</p>
+        </div>
+
+        <form *ngIf="!isLoadingDatos && usuario" (ngSubmit)="guardarDatosPersonales()" class="perfil-form">
+          <h2>Datos Personales</h2>
+          <p>Actualiza tu información personal y de contacto.</p>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nombre">Nombre</label>
+              <input type="text" id="nombre" name="nombre" [(ngModel)]="usuario.nombre" required>
+            </div>
+            <div class="form-group">
+              <label for="apellido">Apellido</label>
+              <input type="text" id="apellido" name="apellido" [(ngModel)]="usuario.apellido" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email (No se puede cambiar)</label>
+            <input type="email" id="email" name="email" [(ngModel)]="usuario.email" disabled>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="dni">DNI</label>
+              <input type="text" id="dni" name="dni" [(ngModel)]="usuario.dni" required>
+            </div>
+            <div class="form-group">
+              <label for="telefono">Teléfono</label>
+              <input type="tel" id="telefono" name="telefono" [(ngModel)]="usuario.telefono">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="direccion">Dirección</label>
+            <input type="text" id="direccion" name="direccion" [(ngModel)]="usuario.direccion">
+          </div>
+          
+          <div class="form-actions">
+            <button type="submit" class="btn-guardar" [disabled]="isSaving">
+              {{ isSaving ? 'Guardando...' : 'Guardar Cambios' }}
+            </button>
+            <a class="link-cambiar-pass">Cambiar contrasena</a>
+          </div>
+        </form>
+      </section>
+
+      <section *ngIf="pestanaActual === 'solicitudes'">
+        <h2>Mis Solicitudes de Adopción</h2>
+        
+        <div *ngIf="isLoadingSolicitudes" class="loading-state">
+          <p>Cargando tus solicitudes...</p>
+        </div>
+
+        <div *ngIf="!isLoadingSolicitudes && solicitudes.length === 0" class="empty-state">
+          <i class="bi bi-file-earmark-x"></i>
+          <p>Aún no has enviado ninguna solicitud de adopción.</p>
+          <button class="btn-accion">Ver animales para adoptar</button>
+        </div>
+
+        <ul *ngIf="!isLoadingSolicitudes && solicitudes.length > 0" class="lista-items">
+          <li *ngFor="let sol of solicitudes" [class]="'estado-' + sol.estadoActual.nombre.toLowerCase()">
+            <div class="item-info">
+              <h3>Postulación por: {{ sol.animal.nombre }}</h3>
+              <p>Fecha: {{ sol.fechaSolicitud | date:'dd/MM/yyyy' }}</p>
+            </div>
+            <div class="item-status">
+              <span class="badge">{{ sol.estadoActual.nombre }}</span>
+              <button (click)="verDetalleSolicitud(sol.id)" class="btn-detalle">
+                Ver Detalle
+              </button>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section *ngIf="pestanaActual === 'donaciones'">
+        <h2>Mis Donaciones</h2>
+        
+        <div *ngIf="donaciones.length === 0" class="empty-state">
+          <i class="bi bi-gift"></i>
+          <p>Tu historial de donaciones está vacío.</p>
+          <button class="btn-accion">Quiero donar ahora</button>
+        </div>
+        
+        </section>
+    </main>
+  </div>
+</div>

@@ -29,7 +29,7 @@ export class UsuarioHeader {
 
 
   goPerfil(): void {
-    this.router.navigate(['/mi-perfil']);
+    this.router.navigate(['/perfil']);
   }
 
 

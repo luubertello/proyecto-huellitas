@@ -1,0 +1,291 @@
+/* Contenedor principal de la página de perfil */
+.perfil-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+}
+
+/* Encabezado */
+.perfil-header {
+  border-bottom: 2px solid var(--card, #f0f0f0);
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+}
+.perfil-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text, #333);
+  margin: 0;
+}
+.perfil-header p {
+  font-size: 1.1rem;
+  color: var(--text-muted, #777);
+  margin-top: 0.5rem;
+}
+
+/* Grid para el layout lateral */
+.perfil-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr; /* Columna 1 (menú) de 260px, Columna 2 (contenido) el resto */
+  gap: 2.5rem; /* Espacio entre el menú y el contenido */
+}
+
+/* --- Menú Lateral --- */
+.perfil-menu nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.perfil-menu li {
+  margin-bottom: 0.5rem;
+}
+.perfil-menu a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; /* Espacio entre ícono y texto */
+  padding: 0.8rem 1rem;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-muted, #777);
+  border-radius: var(--radius, 8px);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.perfil-menu a i {
+  font-size: 1.2rem;
+}
+.perfil-menu a:hover {
+  background-color: var(--card, #f0f0f0);
+  color: var(--text, #333);
+}
+
+/* Estilo del link activo */
+.perfil-menu a.active {
+  background-color: var(--peach-strong, #f3ba98);
+  color: var(--text, #333);
+}
+
+/* Link de Cerrar Sesión */
+.logout-link {
+  margin-top: 2rem;
+  border-top: 1px solid var(--card, #f0f0f0);
+  padding-top: 1rem;
+  color: #dc3545; /* Color rojo para "peligro" */
+}
+.logout-link:hover {
+  color: #fff;
+  background-color: #dc3545;
+}
+
+/* --- Contenido de la Pestaña --- */
+.perfil-content {
+  background: var(--white, #fff);
+  border-radius: var(--radius-lg, 12px);
+  /* (Opcional) si quieres un borde o sombra: */
+  /* border: 1px solid var(--card, #f0f0f0); */
+  /* box-shadow: var(--shadow, 0 4px 12px rgba(0,0,0,.05)); */
+}
+
+/* Cada 'section' (pestaña) tendrá este padding */
+.perfil-content section {
+  padding: 1.5rem 2rem;
+}
+.perfil-content h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text, #333);
+  margin-top: 0;
+  border-bottom: 2px solid var(--card, #f0f0f0);
+  padding-bottom: 0.75rem;
+}
+
+/* --- Responsive para Móviles --- */
+@media (max-width: 768px) {
+  .perfil-grid {
+    /* En móviles, las columnas se apilan */
+    grid-template-columns: 1fr; 
+  }
+  .perfil-menu {
+    /* El menú se vuelve horizontal */
+    border-bottom: 2px solid var(--card, #f0f0f0);
+    margin-bottom: 2rem;
+  }
+  .perfil-menu nav ul {
+    display: flex;
+    overflow-x: auto; /* Permite scrollear el menú si no cabe */
+  }
+  .perfil-menu nav li {
+    margin-bottom: 0;
+    flex-shrink: 0; /* Evita que las pestañas se achiquen */
+  }
+}
+
+/* --- Estilos para el Contenido de las Pestañas --- */
+
+/* Formulario de Datos Personales */
+.perfil-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Espacio entre filas */
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+.form-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text, #333);
+  margin-bottom: 0.5rem;
+}
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"] {
+  padding: 0.8rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: var(--radius, 8px);
+  font-size: 1rem;
+}
+.form-group input:disabled {
+  background-color: var(--card, #f0f0f0);
+  color: var(--text-muted, #777);
+  cursor: not-allowed;
+}
+
+/* Botones del Formulario */
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--card, #f0f0f0);
+}
+.btn-guardar {
+  /* Estilo copiado de tu botón 'error-container' */
+  padding: 12px 28px;
+  font-weight: 800;
+  text-transform: uppercase;
+  border: 0;
+  border-radius: 999px; 
+  background: #6b5347; 
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(0,0,0,.08);
+  transition: transform .1s ease;
+  font-size: 0.9rem;
+}
+.btn-guardar:hover {
+  transform: translateY(-2px);
+}
+.link-cambiar-pass {
+  font-weight: 600;
+  color: var(--peach-strong, #f3ba98);
+  cursor: pointer;
+  text-decoration: none;
+}
+.link-cambiar-pass:hover {
+  text-decoration: underline;
+}
+
+/* --- Estilos para las Listas (Solicitudes y Donaciones) --- */
+
+/* Estado vacío (si no hay items) */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  border: 2px dashed var(--card, #f0f0f0);
+  border-radius: var(--radius-lg, 12px);
+  color: var(--text-muted, #777);
+}
+.empty-state i {
+  font-size: 3rem;
+  opacity: 0.5;
+  margin-bottom: 1rem;
+}
+.empty-state p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+.btn-accion {
+  /* Botón secundario */
+  padding: 10px 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: 1px solid var(--text, #333);
+  border-radius: 999px; 
+  background: transparent; 
+  color: var(--text, #333);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+.btn-accion:hover {
+  background: var(--text, #333);
+  color: var(--white, #fff);
+}
+
+/* Lista de items */
+.lista-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.lista-items li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--card, #f0f0f0);
+}
+.lista-items li:last-child {
+  border-bottom: none;
+}
+.item-info h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text, #333);
+  margin: 0 0 0.25rem 0;
+}
+.item-info p {
+  font-size: 0.9rem;
+  color: var(--text-muted, #777);
+  margin: 0;
+}
+.item-status {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.badge {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  background-color: #ccc;
+  color: #333;
+}
+/* Colores de badges (puedes ajustarlos) */
+.estado-pendiente .badge { background-color: #ffc107; color: #333; }
+.estado-aprobada .badge { background-color: #28a745; color: white; }
+.estado-rechazada .badge { background-color: #dc3545; color: white; }
+.badge.anonimo { background-color: #6c757d; color: white; }
+
+.btn-detalle {
+  /* Botón de texto simple */
+  font-weight: 600;
+  color: var(--peach-strong, #f3ba98);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}

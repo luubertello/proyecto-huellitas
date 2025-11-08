@@ -1,11 +1,10 @@
 // En: src/usuario/usuario.controller.ts
 
-import { Controller, Get, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Patch, UseGuards, Body, ValidationPipe, Req } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ActualizarPerfilDto } from 'src/DTO/actualizar-perfil.dto';
 
-// Aplicamos el Guard en todo el controlador
-// Todas las rutas dentro de Usuario requieren un token JWT válido
 // @UseGuards(JwtAuthGuard)
 @Controller('usuarios')
 export class UsuarioController {
@@ -27,5 +26,24 @@ export class UsuarioController {
   @Get('email/:email')
   async buscarUsuarioPorEmail(@Param('email') email: string) {
     return this.usuarioService.findOneByEmail(email);
+  }
+
+  // Ver mi perfil
+  @Get('perfil/me')
+  @UseGuards(JwtAuthGuard) 
+  async getPerfil(@Req() req) {
+    const userId = req.user.userId; 
+    return this.usuarioService.findOneById(userId);
+  }
+
+  // Actualizar mi perfil
+  @Patch('perfil/me')
+  @UseGuards(JwtAuthGuard) 
+  async updatePerfil(
+    @Req() req, 
+    @Body() dto: ActualizarPerfilDto
+  ) {
+    const userId = req.user.userId;
+    return this.usuarioService.actualizarPerfil(userId, dto);
   }
 }
