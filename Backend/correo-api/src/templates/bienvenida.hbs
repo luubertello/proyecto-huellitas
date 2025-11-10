@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  .container {
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .header {
+    background-color: #6b5347; /* (Tu color marrón de los botones) */
+    padding: 20px;
+    text-align: center;
+  }
+  .header img {
+    max-width: 150px; /* Ajusta el tamaño de tu logo */
+  }
+  .content {
+    padding: 30px;
+    line-height: 1.6;
+    color: #333333;
+  }
+  .content h1 {
+    font-size: 24px;
+    color: #333333;
+    margin-top: 0;
+  }
+  .content p {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  .button-container {
+    text-align: center;
+    margin: 30px 0;
+  }
+  .button {
+    background-color: #f3ba98; /* (Tu color "peach-strong") */
+    color: #333;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .footer {
+    background-color: #f9f9f9;
+    padding: 20px;
+    text-align: center;
+    font-size: 12px;
+    color: #777777;
+  }
+</style>
+  <meta charset="UTF-8">
+  <title>¡Bienvenido/a a Huellitas!</title>
+  </head>
+<body>
+  <div class="container">
+    <div class="header">
+      
+    </div>
+    <div class="content">
+      <h1>¡Hola, {{ nombre }}! Te damos la bienvenida a Huellitas</h1>
+      <p>Estamos muy felices de que te hayas unido a nuestra comunidad. Tu cuenta ha sido creada exitosamente.</p>
+      <p>Ya puedes iniciar sesión para explorar los perfiles de los animalitos que esperan un hogar, postularte para adoptar o realizar donaciones para ayudarnos a seguir rescatando.</p>
+      <div class="button-container">
+        <a href="http://localhost:4200/inicio" class="button">Explorar la web</a>
+      </div>
+      <p>Gracias por sumarte, <br>El equipo de Huellitas 🐾</p>
+    </div>
+    <div class="footer">
+      <p>&copy; 2025 Huellitas Adopción. Todos los derechos reservados.</p>
+    </div>
+  </div>
+</body>
+</html>
