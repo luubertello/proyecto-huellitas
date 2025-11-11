@@ -62,11 +62,8 @@ export class AnimalService {
 
   // Actualizar datos
 async update(id: number, dto: Partial<CrearAnimalDto>): Promise<Animal> {
-    // 1. findOne ya valida la existencia y lanza 404 si no existe
     const animal = await this.findOne(id);
 
-    // 2. Asignamos los campos explícitamente (más seguro que Object.assign)
-    // Comprobamos cada campo del DTO y lo asignamos al 'animal'
     if (dto.nombre) {
       animal.nombre = dto.nombre;
     }
@@ -83,7 +80,6 @@ async update(id: number, dto: Partial<CrearAnimalDto>): Promise<Animal> {
       animal.foto = dto.foto;
     }
 
-    // Asignamos las relaciones
     if (dto.estadoActualId) {
       animal.estadoActual = { id: dto.estadoActualId } as Estado;
     }
@@ -94,11 +90,9 @@ async update(id: number, dto: Partial<CrearAnimalDto>): Promise<Animal> {
       animal.especie = { id: dto.especieId } as Especie;
     }
 
-    // 3. Guardamos la entidad modificada
     await this.animalRepo.save(animal);
 
-    // 4. Recargamos la entidad desde la DB y la devolvemos
-    // Esto garantiza que la respuesta JSON tenga todas las relaciones actualizadas
+
     return this.findOne(id);
   }
 
@@ -130,6 +124,4 @@ async update(id: number, dto: Partial<CrearAnimalDto>): Promise<Animal> {
         const animal = await this.findOne(id); // validamos que exista
         await this.animalRepo.remove(animal);
     }
-
-
 }

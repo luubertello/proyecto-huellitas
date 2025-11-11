@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Param, Body, Put, Patch, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Post, Get, Param, Body, Put, Patch, Delete, ParseIntPipe, ValidationPipe } from '@nestjs/common';
 import { AnimalService } from './animal.service';
 import { CrearAnimalDto } from '../DTO/crearAnimal.dto';
 import { Animal } from './animal.entity';
@@ -42,9 +42,8 @@ export class AnimalController {
   @Patch(':id/estado')
   cambiarEstado(
     @Param('id', ParseIntPipe) id: number,
-    @Body() dto: CambiarEstadoAnimalDto, // Usamos el DTO
+     @Body(new ValidationPipe()) dto: CambiarEstadoAnimalDto, 
   ): Promise<Animal> {
-    // Llamamos al nuevo método en tu servicio
     return this.animalService.cambiarEstado(id, dto.nuevoEstado);
   }
 
