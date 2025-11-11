@@ -9,8 +9,9 @@ import { Router } from '@angular/router';
 })
 export class RequisitosAdopcion {
   constructor(private router: Router) {}
-  goFormulario(){
-    this.router.navigate(['/adopta/formulario']);
+  
+  registrarSolicitudAdopcion(animal:any):void {
+   this.router.navigate(['/adopta', 'animal', animal.id, 'formulario']);
   }
 
 }
