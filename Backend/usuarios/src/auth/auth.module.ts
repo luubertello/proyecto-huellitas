@@ -8,11 +8,13 @@ import { JwtStrategy } from './jwt.strategy';
 import { UsuarioModule } from 'src/usuario/usuario.module';
 import { GoogleStrategy } from './google.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
     UsuarioModule,
     PassportModule,
+    HttpModule,
     JwtModule.registerAsync({
       imports: [ConfigModule], 
       inject: [ConfigService], 

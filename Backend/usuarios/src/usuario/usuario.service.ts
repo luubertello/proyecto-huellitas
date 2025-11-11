@@ -185,4 +185,16 @@ async findOneByEmailWithPassword(email: string): Promise<Usuario | null> {
     const { contrasena, ...result } = usuarioActualizado;
     return result;
   }
+
+  async actualizarContrasena(id: number, nuevaContrasenaHash: string): Promise<Usuario> {
+    const usuario = await this.usuarioRepository.findOneBy({ id });
+    if (!usuario) {
+      throw new NotFoundException(`Usuario con ID ${id} no encontrado.`);
+    }
+
+    usuario.contrasena = nuevaContrasenaHash;
+    
+    await this.usuarioRepository.save(usuario);
+    return usuario;
+  }
 }

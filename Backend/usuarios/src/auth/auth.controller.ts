@@ -1,11 +1,13 @@
 // En: src/auth/auth.controller.ts
 
-import { Controller, Post, Body, UseGuards, Get, Request, Res } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get, Request, Res, ValidationPipe } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from 'src/DTO/login.dto';
 import { RegistroDto } from 'src/DTO/registro.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { AuthGuard } from '@nestjs/passport';
+import { RestablecerContrasenaDto } from 'src/DTO/reestablecer-contrasena.dto';
+import { SolicitarRecuperacionDto } from 'src/DTO/solicitar-recuperacion.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -56,7 +58,23 @@ export class AuthController {
     };
     const accessToken = this.authService.generateJwtToken(user);
 
-    // Redirigimos al frontend pasándole el token en la URL
     res.redirect(`http://localhost:4200/auth/callback?token=${accessToken}`);
+  }
+
+  // Solicitar recuperacion de la contrasena
+  @Post('solicitar-recuperacion')
+  async solicitarRecuperacion(
+    @Body(new ValidationPipe()) dto: SolicitarRecuperacionDto
+  ) {
+    const frontendUrl = 'http://localhost:4200/restablecer-contrasena';
+    return this.authService.solicitarRecuperacion(dto.email, frontendUrl);
+  }
+
+  // Reestablecer contrasena
+  @Post('restablecer-contrasena')
+  async restablecerContrasena(
+    @Body(new ValidationPipe()) dto: RestablecerContrasenaDto
+  ) {
+    return this.authService.restablecerContrasena(dto.token, dto.nuevaContrasena);
   }
 }

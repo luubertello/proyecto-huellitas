@@ -9,7 +9,7 @@ export class RecuperacionDto {
   @IsNotEmpty()
   nombre: string;
 
-  @IsUrl()
+  @IsUrl({ require_tld: false })
   @IsNotEmpty()
   resetLink: string;
 }

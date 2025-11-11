@@ -10,25 +10,31 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
 // Mensaje de Bienvenida
-  @Post('enviar-bienvenida')
+  @Post('bienvenida')
   enviarBienvenida(@Body(new ValidationPipe()) dto: BienvenidaDto) {
     return this.appService.enviarBienvenida(dto);
   }
 
 // Recuperar contrasena
-  @Post('enviar-recuperacion')
+  @Post('recuperacion')
   enviarRecuperacion(@Body(new ValidationPipe()) dto: RecuperacionDto) {
     return this.appService.enviarRecuperacion(dto);
   }
 
+// Contrasena reestablecida
+  @Post('contrasena-cambiada')
+  enviarContrasenaCambiada(@Body(new ValidationPipe()) dto: BienvenidaDto) {
+    return this.appService.enviarContrasenaCambiada(dto);
+  }
+
 // Notificar solicitud aprobada
-  @Post('enviar-solicitud-aprobada')
+  @Post('solicitud-aprobada')
   enviarSolicitudAprobada(@Body(new ValidationPipe()) dto: NotificacionSolicitudDto) {
     return this.appService.enviarSolicitudAprobada(dto);
   }
 
 // Notificar solicitud rechazada
-  @Post('enviar-solicitud-rechazada')
+  @Post('solicitud-rechazada')
   enviarSolicitudRechazada(@Body(new ValidationPipe()) dto: NotificacionSolicitudDto) {
     return this.appService.enviarSolicitudRechazada(dto);
   }

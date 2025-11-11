@@ -46,6 +46,26 @@ export class AppService {
     return { message: 'Email de recuperación enviado' };
   }
 
+// Email de notificacion de cambio de contrasena
+  async enviarContrasenaCambiada(dto: BienvenidaDto) { 
+    this.logger.log(`Enviando email de cambio de contraseña a ${dto.email}...`);
+    try {
+      await this.mailerService.sendMail({
+        to: dto.email,
+        subject: 'Tu contraseña de Huellitas ha sido actualizada',
+        template: 'contrasena-cambiada',
+        context: {
+          nombre: dto.nombre,
+        },
+      });
+      this.logger.log('Email de seguridad enviado con éxito.');
+      return { message: 'Email de seguridad enviado' };
+    } catch (error) {
+      this.logger.error('Error al enviar email de seguridad:', error);
+      throw error;
+    }
+  }
+
 
 // Email de solicitud aprobada
   async enviarSolicitudAprobada(dto: NotificacionSolicitudDto) {

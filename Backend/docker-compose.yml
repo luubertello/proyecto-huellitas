@@ -41,10 +41,11 @@ services:
       DB_USERNAME: ${DB_USER_USUARIOS}
       DB_PASSWORD: ${DB_PASSWORD_USUARIOS}
       DB_DATABASE: ${DB_NAME_USUARIOS}
-      
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       JWT_SECRET: ${JWT_SECRET} 
+      CORREO_SERVICE_URL: http://correo-api:3000
+      
     networks:
       - huellitas-net
 
@@ -92,6 +93,7 @@ services:
 
       USUARIOS_SERVICE_URL: http://usuarios-api:3000/usuarios
       ANIMALES_SERVICE_URL: http://animales-api:3000/animales
+      CORREO_SERVICE_URL: http://correo-api:3000
     networks:
       - huellitas-net
 
