@@ -14,6 +14,18 @@ export class AnimalController {
     return this.animalService.findAll();
   }
 
+  // Buscar todos los gatos
+  @Get('gatos')
+  findGatos(): Promise<Animal[]> {
+    return this.animalService.findGatos();
+  }
+
+  // Buscar todos los perros
+  @Get('perros')
+  findPerros(): Promise<Animal[]> {
+    return this.animalService.findPerros();
+  }
+
   // Buscar animal por ID
   @Get(':id')
   findOne(@Param('id') id: string): Promise<Animal> {
