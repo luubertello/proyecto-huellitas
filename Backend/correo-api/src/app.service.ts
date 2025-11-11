@@ -4,6 +4,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { BienvenidaDto } from './dto/bienvenida.dto';
 import { RecuperacionDto } from './dto/recuperacion.dto';
 import { NotificacionSolicitudDto } from './dto/notificacion-solicitud.dto';
+import { AdminNotificacionDto } from './dto/admin-notificacion.dto';
 
 @Injectable()
 export class AppService {
@@ -95,5 +96,48 @@ export class AppService {
       },
     });
     return { message: 'Email de solicitud rechazada enviado' };
+  }
+
+// Email de Solicitud recibida
+  async enviarSolicitudRecibida(dto: NotificacionSolicitudDto) {
+    this.logger.log(`Enviando email de 'Solicitud Recibida' a ${dto.email}...`);
+    try {
+      await this.mailerService.sendMail({
+        to: dto.email,
+        subject: `¡Recibimos tu solicitud para adoptar a ${dto.nombreAnimal}!`,
+        template: 'solicitud-recibida', 
+        context: {
+          nombreAdoptante: dto.nombreAdoptante,
+          nombreAnimal: dto.nombreAnimal,
+        },
+      });
+      this.logger.log('Email de "Solicitud Recibida" enviado.');
+      return { message: 'Email de solicitud recibida enviado' };
+    } catch (error) {
+      this.logger.error('Error al enviar "Solicitud Recibida":', error);
+      throw error;
+    }
+  }
+
+// Email de nueva solicitud (Admin)
+  async enviarNuevaSolicitudAdmin(dto: AdminNotificacionDto) {
+    this.logger.log(`Enviando email de 'Nueva Solicitud (Admin)' a ${dto.emailAdmin}...`);
+    try {
+      await this.mailerService.sendMail({
+        to: dto.emailAdmin, 
+        subject: `¡Nueva Solicitud! (${dto.nombreAdoptante} quiere adoptar a ${dto.nombreAnimal})`,
+        template: 'nueva-solicitud',
+        context: {
+          nombreAdoptante: dto.nombreAdoptante,
+          nombreAnimal: dto.nombreAnimal,
+          email: dto.emailAdoptante,
+        },
+      });
+      this.logger.log('Email de "Nueva Solicitud (Admin)" enviado.');
+      return { message: 'Email de nueva solicitud (admin) enviado' };
+    } catch (error) {
+      this.logger.error('Error al enviar "Nueva Solicitud (Admin)":', error);
+      throw error;
+    }
   }
 }

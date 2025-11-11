@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { BienvenidaDto } from './dto/bienvenida.dto';
 import { RecuperacionDto } from './dto/recuperacion.dto';
 import { NotificacionSolicitudDto } from './dto/notificacion-solicitud.dto';
+import { AdminNotificacionDto } from './dto/admin-notificacion.dto';
 
 @Controller('email')
 export class AppController {
@@ -37,5 +38,17 @@ export class AppController {
   @Post('solicitud-rechazada')
   enviarSolicitudRechazada(@Body(new ValidationPipe()) dto: NotificacionSolicitudDto) {
     return this.appService.enviarSolicitudRechazada(dto);
+  }
+
+// Notificar solicitud recibida
+  @Post('solicitud-recibida')
+  enviarSolicitudRecibida(@Body(new ValidationPipe()) dto: NotificacionSolicitudDto) {
+    return this.appService.enviarSolicitudRecibida(dto);
+  }
+
+// Notificar nueva solicitud (admin)
+  @Post('nueva-solicitud')
+  enviarNuevaSolicitudAdmin(@Body(new ValidationPipe()) dto: AdminNotificacionDto) {
+    return this.appService.enviarNuevaSolicitudAdmin(dto);
   }
 }

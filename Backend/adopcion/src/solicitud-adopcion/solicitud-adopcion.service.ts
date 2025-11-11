@@ -4,19 +4,33 @@ import { Injectable, NotFoundException, InternalServerErrorException, Logger } f
 import { InjectRepository } from '@nestjs/typeorm';
 import { Not, Repository } from 'typeorm';
 import { HttpService } from '@nestjs/axios';
-import { firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom } from 'rxjs';
 import { SolicitudAdopcion } from './solicitud-adopcion.entity';
 import { FormularioAdopcion } from '../formulario-adopcion/formulario-adopcion.entity';
 import { Estado } from '../estado/estado.entity';
 import { CambioEstado } from '../cambio-estado/cambio-estado.entity';
 import { CrearSolicitudDto } from '../DTO/crear-solicitud.DTO';
 import { CambiarEstadoDto } from '../DTO/cambiar-estado.DTO';
+import { ConfigService } from '@nestjs/config';
+
+interface NotificacionSolicitudDto {
+  email: string;
+  nombreAdoptante: string;
+  nombreAnimal: string;
+}
+
+interface AdminNotificacionDto {
+      emailAdmin: string;
+      emailAdoptante: string;
+      nombreAdoptante: string;
+      nombreAnimal: string;
+    }
 
 @Injectable()
 export class SolicitudAdopcionService {
   private readonly USUARIOS_SERVICE_URL = 'http://usuarios-api:3000/usuarios';
   private readonly ANIMALES_SERVICE_URL = 'http://animales-api:3000/animales';
-  // servicio de notificaciones x mail
+  private readonly CORREO_SERVICE_URL = 'http://correo-api:3000/email';
 
   private readonly logger = new Logger(SolicitudAdopcionService.name);
 
@@ -30,44 +44,75 @@ export class SolicitudAdopcionService {
 
   async create(dto: CrearSolicitudDto, adoptanteId: number): Promise<SolicitudAdopcion> {
     const { animalId, ...formData } = dto;
-    this.logger.log(`[DEBUG] Iniciando 'create' para adoptanteId: ${adoptanteId}`);
-    this.logger.log(`[DEBUG] El animalId del DTO es: ${animalId}`);
-    // Valida que el animal y el usuario existen
+    let adoptanteData: any;
+    let animalData: any;
+
     try {
-      await firstValueFrom(this.httpService.get(`${this.USUARIOS_SERVICE_URL}/${adoptanteId}`));
-      await firstValueFrom(this.httpService.get(`${this.ANIMALES_SERVICE_URL}/${animalId}`));
-     } catch (error) {
+      adoptanteData = (await firstValueFrom(this.httpService.get(`${this.USUARIOS_SERVICE_URL}/${adoptanteId}`))).data;
+      animalData = (await firstValueFrom(this.httpService.get(`${this.ANIMALES_SERVICE_URL}/${animalId}`))).data;
+
+    } catch (error) {
       console.error('--- ERROR ORIGINAL DE LA PETICIÓN HTTP ---');
       console.error(error.response?.data || error.message); 
       throw new NotFoundException('El usuario o el animal especificado no existe.');
     }
-    // Obtiene el estado inicial ("Pendiente")
+
     const estadoInicial = await this.estadoRepo.findOne({ where: { nombre: 'Pendiente' } });
     if (!estadoInicial) {
       throw new InternalServerErrorException('El estado inicial "Pendiente" no está configurado en la base de datos.');
     }
-
-    // Crea y guarda el formulario en la BD
     const nuevoFormulario = this.formularioRepo.create(formData);
     const formularioGuardado = await this.formularioRepo.save(nuevoFormulario);
-
-    // Crea la solicitud principal usando el formulario recién guardado
     const nuevaSolicitud = this.solicitudRepo.create({
-    adoptanteId: adoptanteId,
-    animalId: animalId,
-    formulario: formularioGuardado,
-    estadoActual: estadoInicial,
+      adoptanteId: adoptanteId,
+      animalId: animalId,
+      formulario: formularioGuardado,
+      estadoActual: estadoInicial,
     });
+    const solicitudGuardada = await this.solicitudRepo.save(nuevaSolicitud);
 
-    // Guarda y devuelve la solicitud
-    return this.solicitudRepo.save(nuevaSolicitud);
+    try {
+      this.logger.log(`Enviando emails de creación para solicitud ${solicitudGuardada.id}`);
+
+      const emailDto: NotificacionSolicitudDto = {
+        email: adoptanteData.email,
+        nombreAdoptante: adoptanteData.nombre,
+        nombreAnimal: animalData.nombre
+      };
+
+      await firstValueFrom(
+        this.httpService.post(`${this.CORREO_SERVICE_URL}/solicitud-recibida`, emailDto)
+          .pipe(catchError(err => { throw new InternalServerErrorException(err.response?.data || err.message); }))
+      );
+
+      const emailsAdmins = ['lubertello123@gmail.com']; 
+
+      for (const emailAdmin of emailsAdmins) {
+        
+        const dtoAdmin: AdminNotificacionDto = {
+          emailAdmin: emailAdmin,            
+          emailAdoptante: adoptanteData.email, 
+          nombreAdoptante: adoptanteData.nombre,
+          nombreAnimal: animalData.nombre
+        };
+
+        await firstValueFrom(
+          this.httpService.post(`${this.CORREO_SERVICE_URL}/nueva-solicitud`, dtoAdmin)
+            .pipe(catchError(err => { throw new InternalServerErrorException(err.response?.data || err.message); }))
+        );
+      }
+      this.logger.log(`Emails de "Nueva Solicitud" enviados a ${emailsAdmins.length} admin(s).`);
+
+    } catch (error) {
+      this.logger.error(`FALLO al enviar emails de creación para solicitud ${solicitudGuardada.id}: ${error.message}`);
+    }
+    return solicitudGuardada;
 }
 
 // Busca todas las solicitudes
   async findAll(): Promise<any[]> { 
-    // 1. Obtenemos todas las solicitudes de nuestra BD
     const solicitudes = await this.solicitudRepo.find({
-      relations: ['estadoActual'], // Mantenemos las relaciones que tenías
+      relations: ['estadoActual'], 
       order: { fechaSolicitud: 'DESC' },
     });
 
@@ -81,7 +126,7 @@ export class SolicitudAdopcionService {
           const animalRes = await firstValueFrom(
       this.httpService.get(`${this.ANIMALES_SERVICE_URL}/${solicitud.animalId}`)
           );
-          animalData = animalRes.data; // Guardamos el objeto completo del animal
+          animalData = animalRes.data;
         } catch (e) {
           console.error(`[findAll] Error al buscar animal ${solicitud.animalId}:`, e.message);
         }
@@ -90,7 +135,7 @@ export class SolicitudAdopcionService {
           const adoptanteRes = await firstValueFrom(
       this.httpService.get(`${this.USUARIOS_SERVICE_URL}/${solicitud.adoptanteId}`)
           );
-          adoptanteData = adoptanteRes.data; // Guardamos el objeto completo del adoptante
+          adoptanteData = adoptanteRes.data;
         } catch (e) {
           console.error(`[findAll] Error al buscar adoptante ${solicitud.adoptanteId}:`, e.message);
         }
@@ -108,7 +153,6 @@ export class SolicitudAdopcionService {
 
 
   async findOne(id: number): Promise<any> {
-    // Obtener la solicitud de la base de datos local
     const solicitud = await this.solicitudRepo.findOne({
       where: { id },
       relations: ['formulario', 'estadoActual', 'historialDeEstados'],
@@ -117,14 +161,12 @@ export class SolicitudAdopcionService {
       throw new NotFoundException(`Solicitud con ID ${id} no encontrada.`);
     }
 
-    // Agregar datos de otros microservicios
     try {
       const [adoptanteRes, animalRes] = await Promise.all([
         firstValueFrom(this.httpService.get(`${this.USUARIOS_SERVICE_URL}/${solicitud.adoptanteId}`)),
         firstValueFrom(this.httpService.get(`${this.ANIMALES_SERVICE_URL}/${solicitud.animalId}`))
       ]);
 
-      // Combinar todo en una única respuesta
       return {
         ...solicitud,
         adoptante: adoptanteRes.data, // Añadir los datos completos del usuario
@@ -164,11 +206,19 @@ export class SolicitudAdopcionService {
     solicitud.estadoActual = nuevoEstado;
     const solicitudGuardada = await this.solicitudRepo.save(solicitud);
 
+    let solicitudCompleta: any;
+    try {
+      solicitudCompleta = await this.findOne(solicitudGuardada.id);
+    } catch (error) {
+      this.logger.error(`No se pudieron obtener datos completos para email (Sol. ID: ${id}): ${error.message}`);
+      return solicitudGuardada; 
+    }
+
     try {
       switch (nuevoEstado.nombre) {
         case 'Aprobada':
           this.logger.log(`Disparando efectos para Solicitud ${id} Aprobada...`);
-          await this.handleSolicitudAprobada(solicitudGuardada);
+          await this.handleSolicitudAprobada(solicitudCompleta);
           break;
         
         case 'Finalizada':
@@ -177,7 +227,7 @@ export class SolicitudAdopcionService {
           break;
         
         case 'Rechazada':
-          // enviar notificaicon por mail
+          await this.handleSolicitudRechazada(solicitudCompleta);
           break;
       }
     } catch (error) {
@@ -189,12 +239,11 @@ export class SolicitudAdopcionService {
   }
 
   // Logica para solicitud aprobada
-  private async handleSolicitudAprobada(solicitud: SolicitudAdopcion): Promise<void> {
-    const { animalId, adoptanteId } = solicitud;
+  private async handleSolicitudAprobada(solicitud: any): Promise<void> {
+    const { animalId, adoptante, animal } = solicitud;
 
     // Cambiar estado del animal
     try {
-      // ASUMO que tu endpoint de animales es: PATCH /animales/:id/estado
       const url = `${this.ANIMALES_SERVICE_URL}/${animalId}/estado`;
       const dto = { nuevoEstado: 'pendienteAdopcion' };
       await firstValueFrom(this.httpService.patch(url, dto));
@@ -202,29 +251,45 @@ export class SolicitudAdopcionService {
     } catch (error) {
       this.logger.error(`No se pudo actualizar el estado del animal ${animalId}`, error.message);
     }
-  }
-
-    /* Enviar email de notificación
+    // Enviar email de notificación
     try {
-      // Necesitamos los datos del adoptante (email) y animal (nombre)
-      const adoptante = (await firstValueFrom(this.httpService.get(`${this.USUARIOS_SERVICE_URL}/${adoptanteId}`))).data;
-      const animal = (await firstValueFrom(this.httpService.get(`${this.ANIMALES_SERVICE_URL}/${animalId}`))).data;
-
-      const emailDto = {
-        to: adoptante.email,
-        subject: `¡Tu solicitud de adopción para ${animal.nombre} fue aprobada!`,
-        body: `Hola ${adoptante.nombre}, ¡felicidades! Tu solicitud ha sido aprobada. Por favor, contáctanos para coordinar la reunión y el retiro.`
+      const emailDto: NotificacionSolicitudDto = {
+        email: adoptante.email,
+        nombreAdoptante: adoptante.nombre,
+        nombreAnimal: animal.nombre
       };
-      
-      // Llamamos al (hipotético) servicio de notificaciones
-      await firstValueFrom(this.httpService.post(this.NOTIFICACIONES_SERVICE_URL, emailDto));
+
+      await firstValueFrom(
+        this.httpService.post(`${this.CORREO_SERVICE_URL}/solicitud-aprobada`, emailDto)
+            .pipe(catchError(err => { throw new InternalServerErrorException(err.response?.data || err.message); }))
+      );
       this.logger.log(`Email de aprobación enviado a ${adoptante.email}`);
 
     } catch (error) {
-      this.logger.error(`No se pudo enviar el email de aprobación a ${adoptanteId}`, error.message);
+      this.logger.error(`No se pudo enviar el email de aprobación a ${adoptante.email}`, error.message);
+    }
+ }
+
+ private async handleSolicitudRechazada(solicitud: any): Promise<void> {
+    const { adoptante, animal } = solicitud;
+
+    try {
+      const emailDto: NotificacionSolicitudDto = {
+        email: adoptante.email,
+        nombreAdoptante: adoptante.nombre,
+        nombreAnimal: animal.nombre
+      };
+
+      await firstValueFrom(
+        this.httpService.post(`${this.CORREO_SERVICE_URL}/solicitud-rechazada`, emailDto)
+            .pipe(catchError(err => { throw new InternalServerErrorException(err.response?.data || err.message); }))
+      );
+      this.logger.log(`Email de rechazo enviado a ${adoptante.email}`);
+
+    } catch (error) {
+      this.logger.error(`No se pudo enviar el email de rechazo a ${adoptante.email}`, error.message);
     }
   }
-    */
 
     // Logica para solicitud finalizada
   private async handleSolicitudFinalizada(solicitud: SolicitudAdopcion, estadoAnterior: Estado, adminId: number): Promise<void> {
