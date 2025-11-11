@@ -32,7 +32,7 @@ export class DonacionInsumo {
   @Column({ type: 'varchar', nullable: true })
   telefonoInvitado: string;
 
-  // --- Relación con EstadoLogistica ---
+  // --- Relación con Estado ---
   @ManyToOne(() => EstadoInsumo, (estado) => estado.donacionesInsumos, { eager: true })
   estadoInsumo: EstadoInsumo;
 }
