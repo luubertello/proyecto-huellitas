@@ -40,6 +40,37 @@ export class AnimalService {
     return animal;
   }
 
+  // Buscar todos los gatos
+  async findGatos(): Promise<Animal[]> {
+    return this.animalRepo.find({
+      where: {
+        especie: {
+          nombre: 'Gato' 
+        },
+        estadoActual: {
+          nombre: 'enAdopcion' 
+        }
+      },
+      relations: ['especie', 'estadoActual', 'raza'],
+    });
+  }
+
+  // Buscar todos los perros
+  async findPerros(): Promise<Animal[]> {
+
+    return this.animalRepo.find({
+      where: {
+        especie: {
+          nombre: 'Perro'
+        },
+        estadoActual: {
+          nombre: 'enAdopcion'
+        }
+      },
+      relations: ['especie', 'estadoActual', 'raza'],
+    });
+  }
+
   // Crear animal
   async create(dto: CrearAnimalDto): Promise<Animal> {
     const especie = await this.especieRepo.findOne({ where: { id: dto.especieId } });

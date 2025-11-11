@@ -32,3 +32,4 @@ export class AdoptaGatos {
     this.router.navigate(['/adopta/gatos/', animal.id]);
   }
 }
+

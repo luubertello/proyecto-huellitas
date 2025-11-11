@@ -1,12 +1,8 @@
--- ========================
--- INSERTAR ROLES
--- ========================
+
 INSERT INTO rol (id, nombre) VALUES
 (1, 'interesado'),
-(2, 'admin General'),
-(3, 'responsable de Adopciones'),
-(4, 'responsable de Animales'),
-(5, 'responsable de Donaciones'),
-(6, 'responsable de Inventarios');
-
-
+(2, 'admin general'),
+(3, 'responsable de adopciones'),
+(4, 'responsable de animales'),
+(5, 'responsable de donaciones'),
+(6, 'responsable de inventarios');
