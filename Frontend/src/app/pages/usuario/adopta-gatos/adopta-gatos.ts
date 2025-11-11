@@ -1,42 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ViewEncapsulation } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-adopta-gatos',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './adopta-gatos.html',
   styleUrl: './adopta-gatos.css',
   encapsulation: ViewEncapsulation.None
 })
-export class AdoptaGatos {
-  constructor(private router: Router) {}
+export class AdoptaGatos implements OnInit {
+animales: any[] = [];
+  constructor(
+    private http: HttpClient,
+    private router: Router) {}
 
-goAdopcionGatos() {
-    this.router.navigate(['/adopcion/gatos']);
+  ngOnInit() {
+    this.cargarGatos(); 
   }
 
-  goAdopcionPerros() {
-    this.router.navigate(['/adopcion/perros']);
+   cargarGatos() { 
+    this.http.get<any[]>('http://localhost:3000/animales/gatos') 
+      .subscribe(data => this.animales = data, 
+            error => console.error('Error al cargar gatos', error));
   }
 
-  goAdopcionFormulario() {
-    this.router.navigate(['/adopcion/formulario']);
-  }
-
-  goAdopcionRequisitos() {
-    this.router.navigate(['/adopcion/requisitos']);
-  }
-
-  goAdopcion() {
-    this.router.navigate(['/adopcion']);
-  }
-
-  goDonar() {
-    this.router.navigate(['/donaciones']);
-  }
-
-  goInicio() {
-    this.router.navigate(['/inicio]']);
+   goPerfil(animal: any): void {
+    this.router.navigate(['/adopta/animal/', animal.id]);
   }
 }
+
