@@ -26,6 +26,7 @@ import { NoAutorizado } from './pages/common/no-autorizado/no-autorizado';
 import { adminGuard } from './auth/admin.guard';
 import { RestablecerContrasena } from './pages/common/restablecer-contrasena/restablecer-contrasena';
 import { SolicitarRecuperacion } from './pages/common/solicitar-recuperacion/solicitar-recuperacion';
+import { ComoAdoptar } from './pages/usuario/como-adoptar/como-adoptar';
 
 export const routes: Routes = [
 
@@ -50,6 +51,7 @@ export const routes: Routes = [
           { path: 'gatos', component: AdoptaGatos },   // /adopta/gatos
           { path: 'perros', component: AdoptaPerros }, // /adopta/perros
           { path: 'requisitos', component: RequisitosAdopcion }, // /adopta/requisitos
+          { path: 'como-adoptar', component: ComoAdoptar },
           { path: 'animal/:id/formulario', component: FormularioAdopcion }, // /adopta/animal/:id/formulario
           { path: 'animal/:id', component: PerfilAnimal } // /adopta/animal/:id
         ],
