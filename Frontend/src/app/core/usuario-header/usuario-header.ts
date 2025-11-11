@@ -68,4 +68,8 @@ export class UsuarioHeader {
   goInicioSesion() {
       this.router.navigate(['/iniciar-sesion']);
   }
+
+  goComoAdoptar() {
+    this.router.navigate(['/adopta/como-adoptar'])
+  }
 }
