@@ -47,10 +47,9 @@
 
         <div class="help-links">
           <p class="muted">
-            <!--  Usamos [routerLink] -->
             ¿No tienes cuenta? <a [routerLink]="['/registro']">Crea una</a>
           <p class="muted">
-            ¿Olvidaste tu contraseña? <a routerLink="/registro">Cambia tu contraseña</a>
+            ¿Olvidaste tu contraseña? <a [routerLink]="['/solicitar-recuperacion']">Cambia tu contraseña</a>
           </p>
         </div>
       </form>

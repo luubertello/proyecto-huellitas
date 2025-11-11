@@ -1,0 +1,56 @@
+<main class="page">
+  <section class="auth">
+    <div class="card">
+      
+      <h1>Restablecer tu Contraseña</h1>
+      <p style="margin-top:-10px; margin-bottom: 24px; color: var(--text-muted); font-size: 0.9rem;">
+        Ingresa tu nueva contraseña. Debe tener al menos 8 caracteres.
+      </p>
+
+      <form [formGroup]="resetForm" (ngSubmit)="onSubmit()" class="form">
+        
+        <div class="field">
+          <span>Nueva Contraseña</span>
+          <input 
+            type="password" 
+            id="nuevaContrasena" 
+            formControlName="nuevaContrasena"
+            [class.invalid]="f['nuevaContrasena'].touched && f['nuevaContrasena'].invalid">
+          
+          <div *ngIf="f['nuevaContrasena'].touched && f['nuevaContrasena'].errors" class="field-error">
+            <small *ngIf="f['nuevaContrasena'].errors['required']">La contraseña es obligatoria.</small>
+            <small *ngIf="f['nuevaContrasena'].errors['minlength']">Debe tener al menos 8 caracteres.</small>
+          </div>
+        </div>
+
+        <div class="field">
+          <span>Confirmar Contraseña</span>
+          <input 
+            type="password" 
+            id="confirmarContrasena" 
+            formControlName="confirmarContrasena"
+            [class.invalid]="f['confirmarContrasena'].touched && (f['confirmarContrasena'].invalid || resetForm.hasError('noCoinciden'))">
+          
+          <div *ngIf="f['confirmarContrasena'].touched && f['confirmarContrasena'].errors" class="field-error">
+            <small *ngIf="f['confirmarContrasena'].errors['required']">Debes confirmar la contraseña.</small>
+          </div>
+          <div *ngIf="f['confirmarContrasena'].touched && !f['confirmarContrasena'].errors && resetForm.hasError('noCoinciden')" class="field-error">
+            <small>Las contraseñas no coinciden.</small>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" [disabled]="isLoading || resetForm.invalid">
+          {{ isLoading ? 'Cambiando...' : 'Cambiar Contraseña' }}
+        </button>
+
+        <div *ngIf="errorMessage" class="alert alert-danger">
+          {{ errorMessage }}
+        </div>
+        <div *ngIf="successMessage" class="alert alert-success">
+          {{ successMessage }}
+        </div>
+
+      </form>
+    </div>
+  </section>
+</main>

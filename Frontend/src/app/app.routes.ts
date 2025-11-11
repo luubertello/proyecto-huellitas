@@ -24,6 +24,8 @@ import { authGuard } from './auth/auth.guard';
 import { InicioAdmin } from './pages/admin/inicioAdmin/inicio';
 import { NoAutorizado } from './pages/common/no-autorizado/no-autorizado';
 import { adminGuard } from './auth/admin.guard';
+import { RestablecerContrasena } from './pages/common/restablecer-contrasena/restablecer-contrasena';
+import { SolicitarRecuperacion } from './pages/common/solicitar-recuperacion/solicitar-recuperacion';
 
 export const routes: Routes = [
 
@@ -38,6 +40,8 @@ export const routes: Routes = [
       { path: 'iniciar-sesion', component: IniciarSesion },
       { path: 'registro', component: Registro },
       { path: 'perfil', component: PerfilUsuario },
+      { path: 'solicitar-recuperacion', component: SolicitarRecuperacion },
+      { path: 'restablecer-contrasena', component: RestablecerContrasena },
       { path: '', redirectTo: 'inicio', pathMatch: 'full' },
       {
         path: 'adopta',

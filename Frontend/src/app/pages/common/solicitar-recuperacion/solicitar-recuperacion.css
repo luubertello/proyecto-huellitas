@@ -1,0 +1,140 @@
+/* Página */
+.page{
+  background: var(--bg);
+  min-height: calc(100vh - 92px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 36px 16px;
+}
+.auth{
+  width: 100%;
+  max-width: 900px;
+  padding: 32px 16px;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+  
+.auth .card{
+  width: min(620px, 100%);
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 40px 28px;
+  text-align:center;
+}
+.auth h1{
+  font-size: 1.4rem;
+  margin: 0 0 18px;
+}
+
+/* Formulario */
+.form{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.field{
+  text-align:left;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.field span{
+  font-size:.9rem;
+  color: var(--text);
+}
+.field input{
+  width:100%;
+  padding: 14px 16px;
+  border: 1.5px solid rgba(0,0,0,.06);
+  background: var(--white);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  outline:none;
+  transition: border .2s, box-shadow .2s;
+}
+.field input::placeholder{ color:#b6a59e; }
+.field input:focus{
+  border-color: var(--peach-strong);
+  box-shadow: 0 0 0 4px rgba(243,186,152,.25);
+}
+
+.btn-primary{
+  margin: 8px auto 0;
+  display:inline-block;
+  padding: 12px 26px;
+  border:none;
+  border-radius: 20px;
+  background: #6b5347;
+  color: #fff;
+  font-weight:600;
+  letter-spacing:.3px;
+  cursor:pointer;
+  transition: transform .03s ease-in-out, filter .2s ease;
+}
+.btn-primary:active{ transform: translateY(1px); }
+.btn-primary:hover{ filter: brightness(1.05); }
+
+.help-links{
+  margin-top:8px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  text-align:left;
+}
+.muted{ color: var(--text-muted); font-size:.78rem; margin:0; }
+.muted a{
+  color: var(--text-muted);
+  font-weight:600;
+  text-decoration: none;
+  border-bottom: 1px dotted currentColor;
+}
+.muted a:hover{ color: var(--text); }
+
+/* Responsive */
+:root{ --edge: clamp(16px, 6vw, 96px); }
+
+@media (max-width: 900px){
+  .topbar .container{
+    padding-inline: clamp(12px, 5vw, 40px);
+    gap: 14px;
+  }
+}
+/* Estilo para el input inválido */
+.field input.invalid {
+  border-color: #dc3545; /* Rojo */
+  box-shadow: 0 0 0 4px rgba(220, 53, 69, .25);
+}
+
+/* Contenedor para los mensajes de error <small> */
+.field-error {
+  margin-top: -4px;
+  padding-left: 4px;
+}
+.field-error small {
+  color: #dc3545;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Alertas para los mensajes de la API (éxito o error) */
+.alert {
+  padding: 1.5rem;
+  margin-top: 16px;
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.alert-danger {
+  background-color: rgba(220, 53, 69, .1);
+  color: #dc3545;
+}
+
+.alert-success {
+  background-color: rgba(40, 167, 69, .1);
+  color: #28a745;
+}

@@ -1,0 +1,59 @@
+<main class="page">
+  <section class="auth">
+    <div class="card">
+      
+      <img src="/assets/logo completo.png" alt="Huellitas Logo" class="logo" style="max-width: 200px; margin-bottom: 1rem;">
+      <h1>Recuperar Contraseña</h1>
+      
+      <form *ngIf="!successMessage" [formGroup]="solicitarForm" (ngSubmit)="onSubmit()" class="form">
+        
+        <p style="margin-top:-10px; margin-bottom: 24px; color: var(--text-muted); font-size: 0.9rem;">
+          Ingresa tu email y te enviaremos un enlace para restablecer tu contraseña.
+        </p>
+
+        <div class="field">
+          <span>Email</span>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email"
+            placeholder="tu-correo@ejemplo.com"
+            [class.invalid]="f['email'].touched && f['email'].invalid">
+          
+          <div *ngIf="f['email'].touched && f['email'].errors" class="field-error">
+            <small *ngIf="f['email'].errors['required']">El email es obligatorio.</small>
+            <small *ngIf="f['email'].errors['email']">Debe ser un email válido.</small>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" [disabled]="isLoading || solicitarForm.invalid">
+          {{ isLoading ? 'Enviando...' : 'Enviar Correo' }}
+        </button>
+
+        <div *ngIf="errorMessage" class="alert alert-danger" style="margin-top: 16px;">
+          {{ errorMessage }}
+        </div>
+        
+        <div class="help-links" style="text-align: center; margin-top: 1.5rem;">
+          <p class="muted">
+            ¿Recordaste tu contraseña? 
+            <a (click)="goLogin()" style="cursor: pointer;">Inicia Sesión</a>
+          </p>
+        </div>
+        
+      </form>
+
+      <div *ngIf="successMessage" class="alert alert-success">
+        <i class="bi bi-check-circle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+        <h2>¡Correo Enviado!</h2>
+        <p style="font-size: 1rem; line-height: 1.6;">{{ successMessage }}</p>
+        <p style="font-size: 0.9rem; margin-top: 1rem;">(No olvides revisar tu carpeta de Spam).</p>
+        
+        <button class="btn-primary" (click)="goLogin()" style="margin-top: 1.5rem;">
+          Volver a Iniciar Sesión
+        </button>
+      </div>
+
+    </div>
+  </section>
+</main>
