@@ -5,6 +5,9 @@ import { BienvenidaDto } from './dto/bienvenida.dto';
 import { RecuperacionDto } from './dto/recuperacion.dto';
 import { NotificacionSolicitudDto } from './dto/notificacion-solicitud.dto';
 import { AdminNotificacionDto } from './dto/admin-notificacion.dto';
+import { DonacionDineroRecibidaDto } from './dto/donacion-dinero-recibida.dto';
+import { NuevaDonacionInsumoDto } from './dto/nueva-donacion-insumo.dto';
+import { DonacionInsumoRecibidaDto } from './dto/donacion-insumo-recibida.dto';
 
 @Injectable()
 export class AppService {
@@ -137,6 +140,71 @@ export class AppService {
       return { message: 'Email de nueva solicitud (admin) enviado' };
     } catch (error) {
       this.logger.error('Error al enviar "Nueva Solicitud (Admin)":', error);
+      throw error;
+    }
+  }
+
+// Email donacion de insumo recibida
+  async donacionInsumoRecibida(dto: DonacionInsumoRecibidaDto) {
+    this.logger.log(`Enviando email 'Insumo Recibida' a ${dto.email}...`);
+    try {
+      await this.mailerService.sendMail({
+        to: dto.email,
+        subject: '¡Hemos recibido tu oferta de donación de insumos!',
+        template: 'donacion-insumo-recibida',
+        context: {
+          nombreDonante: dto.nombreDonante,
+          descripcionInsumo: dto.descripcionInsumo,
+        },
+      });
+      return { message: 'Email de oferta de insumo (usuario) enviado' };
+    } catch (error) {
+      this.logger.error('Error al enviar "Insumo Recibida":', error);
+      throw error;
+    }
+  }
+
+// Email nueva donacion de insumos (admin)
+  async nuevaDonacionInsumo(dto: NuevaDonacionInsumoDto) {
+    this.logger.log(`Enviando email 'Nueva Donación Insumo' a ${dto.emailAdmin}...`);
+    try {
+      await this.mailerService.sendMail({
+        to: dto.emailAdmin,
+        subject: `¡Nueva Donación de Insumos! (de ${dto.nombreDonante})`,
+        template: 'nueva-donacion-insumo',
+        context: {
+          nombreDonante: dto.nombreDonante,
+          emailDonante: dto.emailDonante,
+          telefonoDonante: dto.telefonoDonante,
+          descripcionInsumo: dto.descripcionInsumo,
+          tipoEntrega: dto.tipoEntrega === 'retira_domicilio' ? 'Solicita Retiro a Domicilio' : 'Lo entrega en la fundación',
+          direccionRetiro: dto.direccionRetiro || 'N/A',
+        },
+      });
+      return { message: 'Email de oferta de insumo (admin) enviado' };
+    } catch (error)
+ {
+      this.logger.error('Error al enviar "Nueva Donación Insumo":', error);
+      throw error;
+    }
+  }
+
+// Email de donacion de dinero recibido
+  async donacionDineroRecibida(dto: DonacionDineroRecibidaDto) {
+    this.logger.log(`Enviando recibo de 'Donación Monetaria' a ${dto.email}...`);
+    try {
+      await this.mailerService.sendMail({
+        to: dto.email,
+        subject: '¡Muchas gracias por tu donación!',
+        template: 'donacion-dinero-recibida',
+        context: {
+          nombreDonante: dto.nombreDonante,
+          monto: dto.monto,
+        },
+      });
+      return { message: 'Email de recibo de dinero enviado' };
+    } catch (error) {
+      this.logger.error('Error al enviar "Recibo de Dinero":', error);
       throw error;
     }
   }

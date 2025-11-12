@@ -1,8 +1,10 @@
+// En: donaciones-api/src/estado-logistica/estado-logistica.entity.ts
+
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { DonacionInsumo } from '../donacion-insumo/donacion-insumo.entity';
 
-@Entity('estado_insumo')
-export class EstadoInsumo {
+@Entity('estado_donacion_insumo')
+export class EstadoDonacionInsumo {
   @PrimaryGeneratedColumn()
   id: number;
 

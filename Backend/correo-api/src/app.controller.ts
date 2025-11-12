@@ -5,6 +5,9 @@ import { BienvenidaDto } from './dto/bienvenida.dto';
 import { RecuperacionDto } from './dto/recuperacion.dto';
 import { NotificacionSolicitudDto } from './dto/notificacion-solicitud.dto';
 import { AdminNotificacionDto } from './dto/admin-notificacion.dto';
+import { DonacionDineroRecibidaDto } from './dto/donacion-dinero-recibida.dto';
+import { NuevaDonacionInsumoDto } from './dto/nueva-donacion-insumo.dto';
+import { DonacionInsumoRecibidaDto } from './dto/donacion-insumo-recibida.dto';
 
 @Controller('email')
 export class AppController {
@@ -50,5 +53,23 @@ export class AppController {
   @Post('nueva-solicitud')
   enviarNuevaSolicitudAdmin(@Body(new ValidationPipe()) dto: AdminNotificacionDto) {
     return this.appService.enviarNuevaSolicitudAdmin(dto);
+  }
+
+// Notificar donacion insumo recibida
+  @Post('donacion-insumo-recibida')
+  donacionInsumoRecibida(@Body(new ValidationPipe()) dto: DonacionInsumoRecibidaDto) {
+    return this.appService.donacionInsumoRecibida(dto);
+  }
+
+// Notificar nueva donacion insumo al admin
+  @Post('nueva-donacion-insumo')
+  nuevaDonacionInsumo(@Body(new ValidationPipe()) dto: NuevaDonacionInsumoDto) {
+    return this.appService.nuevaDonacionInsumo(dto);
+  }
+
+// Notificar donacion dinero recibida
+  @Post('donacion-dinero-recibida')
+  donacionDineroRecibida(@Body(new ValidationPipe()) dto: DonacionDineroRecibidaDto) {
+    return this.appService.donacionDineroRecibida(dto);
   }
 }

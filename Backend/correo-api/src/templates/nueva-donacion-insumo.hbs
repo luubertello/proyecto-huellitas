@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  .container {
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .header {
+    background-color: #6b5347; /* (Tu color marrón de los botones) */
+    padding: 20px;
+    text-align: center;
+  }
+  .header img {
+    max-width: 150px; /* Ajusta el tamaño de tu logo */
+  }
+  .content {
+    padding: 30px;
+    line-height: 1.6;
+    color: #333333;
+  }
+  .content h1 {
+    font-size: 24px;
+    color: #333333;
+    margin-top: 0;
+  }
+  .content p {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  .button-container {
+    text-align: center;
+    margin: 30px 0;
+  }
+  .button {
+    background-color: #f3ba98; /* (Tu color "peach-strong") */
+    color: #333;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .footer {
+    background-color: #f9f9f9;
+    padding: 20px;
+    text-align: center;
+    font-size: 12px;
+    color: #777777;
+  }
+</style>
+<meta charset="UTF-8">
+  <title>¡Nueva Oferta de Insumos!</title>
+  </head>
+<body>
+  <div class="container">
+    <div class="header"></div>
+    <div class="content">
+      <h1>¡Alerta de Nueva Donación de Insumos!</h1>
+      <p>Se ha recibido una nueva oferta de donación de insumos que requiere coordinación:</p>
+      <ul style="font-size: 16px; list-style: none; padding-left: 0;">
+        <li><strong>Donante:</strong> {{ nombreDonante }}</li>
+        <li><strong>Email:</strong> {{ emailDonante }}</li>
+        <li><strong>Teléfono:</strong> {{ telefonoDonante }}</li>
+        <li><strong>Insumos:</strong> {{ descripcionInsumo }}</li>
+        <li><strong>Entrega:</strong> {{ tipoEntrega }}</li>
+        <li><strong>Dirección:</strong> {{ direccionRetiro }}</li>
+      </ul>
+      <p>Por favor, ingresa al panel de administrador para gestionarla y contactar al donante.</p>
+      <div class="button-container">
+        <a href="http://localhost:4200/admin/inventario" class="button">Ir al Panel de Inventario</a>
+      </div>
+    </div>
+    <div class="footer"><p>Este es un correo automático del sistema.</p></div>
+  </div>
+</body>
+</html>
