@@ -13,9 +13,10 @@ import { Router } from '@angular/router';
 })
 
 export class AdoptaGatos {
-  gatos: any[]=[];
+  animales: any[]=[];
 
-  constructor( private http: HttpClient,
+  constructor( 
+    private http: HttpClient,
     private router: Router) {}
 
   ngOnInit() {
@@ -23,8 +24,8 @@ export class AdoptaGatos {
   }
 
   cargarGatos() {
-    this.http.get<any[]>('http://localhost:3000/gatos')
-    .subscribe(data => this.gatos = data, 
+    this.http.get<any[]>('http://localhost:3000/animales/gatos')
+    .subscribe(data => this.animales = data, 
                  error => console.error('Error al cargar gatos', error));
   }
 

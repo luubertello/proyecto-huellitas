@@ -50,9 +50,9 @@ export const routes: Routes = [
           { path: '', component: Adopcion },           // /adopta
           { path: 'gatos', component: AdoptaGatos },   // /adopta/gatos
           { path: 'perros', component: AdoptaPerros }, // /adopta/perros
-          { path: 'requisitos', component: RequisitosAdopcion }, // /adopta/requisitos
+          { path: 'requisitos/:id', component: RequisitosAdopcion }, // /adopta/requisitos
           { path: 'como-adoptar', component: ComoAdoptar },
-          { path: 'animal/:id/formulario', component: FormularioAdopcion }, // /adopta/animal/:id/formulario
+          { path: 'formulario/:id', component: FormularioAdopcion }, // /adopta/animal/:id/formulario
           { path: 'animal/:id', component: PerfilAnimal } // /adopta/animal/:id
         ],
       },

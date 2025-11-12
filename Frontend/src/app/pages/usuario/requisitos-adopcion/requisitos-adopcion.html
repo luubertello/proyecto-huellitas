@@ -1,74 +1,41 @@
-<!-- Contenido -->
 <main class="page">
-  <section class="auth">
-    <div class="card requirements">
-        <header class="card-head">
-            <h2 class="eyebrow">Requisitos para la</h2>
-            <h1 class="heading">Adopción Responsable</h1>
-            <span class="divider"></span> </header>
+  <section class="auth">
+    <div class="card requirements">
+        <header class="card-head">
+            <h2 class="eyebrow">Requisitos para la</h2>
+            <h1 class="heading">Adopción Responsable</h1>
+            <span class="divider"></span>
+        </header>
 
-      <ul class="req-list">
-        <li>
-          <span class="paw" aria-hidden="true">🐾</span>
-          <div class="req-body">
-            <strong>Ser mayor de 18 años.</strong>
-        </div>
-        </li>
+      <ul class="req-list">
+                <li>
+          <span class="paw" aria-hidden="true">🐾</span>
+          <div class="req-body">
+            <strong>Ser mayor de 18 años.</strong>
+          </div>
+        </li>
+                <li>
+          <span class="paw" aria-hidden="true">🐾</span>
+          <div class="req-body">
+            <strong>Aceptar el seguimiento post-adopción.</strong>
+            <p class="detail">
+                El adoptante se compromete a mantener contacto de por vida...
+            </p>
+        </div>
+        </li>
+      </ul>
 
-        <li>
-          <span class="paw" aria-hidden="true">🐾</span>
-          <div class="req-body">
-            <strong>El hogar deberá contar con la protección necesaria.</strong>
-            <ul class="sub-bullets">
-                <li><strong>Para gatos:</strong><span>medianeras altas, red en ventanas, cerramiento adecuado en balcones y terrazas, etc.</span></li>
-                <li><strong>Para perros:</strong><span>medianeras altas, portones, rejas y demás medidas que eviten accidentes o fugas.</span></li>
-            </ul>
-            <p class="detail">
-             Este requisito es fundamental para evitar que el animal se escape, se pierda, se lastime o incluso ponga en riesgo su vida.
-            Hemos dedicado gran parte de nuestras vidas a rescatar, cuidar y castrar gatos y perros, y no queremos que sufran consecuencias evitables.
-            </p>
-            </div>
-        </li>
+      <p class="muted note center">
+        Si cumples con los requisitos y estás de acuerdo con las condiciones de adopción
+      </p>
 
-        <li>
-          <span class="paw" aria-hidden="true">🐾</span>
-           <div class="req-body">
-             <strong>Castración obligatoria.</strong>
-            <p class="detail">
-            Si el adoptado se entrega sin esterilizar, será condición indispensable castrarlo en la edad indicada por el/la veterinario/a de cabecera.
-            </p>
-            </div>
-        </li>
-
-      <li>
-          <span class="paw" aria-hidden="true">🐾</span>
-          <div class="req-body">
-            <strong>Compromiso con la salud y bienestar.</strong>
-            <p class="detail">
-            Alimentación de buena calidad acorde a edad y estado, controles veterinarios, vacunación y desparasitación según indique el/la profesional.
-            </p>
-            </div>
-        </li>
-    
-
-        <li>
-          <span class="paw" aria-hidden="true">🐾</span>
-          <div class="req-body">
-            <strong>Aceptar el seguimiento post-adopción.</strong>
-            <p class="detail">
-                El adoptante se compromete a mantener contacto de por vida con el/la transitante, enviando fotos, videos y actualizaciones periódicas. Para nosotros es fundamental saber cómo están los animales que rescatamos, cuidamos y amamos, y a quienes prometimos encontrarles las mejores familias.
-            </p>
-        </div>
-        </li>
-      </ul>
-
-      <p class="muted note center">
-        Si cumples con los requisitos y estás de acuerdo con las condiciones de adopción
-      </p>
-
-      <button type="button" class="btn-primary btn-lg" (click)="registrarSolicitudAdopcion(animal)">¡ADOPTA!</button>
-    </div>
-  </section>
+            <div class="req-actions">
+        <button type="button" class="btn-secondary" (click)="volverAlPerfil()">Volver</button>
+        
+                <button type="button" class="btn-primary btn-lg" (click)="irAlFormulario()">¡ADOPTA!</button>
+      </div>
+          </div>
+  </section>
 </main>
 
 <footer class="footer" aria-hidden="true"></footer>

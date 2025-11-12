@@ -1,17 +1,41 @@
-import { Component, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
+
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, ActivatedRoute } from '@angular/router';
+
 @Component({
   selector: 'app-requisitos-adopcion',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './requisitos-adopcion.html',
-  styleUrl: './requisitos-adopcion.css',
-  encapsulation: ViewEncapsulation.None,
+  styleUrl: './requisitos-adopcion.css'
 })
-export class RequisitosAdopcion {
-  constructor(private router: Router) {}
-  
-  registrarSolicitudAdopcion(animal:any):void {
-   this.router.navigate(['/adopta', 'animal', animal.id, 'formulario']);
+export class RequisitosAdopcion implements OnInit {
+
+  private animalId: string | null = null; 
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
+  ngOnInit(): void {
+    this.animalId = this.route.snapshot.paramMap.get('id');
+    if (!this.animalId) {
+      console.error("¡ERROR! No se encontró el ID del animal en la URL.");
+    }
   }
 
+  irAlFormulario(): void {
+    if (this.animalId) {
+      this.router.navigate(['/formulario-adopcion', this.animalId]);
+    } else {
+      console.error("No se puede ir al formulario, no hay ID de animal.");
+    }
+  }
+
+  volverAlPerfil(): void {
+    if (this.animalId) {
+      this.router.navigate(['/adopta/animal', this.animalId]);
+    } else {
+      this.router.navigate(['/adopta']);
+    }
+  }
 }

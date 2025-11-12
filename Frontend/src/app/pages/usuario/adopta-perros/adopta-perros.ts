@@ -16,10 +16,10 @@ animales: any[] = [];
     private router: Router) {}
 
   ngOnInit() {
-    this.cargarGatos(); 
+    this.cargarPerros(); 
   }
 
-   cargarGatos() { 
+   cargarPerros() { 
     this.http.get<any[]>('http://localhost:3000/animales/perros') 
       .subscribe(data => this.animales = data, 
             error => console.error('Error al cargar perros', error));
