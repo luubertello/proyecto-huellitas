@@ -21,11 +21,18 @@ export class DonacionInsumo {
   @Column({ type: 'text', nullable: true })
   descripcion: string;
 
-  @Column({ type: 'int', default: 1 })
+  @Column({ type: 'float', default: 1 })
   cantidad: number;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   unidad: string;
+
+  @Column({
+    type: 'jsonb', 
+    nullable: true,
+    default: () => "'{}'",
+  })
+  atributos: any;
 
   // --- Datos de Logística (del formulario) ---
   @Column({ type: 'varchar', length: 50 })

@@ -1,58 +1,38 @@
 // En: donaciones-api/src/dto/crear-donacion-insumo.dto.ts
-
-import { IsString, IsNotEmpty, IsInt, IsOptional, IsEmail, IsIn, ValidateIf } from 'class-validator';
+import { IsString, IsNotEmpty, IsInt, IsOptional, IsEmail, IsIn, ValidateIf, IsObject, IsNumber, IsPositive } from 'class-validator';
 
 export class CrearDonacionInsumoDto {
+  @IsString() @IsNotEmpty()
+  categoria: string; 
 
-  // --- Datos del Insumo ---
-  @IsString()
-  @IsNotEmpty()
-  categoria: string;
+  @IsString() @IsOptional()
+  descripcion?: string; 
 
-  @IsString()
-  @IsOptional()
-  nombre?: string; 
+  @IsString() @IsNotEmpty()
+  unidad: string;
 
-  @IsString()
-  @IsOptional()
-  descripcion?: string;
-
-  @IsInt()
-  @IsNotEmpty()
+  @IsNumber() @IsPositive() @IsNotEmpty()
   cantidad: number;
-
-  @IsString()
+  
+  @IsObject() 
   @IsOptional()
-  unidad?: string;
+  atributos?: any; 
 
-  // --- Datos de Logística ---
-  @IsIn(['retira_domicilio', 'entrega_fundacion'])
-  @IsNotEmpty()
+  @IsIn(['fundacion', 'retira_domicilio']) @IsNotEmpty()
   tipoEntrega: string;
 
-  @IsString()
-  @ValidateIf(o => o.tipoEntrega === 'retira_domicilio') 
-  @IsNotEmpty({ message: 'La dirección es obligatoria si retiramos a domicilio' })
+  @IsString() @ValidateIf(o => o.tipoEntrega === 'retira_domicilio') @IsNotEmpty()
   direccionRetiro?: string;
-
-  // --- Datos de Donante Invitado ---
   
-  @IsString()
-  @ValidateIf(o => !o.userId)
-  @IsNotEmpty({ message: 'El nombre es obligatorio para donantes invitados' })
+  @IsString() @ValidateIf(o => !o.userId) @IsNotEmpty()
   nombreInvitado?: string;
   
-  @IsEmail()
-  @ValidateIf(o => !o.userId)
-  @IsNotEmpty({ message: 'El email es obligatorio para donantes invitados' })
+  @IsEmail() @ValidateIf(o => !o.userId) @IsNotEmpty()
   emailInvitado?: string;
 
-  @IsString()
-  @ValidateIf(o => !o.userId)
-  @IsNotEmpty({ message: 'El teléfono es obligatorio para donantes invitados' })
+  @IsString() @ValidateIf(o => !o.userId) @IsNotEmpty()
   telefonoInvitado?: string;
 
-  @IsInt()
-  @IsOptional()
+  @IsInt() @IsOptional()
   userId?: number;
 }

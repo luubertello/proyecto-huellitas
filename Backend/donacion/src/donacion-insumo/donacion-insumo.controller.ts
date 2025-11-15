@@ -8,6 +8,7 @@ import type { Request } from 'express';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { OptionalJwtAuthGuard } from 'src/auth/optional-jwt-auth.guard';
 
 interface RequestConUsuario extends Request {
   user: {
@@ -23,7 +24,7 @@ export class DonacionInsumoController {
 
 // POST /donaciones/insumos
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(OptionalJwtAuthGuard)
   async crearDonacion(@Body() body: any, @Req() req: RequestConUsuario) {
     const dto = plainToInstance(CrearDonacionInsumoDto, body);
 
