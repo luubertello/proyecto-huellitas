@@ -6,3 +6,5 @@ Get-Content .\animales\init-animales.sql | docker exec -i animales_pg psql -U ad
 
 # Ejecutar init de adopcion
 Get-Content .\adopcion\init-adopcion.sql | docker exec -i adopcion_pg psql -U admin -d adopciones
+
+Get-Content .\inventario\init-inventario.sql | docker exec -i inventario_pg psql -U admin -d inventario

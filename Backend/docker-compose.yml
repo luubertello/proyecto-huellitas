@@ -14,13 +14,15 @@ services:
       - adopcion-api
       - animales-api
       - correo-api
-      - donaciones-api 
+      - donaciones-api
+      - inventario-api
     environment:
       USUARIOS_SERVICE_URL: http://usuarios-api:3000
       ADOPCION_SERVICE_URL: http://adopcion-api:3000
       ANIMALES_SERVICE_URL: http://animales-api:3000
       CORREO_SERVICE_URL: http://correo-api:3000 
       DONACIONES_SERVICE_URL: http://donaciones-api:3000
+      INVENTARIO_SERVICE_URL: http://inventario-api:3000
       JWT_SECRET: ${JWT_SECRET}
     volumes:
       - ./gateway:/app
@@ -229,12 +231,55 @@ services:
     networks:
       - huellitas-net
 
+  # ==========================================================
+  # --- SERVICIO DE INVENTARIO ---
+  # ==========================================================
+  inventario-api:
+    build: ./inventario
+    container_name: huellitas_inventario_api
+    restart: always
+    depends_on:
+      inventario_pg:
+        condition: service_healthy
+      correo-api:
+        condition: service_started 
+    environment:
+      DB_HOST: inventario_pg
+      DB_PORT: 5432
+      DB_USERNAME: ${DB_USER_INVENTARIO}
+      DB_PASSWORD: ${DB_PASSWORD_INVENTARIO}
+      DB_DATABASE: ${DB_NAME_INVENTARIO}
+      
+      JWT_SECRET: ${JWT_SECRET}
+      CORREO_SERVICE_URL: http://correo-api:3000/email
+    networks:
+      - huellitas-net
+
+  inventario_pg:
+    image: postgres:15-alpine
+    container_name: inventario_pg
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME_INVENTARIO}
+      POSTGRES_USER: ${DB_USER_INVENTARIO}
+      POSTGRES_PASSWORD: ${DB_PASSWORD_INVENTARIO}
+    volumes:
+      - inventario_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER_INVENTARIO} -d ${DB_NAME_INVENTARIO}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - huellitas-net
+
 # Volúmenes de datos
 volumes:
   usuarios_data:
   adopcion_data:
   animales_data:
   donaciones_data:
+  inventario_data:
 
 # Red compartida
 networks:

@@ -19,7 +19,7 @@ export class ProxyMiddleware implements NestMiddleware {
       '/solicitudes': 'http://adopcion-api:3000',
       '/email': 'http://correo-api:3000',
       '/donaciones': 'http://donaciones-api:3000',
-      '/inventario': 'http://localhost:3005',
+      '/inventario': 'http://inventario-api:3000',
       '/chatbot': 'http://localhost:3006',
     };
 
