@@ -1,151 +1,126 @@
-/* --- Contenedor Principal del Dashboard --- */
+/* === ESTILO EXACTO DE LA CAPTURA === */
+
+/* Fondo general */
 .admin-dashboard {
-  /* Usamos las variables de tu CSS guía */
-  padding: 2rem clamp(1rem, 6vw, 4rem);
-  /* Usamos 'var(--bg)' si el dashboard está dentro de 'main.page'. 
-    Si esta es la página principal, descomenta estas líneas:
-  */
-  /* background: var(--bg); 
-  min-height: calc(100vh - var(--header-h)); 
-  */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  background: #fdf8f3; /* fondo cálido */
 }
 
-/* --- Encabezado de Bienvenida --- */
+/* Encabezado */
 .dashboard-header {
-  padding-bottom: 1.5rem;
   margin-bottom: 2rem;
-  /* Estilo del header de tu guía */
-  border-bottom: 2px solid var(--card); 
+  border-bottom: 3px solid #e7b18d;
+  padding-bottom: .3rem;
 }
 
 .dashboard-header h2 {
-  margin: 0 0 0.25rem;
-  color: var(--text);
-  font-size: 2rem;
-  font-weight: 800;
+  font-size: 2.3rem;
+  font-weight: 700;
+  margin: 0;
+  color: #333;
 }
 
 .dashboard-header p {
   margin: 0;
-  font-size: 1.1rem;
-  color: var(--text-muted);
+  font-size: 1rem;
+  opacity: .8;
+  color: #333;
 }
 
-/* --- Contenedor de Widgets (La Magia Reactiva) --- */
+/* Contenedor de widgets – una sola columna */
 .widget-container {
   display: grid;
-  /* Aquí está la reactividad:
-    - 'repeat' para repetir columnas.
-    - 'auto-fit' para que se ajusten automáticamente.
-    - 'minmax(340px, 1fr)' significa: 
-      Crea columnas que midan MÍNIMO 340px.
-      Si hay espacio, estíralas para que ocupen 1 fracción (1fr) del espacio.
-    En un móvil (< 700px), solo cabe una. En una tablet (~800px), caben dos.
-  */
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  gap: 2rem;
 }
 
-/* --- Estilo de cada Widget (Card) --- */
+/* === TARJETAS === */
 .widget {
-  background: var(--card);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
-  padding: 1.5rem;
-  
-  /* Para alinear el contenido y los botones */
-  display: flex;
-  flex-direction: column;
-
-  /* Sutil acento de color para cada widget */
-  border-top: 4px solid var(--text-muted);
-
-  /* La parte "dinámica": transiciones */
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: #ffb071;  /* EL COLOR EXACTO DE LA CAPTURA */
+  padding: 2.5rem;
+  border-radius: 35px;  /* súper redondeado */
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  color: #2f2f2f;
 }
 
-/* Efecto hover de tu guía */
-.widget:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 28px rgba(0,0,0,.1);
-}
-
-/* --- Colores de acento para cada widget --- */
-.widget-animales { border-top-color: #007bff; /* Azul */ }
-.widget-adopciones { border-top-color: #28a745; /* Verde (de tu guía) */ }
-.widget-inventario { border-top-color: #ffc107; /* Amarillo */ }
-.widget-donaciones { border-top-color: #dc3545; /* Rojo (de tu guía) */ }
-
-/* Títulos de los widgets */
 .widget h3 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  font-size: 1.5rem;
-  color: var(--text);
+  font-size: 2.2rem;
+  margin: 0 0 0.6rem;
+  font-weight: 700;
 }
 
-/* Texto de los widgets */
 .widget p {
+  font-size: 1.25rem;
   margin: 0;
-  color: var(--text-muted);
-  font-size: 1rem;
-  line-height: 1.5;
-  /* Esto empuja los botones al final de la card */
-  flex-grow: 1; 
+  opacity: .95;
 }
 
-/* --- Sección de Botones --- */
+/* --- Sección de Botones (Estilo Ghost/Amigable - Base) --- */
 .widget-actions {
   display: flex;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
+  gap: 1rem;
+  margin-top: 2rem; 
 }
 
-/* Estilo base para botones, inspirado en tu guía */
+/* Estilo base para botones */
 .widget-actions button {
-  padding: 10px 20px;
-  font-weight: 700;
-  text-transform: uppercase;
-  border: 0;
+  padding: 13px 28px; 
+  font-weight: 600;
+  border: none; /* Quitamos el borde general */
   border-radius: 999px;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 0.85rem;
-  flex-grow: 1; /* Hacemos que los botones compartan el espacio */
+  font-size: 1rem;
+  text-transform: none;
 }
 
-/* Estilo del botón primario (el primero) */
+/* 1. Botón Primario (VER TODOS/VER SOLICITUDES): Color de relleno suave */
 .widget-actions button:first-child {
-  background: var(--peach-strong); /* Color de tu guía */
-  color: var(--text);
+    background: #ffe4c7; 
+    color: var(--dark-text);
 }
 .widget-actions button:first-child:hover {
-  filter: brightness(1.1);
-  box-shadow: 0 6px 14px rgba(0,0,0,.08);
+    background: #ffd7b1;
 }
 
-/* Estilo del botón secundario (el resto) */
+/* 2. Botón Secundario (REGISTRAR NUEVO): Estilo OUTLINE/BORDE */
 .widget-actions button:not(:first-child) {
-  background: var(--bg); /* O var(--card) si prefieres */
-  color: var(--text-muted);
-  border: 1px solid var(--text-muted);
+    background: #fff; /* Fondo blanco */
+    color: var(--dark-text);
+    border: 2px solid #f7701c; /* Borde del color de la tarjeta original */
 }
+
 .widget-actions button:not(:first-child):hover {
-  background: var(--text-muted);
-  color: var(--card);
+    /* Mantener el mismo estilo de borde pero con una sombra sutil o un color de fondo ligeramente más oscuro */
+    background: #f8f8f8; 
+    border-color: #683e23;
 }
 
-/* --- Adaptación a Móviles --- */
+
+/* --- Adaptación a Móviles (Sólo la parte de botones) --- */
 @media (max-width: 768px) {
-  .admin-dashboard {
-    padding: 1rem;
+  .widget-actions {
+    flex-direction: column;
+    gap: 1rem;
   }
 
-  .dashboard-header h2 {
-    font-size: 1.75rem;
+  .widget-actions button {
+    width: 100%;
+    padding: 10px 20px;
   }
-  .dashboard-header p {
-    font-size: 1rem;
+}
+
+/* Móvil */
+@media (max-width: 768px) {
+  .widget {
+    padding: 2rem;
+    border-radius: 25px;
+  }
+
+  .widget h3 {
+    font-size: 1.8rem;
   }
 
   .widget-actions {
