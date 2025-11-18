@@ -68,4 +68,7 @@ export class UsuarioHeader {
   goInicioSesion() {
       this.router.navigate(['/iniciar-sesion']);
   }
+   goNuestraHistoria() {
+    this.router.navigate(['/nuestra-historia']);
+  }
 }

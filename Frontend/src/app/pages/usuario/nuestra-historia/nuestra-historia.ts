@@ -2,10 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-nuestra-historia',
-  imports: [],
+  standalone: true,
   templateUrl: './nuestra-historia.html',
-  styleUrl: './nuestra-historia.css'
+  styleUrls: ['./nuestra-historia.css']
 })
-export class NuestraHistoria {
-
-}
+export class NuestraHistoria {}

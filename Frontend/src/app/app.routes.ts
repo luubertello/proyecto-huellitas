@@ -26,6 +26,8 @@ import { NoAutorizado } from './pages/common/no-autorizado/no-autorizado';
 import { adminGuard } from './auth/admin.guard';
 import { RestablecerContrasena } from './pages/common/restablecer-contrasena/restablecer-contrasena';
 import { SolicitarRecuperacion } from './pages/common/solicitar-recuperacion/solicitar-recuperacion';
+import { NuestraHistoria } from './pages/usuario/nuestra-historia/nuestra-historia';
+  //
 
 export const routes: Routes = [
 
@@ -37,6 +39,7 @@ export const routes: Routes = [
     component: UsuarioLayout,
     children: [
       { path: 'inicio', component: Inicio },
+      {path: 'nuestra-historia', component: NuestraHistoria }, //no se si esta bien aqui
       { path: 'iniciar-sesion', component: IniciarSesion },
       { path: 'registro', component: Registro },
       { path: 'perfil', component: PerfilUsuario },

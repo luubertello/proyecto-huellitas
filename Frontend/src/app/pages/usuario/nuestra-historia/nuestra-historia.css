@@ -1,0 +1,171 @@
+:root{
+  --peach:#f7c9ad;
+  --peach-strong:#f3ba98;
+  --bg:#fbf5ef;
+  --card:#eddccf;
+  --text:#4a3b35;
+  --text-muted:#927c72;
+  --white:#ffffff;
+  --shadow: 0 10px 25px rgba(0,0,0,.08);
+  --radius: 18px;
+  --radius-lg: 26px;
+  --gap: 18px;
+}
+
+*{ box-sizing:border-box; }
+/* 0) Reset básico */
+html, body { margin: 0; padding: 0; }
+
+/* Evita colapso */
+body::before { content: ""; display: table; }  
+
+/* Topbar */
+header.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  margin: 0 !important;
+}
+
+/* Primer hijo sin márgenes */
+body > :first-child { margin-top: 0 !important; }
+
+:root { --header-h: 72px; }
+.hero-carousel {
+  min-height: calc(100dvh - var(--header-h));
+  margin-top: 0 !important;
+}
+
+/* Body */
+body{
+  margin:0;
+  font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:var(--text);
+  background:var(--bg);
+}
+
+/* Topbar */
+.topbar{
+  background: var(--peach);
+  position: sticky;
+  top:0;
+  z-index:10;
+  border-bottom: 1px solid rgba(0,0,0,.04);
+  width: 100%;
+}
+
+:root { --edge: clamp(28px, 6vw, 96px);}
+
+.topbar .container{
+  display:grid;
+  grid-template-columns: auto 1fr auto;
+  align-items:center;
+  gap: 20px;
+  padding-inline: clamp(24px, 6vw, 96px)
+}
+/* ========================================= */
+/* Sección Nuestra Historia */
+/* ========================================= */
+
+.historia {
+    width: 100%;
+    /* Muy importante: Establece el contexto de posicionamiento para los elementos hijos absolutos */
+    position: relative; 
+    overflow: hidden; /* Asegura que no haya desbordamientos inesperados */
+}
+
+.historia-galeria {
+    width: 100%;
+    /* No grid, ya que es una sola imagen */
+    line-height: 0; 
+    font-size: 0;
+}
+
+.historia-galeria img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ========================================= */
+/* Título "NUESTRA HISTORIA" posicionado sobre la imagen */
+/* ========================================= */
+.historia-galeria {
+    /* Mantenemos position: relative para que sea el ancla del h2 */
+    position: relative;
+    width: 100%;
+    line-height: 0;
+    font-size: 0;
+}
+
+.historia-galeria h2 {
+    /* Posiciona el h2 absolutamente dentro de .historia-galeria */
+    position: absolute;
+    bottom: 20px; /* Distancia desde la parte inferior */
+    left: 50px; /* Distancia desde la izquierda */
+    
+    /* Estilos para que se vea bien sobre la imagen */
+    font-size: clamp(2.5rem, 5vw, 4rem); /* Tamaño responsivo */
+    font-weight: 800; /* Más robusto */
+    color: var(--white); /* Texto blanco para contraste */
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6); /* Sombra para mejor legibilidad */
+    margin: 0; /* Reinicia márgenes por defecto del h2 */
+    z-index: 3; /* Asegura que esté por encima de la imagen */
+    
+    /* Opcional: Ancho máximo si el título es muy largo */
+    max-width: 70%; 
+}
+
+
+/* ========================================= */
+/* Bloque de Contenido con el texto del párrafo */
+/* ========================================= */
+.historia-contenido {
+    background-color: var(--card); /* Usamos tu variable para unificar colores */
+    /* Superponemos el bloque de texto. Ajusta este valor si necesitas más o menos superposición */
+    margin-top: -100px; /* Ajusta este valor. Antes era para el título, ahora es para el párrafo */
+    
+    position: relative;
+    z-index: 2; /* Asegura que esté por encima de la imagen, pero debajo del título */
+    
+    /* Redondeamos las esquinas superiores como en tu captura anterior */
+    border-top-left-radius: var(--radius-lg); /* Usamos tu variable */
+    border-top-right-radius: var(--radius-lg); /* Usamos tu variable */
+    
+    padding: 30px 50px; /* Tu padding original */
+}
+
+/* Ocultamos el h2 dentro de historia-contenido ya que lo movimos */
+.historia-contenido h2 {
+    display: none; 
+}
+
+
+.historia-contenido p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--text); /* Usamos tu variable */
+}
+
+/* ========================================= */
+/* Media Queries para Responsividad (Opcional pero recomendado) */
+/* ========================================= */
+@media (max-width: 768px) {
+    .historia-galeria h2 {
+        bottom: 15px;
+        left: 20px;
+        font-size: clamp(2rem, 6vw, 3rem); /* Ajusta el tamaño del título en móviles */
+        max-width: 90%;
+    }
+
+    .historia-contenido {
+        margin-top: -60px; /* Menos superposición en pantallas pequeñas */
+        padding: 20px 25px; /* Menos padding */
+        border-top-left-radius: var(--radius);
+        border-top-right-radius: var(--radius);
+    }
+
+    .historia-contenido p {
+        font-size: 16px;
+    }
+}
