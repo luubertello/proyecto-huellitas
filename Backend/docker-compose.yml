@@ -197,6 +197,8 @@ services:
         condition: service_started
       correo-api:
         condition: service_started
+      inventario-api: 
+        condition: service_started
     environment:
       DB_HOST: ${DB_HOST_DONACIONES}
       DB_PORT: ${DB_PORT_DONACIONES}
@@ -206,6 +208,7 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       USUARIOS_SERVICE_URL: http://usuarios-api:3000
       CORREO_SERVICE_URL: http://correo-api:3000/email
+      INVENTARIO_SERVICE_URL: http://inventario-api:3000
     volumes:
       - ./donacion:/app
       - /app/node_modules
@@ -252,6 +255,7 @@ services:
       
       JWT_SECRET: ${JWT_SECRET}
       CORREO_SERVICE_URL: http://correo-api:3000/email
+      DONACIONES_SERVICE_URL: http://donaciones-api:3000
     networks:
       - huellitas-net
 

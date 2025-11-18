@@ -9,6 +9,8 @@ import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { OptionalJwtAuthGuard } from 'src/auth/optional-jwt-auth.guard';
+import { RolesGuard } from 'src/auth/roles.guard';
+import { Roles } from 'src/auth/roles.decorator';
 
 interface RequestConUsuario extends Request {
   user: {
@@ -45,17 +47,26 @@ export class DonacionInsumoController {
    
 // GET /donaciones/insumos
   @Get()
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('Admin General', 'Responsable de Inventarios') 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Admin General', 'Responsable de Inventarios', 'Responsable de Donaciones') 
   async findAll() {
     return this.donacionInsumoService.findAll();
+  }
+
+  @Get(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Admin General', 'Responsable de Inventarios', 'Responsable de Donaciones') 
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.donacionInsumoService.findOneById(id);
   }
 
 
 // GET /donaciones/insumos/mis-donaciones
   @Get('mis-donaciones')
- //  @UseGuards(JwtAuthGuard, RolesGuard)
- // @Roles('Interesado') 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Interesado') 
   async findMyDonations(@Req() req: RequestConUsuario) {
     const userId = req.user.userId;
     return this.donacionInsumoService.findByUserId(userId);
@@ -64,12 +75,21 @@ export class DonacionInsumoController {
 
 // PATCH /donaciones/insumos/:id/estado
   @Patch(':id/estado')
-  // @UseGuards(JwtAuthGuard, RolesGuard)
- // @Roles('Admin General', 'Responsable de Inventarios')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Admin General', 'Responsable de Donaciones')
   async actualizarEstado(
     @Param('id', ParseIntPipe) id: number,
     @Body(new ValidationPipe()) dto: ActualizarEstadoInsumoDto 
   ) {
     return this.donacionInsumoService.actualizarEstado(id, dto);
+  }
+
+  @Patch(':id/registrar-stock')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Admin General', 'Responsable de Inventarios')
+  async registrarEnStock(
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.donacionInsumoService.marcarComoRegistrado(id);
   }
 }

@@ -24,13 +24,13 @@ interface NuevaDonacionInsumoDto {
   tipoEntrega: string;
   direccionRetiro?: string;
 }
-// ---
 
 @Injectable()
 export class DonacionInsumoService {
     private readonly logger = new Logger(DonacionInsumoService.name);
     private readonly correoServiceUrl: string;
     private readonly usuariosServiceUrl: string;
+    private readonly inventarioServiceUrl: string;
 
  constructor(
     @InjectRepository(DonacionInsumo)
@@ -42,11 +42,13 @@ export class DonacionInsumoService {
  ) {
       const correoUrl = this.configService.get<string>('CORREO_SERVICE_URL');
       const usuariosUrl = this.configService.get<string>('USUARIOS_SERVICE_URL');
-      if (!correoUrl || !usuariosUrl) {
+      const inventarioUrl = this.configService.get<string>('INVENTARIO_SERVICE_URL');
+      if (!correoUrl || !usuariosUrl || !inventarioUrl) {
         throw new InternalServerErrorException('Faltan URLs de microservicios en .env');
       }
       this.correoServiceUrl = correoUrl;
       this.usuariosServiceUrl = usuariosUrl;
+      this.inventarioServiceUrl = inventarioUrl;
     }
 
  async crearDonacionInsumo(dto: CrearDonacionInsumoDto): Promise<DonacionInsumo> {
@@ -71,6 +73,18 @@ export class DonacionInsumoService {
       relations: ['estadoInsumo'], 
       order: { fecha: 'DESC' },
     });
+  }
+
+  async findOneById(id: number): Promise<DonacionInsumo> {
+    const donacion = await this.donacionInsumoRepo.findOne({ 
+      where: { id },
+      relations: ['estadoInsumo'] 
+    });
+
+    if (!donacion) {
+      throw new NotFoundException(`Donación de insumo con ID ${id} no encontrada.`);
+    }
+    return donacion;
   }
 
   async findByUserId(userId: number): Promise<DonacionInsumo[]> {
@@ -98,12 +112,32 @@ export class DonacionInsumoService {
     donacion.estadoInsumo = nuevoEstado; 
     const donacionActualizada = await this.donacionInsumoRepo.save(donacion);
 
-    if (nuevoEstado.nombre === 'Recibido') {
-      this.logger.log(`TODO: Donación ${id} marcada como 'Recibido'. Avisando a inventario-api...`);
-      // aca dsp iria la llamada para mandarselo a inventario-api
-    }
+    if (nuevoEstado.nombre === 'Recibida') {
+      this.logger.log(`Donación ${id} marcada como 'Recibida'. Avisando a inventario-api...`);
+      
+      const dtoParaInventario = {
+        donacionOriginalId: donacion.id,
+        categoria: donacion.categoria,
+        nombre: donacion.nombre,
+        descripcion: donacion.descripcion,
+        cantidad: donacion.cantidad,
+        unidad: donacion.unidad,
+        atributos: donacion.atributos,
+      };
 
-    return donacionActualizada;
+      try {
+        await firstValueFrom(
+          this.httpService.post(`${this.inventarioServiceUrl}/inventario/registrar-ingreso-donacion`, dtoParaInventario)
+            .pipe(catchError(err => { throw new InternalServerErrorException(err.response?.data || err.message); }))
+        );
+        this.logger.log(`Ingreso de donación ${id} registrado en inventario-api.`);
+        
+      } catch (error) {
+        this.logger.error(`FALLO al registrar donación ${id} en inventario-api: ${error.message}`);
+      }
+    }
+
+    return donacionActualizada;
   }
 
  private async enviarCorreosDeInsumo(donacion: DonacionInsumo): Promise<void> {
@@ -180,4 +214,28 @@ export class DonacionInsumoService {
       return null;
     }
  }
+
+ async marcarComoRegistrado(id: number): Promise<DonacionInsumo> {
+    const donacion = await this.donacionInsumoRepo.findOne({ 
+      where: { id },
+      relations: ['estadoInsumo'] 
+  });
+    if (!donacion) {
+      throw new NotFoundException(`Donación de insumo con ID ${id} no encontrada.`);
+    }
+
+    if (donacion.estadoInsumo.nombre !== 'Recibida') {
+      throw new BadRequestException(
+        `La donación ${id} no puede registrarse. Solo se registran donaciones "Recibidas".`
+      );
+    }
+
+    const nuevoEstado = await this.EstadoDonacionInsumoRepo.findOne({ where: { nombre: 'Registrada en Stock' } }); // <-- ¡Tu repo!
+    if (!nuevoEstado) {
+      throw new InternalServerErrorException('El estado "Registrada en Stock" no está en la BD.');
+    }
+    
+    donacion.estadoInsumo = nuevoEstado;
+    return this.donacionInsumoRepo.save(donacion);
+  }
 }

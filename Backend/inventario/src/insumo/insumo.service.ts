@@ -1,55 +1,164 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+// En: inventario-api/src/insumo/insumo.service.ts
+
+import { Injectable, Logger, NotFoundException, InternalServerErrorException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Like } from 'typeorm'; 
 import { Insumo } from './insumo.entity';
 import { CategoriaInsumo } from '../categoria-insumo/categoria-insumo.entity';
 import { CrearInsumoDto } from '../dto/crear-insumo.dto';
 import { ActualizarStockDto } from '../dto/actualizar-stock.dto';
+import { RegistrarIngresoDto } from 'src/dto/registrar-ingreso-donacion.dto';
+import { HttpService } from '@nestjs/axios'; 
+import { ConfigService } from '@nestjs/config'; 
+import { firstValueFrom, catchError } from 'rxjs'; 
 
 @Injectable()
 export class InsumoService {
-  private readonly logger = new Logger(InsumoService.name);
+  private readonly logger = new Logger(InsumoService.name);
+  private readonly donacionesServiceUrl: string; 
 
-  constructor(
-    @InjectRepository(Insumo)
-    private readonly insumoRepo: Repository<Insumo>,
-    @InjectRepository(CategoriaInsumo)
-    private readonly categoriaRepo: Repository<CategoriaInsumo>,
-  ) {}
+  constructor(
+    @InjectRepository(Insumo)
+    private readonly insumoRepo: Repository<Insumo>,
+    @InjectRepository(CategoriaInsumo)
+    private readonly categoriaRepo: Repository<CategoriaInsumo>,
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
+  ) {
+    const donacionesUrl = this.configService.get<string>('DONACIONES_SERVICE_URL');
+    if (!donacionesUrl) {
+      throw new InternalServerErrorException('DONACIONES_SERVICE_URL no está definida en .env');
+    }
+    this.donacionesServiceUrl = donacionesUrl;
+  }
 
-  // --- GET /inventario ---
-  async findAll(): Promise<Insumo[]> {
-    return this.insumoRepo.find({ 
+  // --- GET /inventario ---
+  async findAll(): Promise<Insumo[]> {
+    return this.insumoRepo.find({ 
+      relations: ['categoria'],
+      order: { nombre: 'ASC' }
+    });
+  }
+
+  // --- GET /inventario/buscar?q=... ---
+  /**
+   * Busca insumos por un término de texto (nombre o descripción)
+   */
+  async search(termino: string): Promise<Insumo[]> {
+    if (!termino || termino.trim() === '') {
+      return []; 
+    }
+    
+    return this.insumoRepo.find({
+      where: [
+        { nombre: Like(`%${termino}%`) },
+        { descripcion: Like(`%${termino}%`) }
+      ],
       relations: ['categoria'],
-      order: { nombre: 'ASC' }
+      take: 10 
     });
   }
 
-  // --- POST /inventario/insumo ---
-  async create(dto: CrearInsumoDto): Promise<Insumo> {
-    const { categoriaId, ...insumoData } = dto;
-    
-    const categoria = await this.categoriaRepo.findOneBy({ id: categoriaId });
+
+  // --- POST /inventario ---
+  /**
+   * Crea un nuevo ítem O suma stock si ya existe.
+   */
+  async create(dto: CrearInsumoDto): Promise<Insumo> {
+    const { categoriaId, ...insumoData } = dto;
+    
+    const categoria = await this.categoriaRepo.findOneBy({ id: categoriaId });
+    if (!categoria) {
+      throw new NotFoundException(`La Categoría con ID ${categoriaId} no existe.`);
+    }
+
+    let insumo = await this.insumoRepo.findOne({
+      where: { nombre: dto.nombre, categoria: { id: categoriaId } }
+    });
+
+    if (insumo) {
+      this.logger.log(`El insumo '${dto.nombre}' ya existe. Sumando ${dto.stock} al stock.`);
+      return this.updateStock(insumo.id, { cantidad: dto.stock });
+    }
+
+    const nuevoInsumo = this.insumoRepo.create(insumoData);
+    nuevoInsumo.categoria = categoria;
+
+    return this.insumoRepo.save(nuevoInsumo);
+  }
+
+  // --- PATCH /inventario/:id/stock ---
+  /**
+   * Suma o resta stock a un ítem existente.
+   */
+  async updateStock(id: number, dto: ActualizarStockDto): Promise<Insumo> {
+    const insumo = await this.insumoRepo.findOneBy({ id });
+    if (!insumo) {
+      throw new NotFoundException(`Insumo con ID ${id} no encontrado.`);
+    }
+
+    insumo.stock += dto.cantidad;
+
+    return this.insumoRepo.save(insumo);
+  }
+
+
+  // --- POST /inventario/ingresar-donacion-recibida ---
+  async ingresarDonacionRecibida(dto: RegistrarIngresoDto): Promise<Insumo> {
+    this.logger.log(`Procesando ingreso automático de donación ID: ${dto.donacionOriginalId}`);
+
+    const categoria = await this.categoriaRepo.findOne({ where: { nombre: dto.categoria } });
     if (!categoria) {
-      throw new NotFoundException(`La Categoría con ID ${categoriaId} no existe.`);
+      throw new NotFoundException(`Categoría '${dto.categoria}' no encontrada en Inventario.`);
     }
 
-    const nuevoInsumo = this.insumoRepo.create(insumoData);
-    nuevoInsumo.categoria = categoria;
+    let insumo = await this.insumoRepo.findOne({ 
+      where: { 
+        nombre: dto.nombre, 
+        categoria: { id: categoria.id } 
+      } 
+    });
 
-    return this.insumoRepo.save(nuevoInsumo);
-  }
-
-  // --- PATCH /inventario/:id/stock ---
-  async updateStock(id: number, dto: ActualizarStockDto): Promise<Insumo> {
-    const insumo = await this.insumoRepo.findOneBy({ id });
-    if (!insumo) {
-      throw new NotFoundException(`Insumo con ID ${id} no encontrado.`);
+    if (insumo) {
+      this.logger.log(`Insumo '${dto.nombre}' encontrado. Sumando ${dto.cantidad} al stock.`);
+      insumo = await this.updateStock(insumo.id, { cantidad: dto.cantidad });
+    } else {
+      this.logger.log(`Insumo '${dto.nombre}' no encontrado. Creando nuevo ítem en catálogo...`);
+      
+      const nuevoInsumoDto: CrearInsumoDto = {
+        nombre: dto.nombre, 
+        descripcion: dto.descripcion, 
+        stock: dto.cantidad,
+        unidadMedida: dto.unidad || 'Unidades',
+        atributos: dto.atributos,
+        categoriaId: categoria.id
+      };
+      insumo = await this.create(nuevoInsumoDto);
     }
 
-    insumo.stock += dto.cantidad;
+    await this.marcarDonacionRegistrada(dto.donacionOriginalId);
 
-    return this.insumoRepo.save(insumo);
+    return insumo;
   }
+  
+  /**
+   * (Helper de Callback)
+   * Llama al 'donaciones-api' para avisarle que el stock fue registrado.
+   */
+  private async marcarDonacionRegistrada(donacionId: number): Promise<void> {
+    try {
+      const urlCallback = `${this.donacionesServiceUrl}/donaciones/insumos/${donacionId}/registrar-stock-callback`;
+      
+      await firstValueFrom(
+        this.httpService.patch(urlCallback, {})
+          .pipe(catchError(err => { throw new InternalServerErrorException(err.response?.data || err.message); }))
+      );
+      this.logger.log(`Avisado a donaciones-api: Donación ${donacionId} registrada en stock.`);
 
+    } catch (error) {
+      this.logger.error(
+        `¡FALLO DE CALLBACK! No se pudo marcar la donación ${donacionId} como registrada: ${error.message}`
+      );
+    }
+  }
 }

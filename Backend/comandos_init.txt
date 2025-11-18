@@ -1,10 +1,5 @@
-# Ejecutar init de usuarios
-Get-Content .\usuarios\init-usuarios.sql | docker exec -i usuarios_pg psql -U admin -d usuarios
-
-# Ejecutar init de animales
-Get-Content .\animales\init-animales.sql | docker exec -i animales_pg psql -U admin -d animales
-
-# Ejecutar init de adopcion
-Get-Content .\adopcion\init-adopcion.sql | docker exec -i adopcion_pg psql -U admin -d adopciones
-
-Get-Content .\inventario\init-inventario.sql | docker exec -i inventario_pg psql -U admin -d inventario
+Get-Content .\adopciones_init.sql | docker exec -i adopcion_pg psql -U admin -d adopciones
+Get-Content .\donaciones_init.sql | docker exec -i donaciones_pg psql -U admin -d donaciones
+Get-Content .\inventario_init.sql | docker exec -i inventario_pg psql -U admin -d inventario
+Get-Content .\animales_init.sql | docker exec -i animales_pg psql -U admin -d animales
+Get-Content .\usuarios_init.sql | docker exec -i usuarios_pg psql -U admin -d usuarios
