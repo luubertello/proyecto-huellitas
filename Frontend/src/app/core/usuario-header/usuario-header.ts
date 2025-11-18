@@ -68,7 +68,12 @@ export class UsuarioHeader {
   goInicioSesion() {
       this.router.navigate(['/iniciar-sesion']);
   }
+
    goNuestraHistoria() {
     this.router.navigate(['/nuestra-historia']);
+   }
+
+  goComoAdoptar() {
+    this.router.navigate(['/adopta/como-adoptar'])
   }
 }

@@ -1,0 +1,52 @@
+/* Contenedor de las tarjetas */
+.animals-container {
+  display: grid;
+  /* más anchas */
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--gap);
+  padding: var(--gap);
+  margin-top: 20px;
+}
+
+/* Cada tarjeta de animal */
+.animal-card {
+  background: var(--peach-strong);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  text-align: center;
+  position: relative;
+  padding-bottom: 16px; /* un poco más de espacio */
+  transition: transform 0.2s;
+}
+
+.animal-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Foto */
+.animal-card img {
+  width: 100%;
+  height: 240px; /* más alta */
+  object-fit: cover;
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+}
+
+/* Nombre */
+.animal-card .name {
+  font-weight: 600;
+  margin-top: 10px;
+  font-size: 1.2rem; 
+}
+
+
+/* Título de la página */
+.page-title {
+  text-align: center;
+  font-size: 2.5rem;     /* grande */
+  font-weight: 800;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  color: var(--text);
+}

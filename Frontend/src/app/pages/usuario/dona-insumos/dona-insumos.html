@@ -1,42 +1,149 @@
-
 <div class="form-container">
-  <h1 class="form-title">DONACIONES DE INSUMOS</h1>
+  <h1 class="form-title">DONACIONES DE INSUMOS</h1>
 
-  <div class="form-box">
-    <label for="tipoInsumo">Selecciona el tipo de insumo</label>
-    <select id="tipoInsumo" (change)="onChange($event, 'tipoInsumo')">
-      <option value="alimentos">Alimentos</option>
-      <option value="accesorios">Accesorios</option>
-      <option value="medicamentos">Medicamentos</option>
-      <option value="higiene">Insumos de higiene</option>
-    </select>
+    <div class="form-box" *ngIf="successMessage">
+    <div class="alert alert-success" style="text-align: center;">
+      <i class="bi bi-check-circle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+      <h2>¡Muchísimas gracias!</h2>
+      <p style="font-size: 1rem; line-height: 1.6;">{{ successMessage }}</p>
+      <button (click)="goInicio()">
+        Volver al Inicio
+      </button>
+    </div>
+  </div>
 
-    <label for="especie">Selecciona para qué especie es el alimento a donar</label>
-    <select id="especie" (change)="onChange($event, 'especie')">
-      <option value="perro">Perro</option>
-      <option value="gato">Gato</option>
-    </select>
+    <form class="form-box" [formGroup]="donacionForm" (ngSubmit)="onSubmit()" *ngIf="!successMessage">
 
-    <label for="destinatario">Selecciona para quiénes está dirigido el alimento a donar</label>
-    <select id="destinatario" (change)="onChange($event, 'destinatario')">
-      <option value="adulto">Adulto</option>
-      <option value="cachorro">Cachorro</option>
-      <option value="castrado">Castrado</option>
-      <option value="cronico">Enfermedad crónica</option>
-    </select>
+<div *ngIf="!isLoggedIn" class="guest-section">
+  <p class="guest-intro">
+    ¿No tienes cuenta? ¡No hay problema! Déjanos tus datos para coordinar la entrega.
+  </p>
+  
+  <div class="field-group">
+    <label for="nombreInvitado">Nombre Completo</label>
+    <input type="text" id="nombreInvitado" formControlName="nombreInvitado" 
+           [class.invalid]="f['nombreInvitado'].touched && f['nombreInvitado'].invalid">
+    <div *ngIf="f['nombreInvitado'].touched && f['nombreInvitado'].errors" class="field-error">
+      <small>Tu nombre es obligatorio.</small>
+    </div>
+  </div>
 
-    <label>Ingrese cantidad:</label>
-    <div class="input-group">
-      <input type="number" placeholder="1" (input)="onChange($event, 'cantidad')">
+  <div class="field-group">
+    <label for="emailInvitado">Email</label>
+    <input type="email" id="emailInvitado" formControlName="emailInvitado" 
+           [class.invalid]="f['emailInvitado'].touched && f['emailInvitado'].invalid">
+    <div *ngIf="f['emailInvitado'].touched && f['emailInvitado'].errors" class="field-error">
+      <small *ngIf="f['emailInvitado'].errors['required']">Tu email es obligatorio.</small>
+      <small *ngIf="f['emailInvitado'].errors['email']">Email no válido.</small>
+    </div>
+  </div>
+
+  <div class="field-group">
+    <label for="telefonoInvitado">Teléfono / WhatsApp</label>
+    <input type="tel" id="telefonoInvitado" formControlName="telefonoInvitado" 
+           [class.invalid]="f['telefonoInvitado'].touched && f['telefonoInvitado'].invalid">
+    <div *ngIf="f['telefonoInvitado'].touched && f['telefonoInvitado'].errors" class="field-error">
+      <small>Tu teléfono es obligatorio.</small>
+    </div>
+  </div>
+  
+  <hr class="guest-divider">
+</div>
+    <p *ngIf="isLoggedIn" class="guest-intro success">
+      ¡Hola! Vemos que ya iniciaste sesión. Usaremos los datos de tu perfil para la coordinación.
+    </p>
+
+    <div class="field-group">
+      <label for="tipoInsumo">Selecciona el tipo de insumo</label>
+      <select id="tipoInsumo" formControlName="categoria">
+        <option value="Alimentos">Alimentos</option>
+        <option value="Medicamentos">Medicamentos</option>
+        <option value="Higiene">Higiene</option>
+        <option value="Accesorios">Accesorios</option>
+      </select>
     </div>
 
-    <label for="entrega">Entrega:</label>
-    <select id="entrega" (change)="onChange($event, 'entrega')">
-      <option value="fundacion">En la fundación</option>
-      <option value="envio">Lo realizo con envío</option>
-    </select>
+    <div *ngIf="f['categoria'].value === 'Alimentos'" class="dynamic-fields">
+      <label for="especie">Selecciona para qué especie es el alimento</label>
+      <select id="especie" formControlName="especie">
+        <option value="Perro">Perro</option>
+        <option value="Gato">Gato</option>
+      </select>
+      <label for="destinatario">Selecciona para quiénes está dirigido</label>
+      <select id="destinatario" formControlName="etapa">
+        <option value="Adulto">Adulto</option>
+        <option value="Cachorro">Cachorro</option>
+        <option value="Castrado">Castrado</option>
+        <option value="Cronico">Enfermedad crónica</option>
+      </select>
+    </div>
+    
+    <div *ngIf="f['categoria'].value === 'Medicamentos'" class="dynamic-fields">
+      <label for="marca">Marca (opcional)</label>
+      <input type="text" id="marca" formControlName="marca" placeholder="Ej: Power, Osurnia">
+      <label for="droga">Droga / Principio Activo</label>
+      <input type="text" id="droga" formControlName="droga" placeholder="Ej: Fipronil, Ácido hialurónico">
+    </div>
+    
+    <div *ngIf="f['categoria'].value === 'Higiene' || f['categoria'].value === 'Accesorios'" class="dynamic-fields">
+      <label for="tipoProducto">Tipo de producto</label>
+      <input type="text" id="tipoProducto" formControlName="tipoProducto" 
+             placeholder="Ej: Shampoo, Piedras, Cama, Ropita, Juguetes...">
+    </div>
+    
+    <div class="field-group">
+      <label for="descripcion">Descripción (Marca, tipo, etc.)</label>
+      <input type="text" id="descripcion" formControlName="descripcion" 
+             placeholder="Ej: 1 bolsa Pro Plan 15kg Adulto"
+             [class.invalid]="f['descripcion'].touched && f['descripcion'].invalid">
+      <div *ngIf="f['descripcion'].touched && f['descripcion'].errors" class="field-error">
+        <small>La descripción es obligatoria.</small>
+      </div>
+    </div>
 
-    <button (click)="donarInsumos()">DONAR INSUMOS</button>
-  </div>
+    <div class="form-row-half">
+      <div class="field-in-row">
+        <label>Ingrese cantidad:</label>
+        <input type="number" formControlName="cantidad" 
+               [class.invalid]="f['cantidad'].touched && f['cantidad'].invalid">
+      </div>
+      <div class="field-in-row">
+        <label for="unidad">Unidad de Medida</label>
+        <select id="unidad" formControlName="unidad">
+          <option value="Unidades">Unidades</option>
+          <option value="Bolsa(s)">Bolsa(s)</option>
+          <option value="Kilos">Kilos (kg)</option>
+          <option value="Gramos">Gramos (g)</option>
+          <option value="Litros">Litros (l)</option>
+          <option value="Mililitros">Mililitros (ml)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label for="entrega">Entrega:</label>
+      <select id="entrega" formControlName="tipoEntrega">
+        <option value="fundacion">Lo llevo a la fundación</option>
+        <option value="retira_domicilio">Necesito que lo retiren</option>
+      </select>
+    </div>
+
+    <div *ngIf="f['tipoEntrega'].value === 'retira_domicilio'" class="dynamic-fields">
+      <label for="direccionRetiro">Dirección de retiro</label>
+      <input type="text" id="direccionRetiro" formControlName="direccionRetiro" 
+             placeholder="Calle Falsa 123, B° Centro"
+             [class.invalid]="f['direccionRetiro'].touched && f['direccionRetiro'].invalid">
+      <div *ngIf="f['direccionRetiro'].touched && f['direccionRetiro'].errors" class="field-error">
+        <small>La dirección es obligatoria para el retiro.</small>
+      </div>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+
+    <button type="submit" [disabled]="donacionForm.invalid || isLoading">
+      {{ isLoading ? 'Enviando...' : 'DONAR INSUMOS' }}
+    </button>
+</form>
 </div>
-

@@ -27,7 +27,8 @@ import { adminGuard } from './auth/admin.guard';
 import { RestablecerContrasena } from './pages/common/restablecer-contrasena/restablecer-contrasena';
 import { SolicitarRecuperacion } from './pages/common/solicitar-recuperacion/solicitar-recuperacion';
 import { NuestraHistoria } from './pages/usuario/nuestra-historia/nuestra-historia';
-  //
+import { ComoAdoptar } from './pages/usuario/como-adoptar/como-adoptar';
+
 
 export const routes: Routes = [
 
@@ -52,8 +53,9 @@ export const routes: Routes = [
           { path: '', component: Adopcion },           // /adopta
           { path: 'gatos', component: AdoptaGatos },   // /adopta/gatos
           { path: 'perros', component: AdoptaPerros }, // /adopta/perros
-          { path: 'requisitos', component: RequisitosAdopcion }, // /adopta/requisitos
-          { path: 'animal/:id/formulario', component: FormularioAdopcion }, // /adopta/animal/:id/formulario
+          { path: 'requisitos/:id', component: RequisitosAdopcion }, // /adopta/requisitos
+          { path: 'como-adoptar', component: ComoAdoptar },
+          { path: 'formulario/:id', component: FormularioAdopcion }, // /adopta/animal/:id/formulario
           { path: 'animal/:id', component: PerfilAnimal } // /adopta/animal/:id
         ],
       },
