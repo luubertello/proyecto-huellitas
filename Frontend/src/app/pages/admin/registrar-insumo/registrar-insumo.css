@@ -1,0 +1,193 @@
+
+:host {
+  display: block;
+  background-color: #f7efe7;
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+}
+
+.form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.form-title {
+  background-color: #e7aa77;
+  color: #3b2b23;
+  text-align: center;
+  padding: 15px;
+  border-radius: 20px;
+  font-size: 1.6rem; 
+  margin: 30px 0 20px 0;
+  font-family: 'Montserrat', sans-serif; 
+  font-weight: 700; 
+  letter-spacing: 1px; 
+}
+
+.form-box {
+  background-color: #eee3da;
+  padding: 20px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px; 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+label {
+  font-size: 0.95rem;
+  color: #3b2b23;
+  font-family: 'Poppins', sans-serif; 
+  font-weight: 500; 
+  padding-left: 5px; 
+  margin-bottom: -5px; 
+}
+
+select,
+input {
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+  background-color: #fdf7f0;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-size: 0.95rem;
+  font-family: 'Poppins', sans-serif;
+  margin-top: 4px; 
+}
+
+button {
+  background-color: #f8a965;
+  color: #2d1e17;
+  font-weight: bold;
+  padding: 12px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+  font-family: 'Montserrat', sans-serif; 
+  margin-top: 10px;
+}
+button:hover {
+  background-color: #ec9551;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Fila para Cantidad y Unidad */
+.form-row-half {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* ¡Dos columnas! */
+  gap: 15px; /* (Tu 'gap' estándar) */
+}
+
+.field-in-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.field-in-row label {
+  margin-bottom: 0;
+}
+
+.field-in-row select,
+.field-in-row input {
+  margin-top: 4px;
+}
+
+/* --- Estilos de Invitado --- */
+.guest-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; 
+  background: #fdf7f0;
+  padding: 15px;
+  border-radius: 15px;
+  border: 1px solid #e7aa77;
+}
+.guest-intro {
+  font-size: 0.9rem;
+  color: #6b5347;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  font-weight: 500;
+}
+.guest-intro.success {
+  font-weight: 600;
+  color: #28a745;
+}
+.guest-divider {
+  border: none;
+  border-top: 1px solid #e7aa77;
+  opacity: 0.5;
+  margin-top: 0.5rem;
+}
+
+/* --- Campos dinámicos (se ocultan/muestran) --- */
+.dynamic-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* (Tu 'gap') */
+  animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #ec9551;
+}
+
+/* --- Errores y Alertas --- */
+.field-error {
+  padding-left: 10px;
+  margin-top: -10px;
+}
+.field-error small {
+  color: #dc3545;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+input.invalid,
+select.invalid {
+  border: 1.5px solid #dc3545;
+}
+
+.alert {
+  padding: 1.5rem;
+  border-radius: 20px;
+  font-weight: 600;
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.alert-danger {
+  background-color: rgba(220, 53, 69, .1);
+  color: #dc3545;
+}
+.alert-success {
+  background-color: rgba(40, 167, 69, .1);
+  color: #28a745;
+}
+
+/* --- (Tu Media Query) --- */
+@media (max-width: 480px) {
+  .form-box {
+    padding: 15px;
+  }
+  .form-title {
+    font-size: 1.3rem;
+  }
+  .form-row-half {
+    grid-template-columns: 1fr; /* Apila Cantidad y Unidad en móviles */
+    gap: 15px; /* (Tu 'gap') */
+  }
+}

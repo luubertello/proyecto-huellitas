@@ -28,6 +28,9 @@ import { RestablecerContrasena } from './pages/common/restablecer-contrasena/res
 import { SolicitarRecuperacion } from './pages/common/solicitar-recuperacion/solicitar-recuperacion';
 import { NuestraHistoria } from './pages/usuario/nuestra-historia/nuestra-historia';
 import { ComoAdoptar } from './pages/usuario/como-adoptar/como-adoptar';
+import { GestionInventario } from './pages/admin/gestion-inventario/gestion-inventario';
+import { InsumosPendientes } from './pages/admin/insumos-pendientes/insumos-pendientes';
+import { RegistrarInsumo } from './pages/admin/registrar-insumo/registrar-insumo';
 
 
 export const routes: Routes = [
@@ -80,7 +83,10 @@ export const routes: Routes = [
       { path: 'animales', component: GestionarAnimales }, // /admin/animales
       { path: 'animales/:id', component: EditarAnimal }, // /admin/animales/:id
       { path: 'solicitudes', component: GestionAdopcion }, // /admin/solicitudes
-      { path: 'solicitudes/:id', component: VerSolicitud } // /admin/solicitudes/:id
+      { path: 'solicitudes/:id', component: VerSolicitud }, // /admin/solicitudes/:id
+      { path: 'inventario/stock', component: GestionInventario}, // /admin/inventario/stock
+      { path: 'inventario/pendiente', component: InsumosPendientes}, // /admin/inventario/pendiente
+      { path: 'inventario/nuevo', component: RegistrarInsumo}, // /admin/inventario/nuevo
     ]},
 
 

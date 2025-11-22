@@ -1,1 +1,119 @@
-<p>registrar-insumo works!</p>
+<div class="form-container">
+
+  <h1 class="form-title">REGISTRAR NUEVO INSUMO</h1>
+
+  <div *ngIf="successMessage" class="alert alert-success">
+    {{ successMessage }}
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <form [formGroup]="insumoForm" (ngSubmit)="onSubmit()" class="form-box">
+
+    <!-- Categoría -->
+    <div class="field-group">
+      <label for="categoria">Categoría</label>
+      <select id="categoria" formControlName="categoriaId"
+              [class.invalid]="f['categoriaId'].touched && f['categoriaId'].invalid">
+        <option [ngValue]="null" disabled>Seleccione una categoría</option>
+        <option *ngFor="let cat of categorias" [ngValue]="cat.id">{{ cat.nombre }}</option>
+      </select>
+      <div class="field-error" *ngIf="f['categoriaId'].touched && f['categoriaId'].invalid">
+        <small>La categoría es obligatoria.</small>
+      </div>
+    </div>
+
+    <!-- Nombre -->
+    <div class="field-group">
+      <label for="nombre">Nombre </label>
+      <input type="text" id="nombre" formControlName="nombre" placeholder="Ej: Pro Plan Adulto 15kg">
+      <div class="field-error" *ngIf="f['nombre'].touched && f['nombre'].invalid">
+        <small>El nombre es obligatorio.</small>
+      </div>
+    </div>
+
+    <!-- Descripción -->
+    <div class="field-group">
+      <label for="descripcion">Descripción</label>
+      <input id="descripcion" formControlName="descripcion" placeholder="Detalles, uso, marca...">
+    </div>
+
+    <!-- ALIMENTOS -->
+    <div *ngIf="f['categoriaId'].value === 1" class="dynamic-fields">
+
+      <div class="form-row-half">
+        <div class="field-in-row">
+          <label for="marca">Marca</label>
+          <input type="text" id="marca" formControlName="marca">
+        </div>
+
+        <div class="field-in-row">
+          <label for="especie">Especie</label>
+          <select id="especie" formControlName="especie">
+            <option value="Perro">Perro</option>
+            <option value="Gato">Gato</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="etapa">Etapa</label>
+        <select id="etapa" formControlName="etapa">
+          <option value="Adulto">Adulto</option>
+          <option value="Cachorro">Cachorro</option>
+          <option value="Castrado">Castrado</option>
+          <option value="Cronico">Enfermedad crónica</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- MEDICAMENTOS -->
+    <div *ngIf="f['categoriaId'].value === 2" class="dynamic-fields">
+      <div class="form-row-half">
+        <div class="field-in-row">
+          <label for="droga">Droga / Principio Activo</label>
+          <input type="text" id="droga" formControlName="droga">
+        </div>
+
+        <div class="field-in-row">
+          <label for="marca">Marca</label>
+          <input type="text" id="marca" formControlName="marca" placeholder="Ej: Power, Osurnia">
+        </div>
+      </div>
+    </div>
+
+    <!-- HIGIENE / ACCESORIOS -->
+    <div *ngIf="f['categoriaId'].value === 3 || f['categoriaId'].value === 4" class="dynamic-fields">
+      <label for="tipoProducto">Tipo de producto</label>
+      <input type="text" id="tipoProducto" formControlName="tipoProducto" placeholder="Ej: Shampoo, Piedras, Cama...">
+    </div>
+
+    <!-- Stock y Unidad -->
+    <div class="form-row-half">
+      <div class="field-in-row">
+        <label for="stock">Stock Inicial</label>
+        <input type="number" id="stock" formControlName="stock"
+               [class.invalid]="f['stock'].touched && f['stock'].invalid">
+        <div class="field-error" *ngIf="f['stock'].errors?.['min'] && f['stock'].touched">
+          <small>El stock debe ser 0 o mayor.</small>
+        </div>
+      </div>
+
+      <div class="field-in-row">
+        <label for="unidadMedida">Unidad de Medida</label>
+        <input type="text" id="unidadMedida" formControlName="unidadMedida" placeholder="Bolsa, Kg, Unidad">
+        <div class="field-error" *ngIf="f['unidadMedida'].touched && f['unidadMedida'].invalid">
+          <small>La unidad es obligatoria.</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón -->
+    <button type="submit" [disabled]="insumoForm.invalid || isLoading">
+      {{ isLoading ? 'Creando...' : 'Crear Insumo' }}
+    </button>
+
+  </form>
+</div>

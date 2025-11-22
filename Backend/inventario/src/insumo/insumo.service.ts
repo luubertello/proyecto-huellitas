@@ -7,7 +7,6 @@ import { Insumo } from './insumo.entity';
 import { CategoriaInsumo } from '../categoria-insumo/categoria-insumo.entity';
 import { CrearInsumoDto } from '../dto/crear-insumo.dto';
 import { ActualizarStockDto } from '../dto/actualizar-stock.dto';
-import { RegistrarIngresoDto } from 'src/dto/registrar-ingreso-donacion.dto';
 import { HttpService } from '@nestjs/axios'; 
 import { ConfigService } from '@nestjs/config'; 
 import { firstValueFrom, catchError } from 'rxjs'; 
@@ -101,64 +100,4 @@ export class InsumoService {
 
     return this.insumoRepo.save(insumo);
   }
-
-
-  // --- POST /inventario/ingresar-donacion-recibida ---
-  async ingresarDonacionRecibida(dto: RegistrarIngresoDto): Promise<Insumo> {
-    this.logger.log(`Procesando ingreso automático de donación ID: ${dto.donacionOriginalId}`);
-
-    const categoria = await this.categoriaRepo.findOne({ where: { nombre: dto.categoria } });
-    if (!categoria) {
-      throw new NotFoundException(`Categoría '${dto.categoria}' no encontrada en Inventario.`);
-    }
-
-    let insumo = await this.insumoRepo.findOne({ 
-      where: { 
-        nombre: dto.nombre, 
-        categoria: { id: categoria.id } 
-      } 
-    });
-
-    if (insumo) {
-      this.logger.log(`Insumo '${dto.nombre}' encontrado. Sumando ${dto.cantidad} al stock.`);
-      insumo = await this.updateStock(insumo.id, { cantidad: dto.cantidad });
-    } else {
-      this.logger.log(`Insumo '${dto.nombre}' no encontrado. Creando nuevo ítem en catálogo...`);
-      
-      const nuevoInsumoDto: CrearInsumoDto = {
-        nombre: dto.nombre, 
-        descripcion: dto.descripcion, 
-        stock: dto.cantidad,
-        unidadMedida: dto.unidad || 'Unidades',
-        atributos: dto.atributos,
-        categoriaId: categoria.id
-      };
-      insumo = await this.create(nuevoInsumoDto);
-    }
-
-    await this.marcarDonacionRegistrada(dto.donacionOriginalId);
-
-    return insumo;
-  }
-  
-  /**
-   * (Helper de Callback)
-   * Llama al 'donaciones-api' para avisarle que el stock fue registrado.
-   */
-  private async marcarDonacionRegistrada(donacionId: number): Promise<void> {
-    try {
-      const urlCallback = `${this.donacionesServiceUrl}/donaciones/insumos/${donacionId}/registrar-stock-callback`;
-      
-      await firstValueFrom(
-        this.httpService.patch(urlCallback, {})
-          .pipe(catchError(err => { throw new InternalServerErrorException(err.response?.data || err.message); }))
-      );
-      this.logger.log(`Avisado a donaciones-api: Donación ${donacionId} registrada en stock.`);
-
-    } catch (error) {
-      this.logger.error(
-        `¡FALLO DE CALLBACK! No se pudo marcar la donación ${donacionId} como registrada: ${error.message}`
-      );
-    }
-  }
 }

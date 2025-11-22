@@ -113,29 +113,8 @@ export class DonacionInsumoService {
     const donacionActualizada = await this.donacionInsumoRepo.save(donacion);
 
     if (nuevoEstado.nombre === 'Recibida') {
-      this.logger.log(`Donación ${id} marcada como 'Recibida'. Avisando a inventario-api...`);
-      
-      const dtoParaInventario = {
-        donacionOriginalId: donacion.id,
-        categoria: donacion.categoria,
-        nombre: donacion.nombre,
-        descripcion: donacion.descripcion,
-        cantidad: donacion.cantidad,
-        unidad: donacion.unidad,
-        atributos: donacion.atributos,
-      };
-
-      try {
-        await firstValueFrom(
-          this.httpService.post(`${this.inventarioServiceUrl}/inventario/registrar-ingreso-donacion`, dtoParaInventario)
-            .pipe(catchError(err => { throw new InternalServerErrorException(err.response?.data || err.message); }))
-        );
-        this.logger.log(`Ingreso de donación ${id} registrado en inventario-api.`);
-        
-      } catch (error) {
-        this.logger.error(`FALLO al registrar donación ${id} en inventario-api: ${error.message}`);
-      }
-    }
+      this.logger.log(`Donación ${id} marcada como 'Recibida'.`)
+    }
 
     return donacionActualizada;
   }

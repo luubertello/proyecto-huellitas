@@ -13,6 +13,7 @@ import { CategoriaInsumoModule } from './categoria-insumo/categoria-insumo.modul
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './auth/jwt.strategy';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { JwtStrategy } from './auth/jwt.strategy';
 
     InsumoModule,
     CategoriaInsumoModule,
+    HttpModule,
   ],
   controllers: [AppController, InsumoController],
   providers: [AppService, InsumoService, JwtStrategy],

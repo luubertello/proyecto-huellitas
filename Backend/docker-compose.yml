@@ -24,6 +24,7 @@ services:
       DONACIONES_SERVICE_URL: http://donaciones-api:3000
       INVENTARIO_SERVICE_URL: http://inventario-api:3000
       JWT_SECRET: ${JWT_SECRET}
+      INTERNAL_API_KEY: ${INTERNAL_API_KEY}
     volumes:
       - ./gateway:/app
       - /app/node_modules
@@ -51,6 +52,7 @@ services:
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       JWT_SECRET: ${JWT_SECRET} 
       CORREO_SERVICE_URL: http://correo-api:3000
+      INTERNAL_API_KEY: ${INTERNAL_API_KEY}
     volumes:
       - ./usuarios:/app
       - /app/node_modules
@@ -97,6 +99,7 @@ services:
       DB_PASSWORD: ${DB_PASSWORD_ADOPCIONES}
       DB_DATABASE: ${DB_NAME_ADOPCIONES}
       JWT_SECRET: ${JWT_SECRET}
+      INTERNAL_API_KEY: ${INTERNAL_API_KEY}
       USUARIOS_SERVICE_URL: http://usuarios-api:3000/usuarios
       ANIMALES_SERVICE_URL: http://animales-api:3000/animales
       CORREO_SERVICE_URL: http://correo-api:3000/email
@@ -142,6 +145,7 @@ services:
       DB_PASSWORD: ${DB_PASSWORD_ANIMALES}
       DB_DATABASE: ${DB_NAME_ANIMALES}
       JWT_SECRET: ${JWT_SECRET}
+      INTERNAL_API_KEY: ${INTERNAL_API_KEY}
     volumes:
       - ./animales:/app
       - /app/node_modules
@@ -180,6 +184,7 @@ services:
       EMAIL_SERVICE: ${EMAIL_SERVICE}
       EMAIL_USER: ${EMAIL_USER}
       EMAIL_PASS: ${EMAIL_PASS}
+      INTERNAL_API_KEY: ${INTERNAL_API_KEY}
     networks:
       - huellitas-net
 
@@ -209,6 +214,7 @@ services:
       USUARIOS_SERVICE_URL: http://usuarios-api:3000
       CORREO_SERVICE_URL: http://correo-api:3000/email
       INVENTARIO_SERVICE_URL: http://inventario-api:3000
+      INTERNAL_API_KEY: ${INTERNAL_API_KEY}
     volumes:
       - ./donacion:/app
       - /app/node_modules
@@ -252,7 +258,7 @@ services:
       DB_USERNAME: ${DB_USER_INVENTARIO}
       DB_PASSWORD: ${DB_PASSWORD_INVENTARIO}
       DB_DATABASE: ${DB_NAME_INVENTARIO}
-      
+      INTERNAL_API_KEY: ${INTERNAL_API_KEY}
       JWT_SECRET: ${JWT_SECRET}
       CORREO_SERVICE_URL: http://correo-api:3000/email
       DONACIONES_SERVICE_URL: http://donaciones-api:3000

@@ -9,6 +9,7 @@ import { CategoriaInsumoModule } from 'src/categoria-insumo/categoria-insumo.mod
 import { HttpModule } from '@nestjs/axios';
 import { JwtStrategy } from 'src/auth/jwt.strategy';
 import { RolesGuard } from 'src/auth/roles.guard';
+import { CategoriaInsumoService } from 'src/categoria-insumo/categoria-insumo.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Insumo]), CategoriaInsumoModule, ConfigModule, HttpModule],

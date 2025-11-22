@@ -14,18 +14,19 @@ import {
 import { InsumoService } from './insumo.service';
 import { CrearInsumoDto } from '../dto/crear-insumo.dto';
 import { ActualizarStockDto } from '../dto/actualizar-stock.dto';
-import { RegistrarIngresoDto } from 'src/dto/registrar-ingreso-donacion.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
+import { CategoriaInsumoService } from 'src/categoria-insumo/categoria-insumo.service';
 
 @Controller('inventario')
-@UseGuards(JwtAuthGuard, RolesGuard) 
 export class InsumoController {
-  constructor(private readonly insumoService: InsumoService) {}
+  constructor(private readonly insumoService: InsumoService,
+  private readonly categoriaInsumoService: CategoriaInsumoService) {}
 
 
   // GET /inventario
+  @UseGuards(JwtAuthGuard, RolesGuard) 
   @Get()
   @Roles('Admin General', 'Responsable de Inventarios')
   async findAll() {
@@ -34,6 +35,7 @@ export class InsumoController {
 
 
   // GET /inventario/buscar?q=...
+  @UseGuards(JwtAuthGuard, RolesGuard) 
   @Get('buscar')
   @Roles('Admin General', 'Responsable de Inventarios')
   async search(@Query('q') termino: string) {
@@ -41,6 +43,7 @@ export class InsumoController {
   }
 
   // POST /inventario/insumo
+  @UseGuards(JwtAuthGuard, RolesGuard) 
   @Post('insumo')
   @Roles('Admin General', 'Responsable de Inventarios')
   async create(@Body(new ValidationPipe()) dto: CrearInsumoDto) {
@@ -48,6 +51,7 @@ export class InsumoController {
   }
 
   // PATCH /inventario/:id/stock
+  @UseGuards(JwtAuthGuard, RolesGuard) 
   @Patch(':id/stock')
   @Roles('Admin General', 'Responsable de Inventarios')
   async updateStock(
@@ -57,12 +61,9 @@ export class InsumoController {
     return this.insumoService.updateStock(id, dto);
   }
 
-  // POST /inventario/ingresar-donacion-recibida
-  @Post('ingresar-donacion-recibida')
-  @Roles('Admin General')
-  async registrarIngreso(
-    @Body(new ValidationPipe()) dto: RegistrarIngresoDto
-  ) {
-    return this.insumoService.ingresarDonacionRecibida(dto);
+  @Get('categorias')
+  async findAllCategorias() {
+    return this.categoriaInsumoService.findAll();
   }
+
 }
