@@ -1,1 +1,65 @@
-<p>gestion-inventario works!</p>
+<div class="admin-table-container">
+  
+  <header class="admin-table-header">
+    <h1>Catálogo de Inventario</h1>
+    <p>Stock actual y ajustes.</p>
+    <button (click)="goNuevoInsumo()" class="btn-primary">
+      + Nuevo Insumo
+    </button>
+  </header>
+
+  <div class="table-toolbar">
+    <div class="toolbar-search">
+      <input type="text" placeholder="Buscar por nombre o descripción..." (input)="onSearchChange($event)">
+    </div>
+    
+    <div class="toolbar-filter">
+      <label for="categoria-filter">Filtrar por Categoría:</label>
+      <select id="categoria-filter" [(ngModel)]="filtroCategoria" (change)="applyFilter()">
+        <option [ngValue]="null">Mostrar todas</option>
+        <option *ngFor="let cat of categorias" [ngValue]="cat.id">{{ cat.nombre }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-state">
+    <p>Cargando inventario...</p>
+  </div>
+  
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <table *ngIf="!isLoading && inventarioFiltrado.length > 0" class="data-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre del Ítem</th>
+        <th>Categoría</th>
+        <th>Stock</th>
+        <th>Unidad</th>
+        <th>Atributos (JSON)</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of inventarioFiltrado">
+        <td>{{ item.id }}</td>
+        <td>{{ item.nombre }}</td>
+        <td>{{ item.categoria.nombre }}</td>
+        <td>{{ item.stock }}</td>
+        <td>{{ item.unidadMedida }}</td>
+        <td>
+          <span class="atributos-json">{{ item.atributos | json }}</span>
+        </td>
+        <td class="ajustes">
+          <button (click)="ajustarStock(item.id, 1)" class="btn-sm btn-success">+</button>
+          <button (click)="ajustarStock(item.id, -1)" class="btn-sm btn-danger">-</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!isLoading && inventarioFiltrado.length === 0" class="alert alert-info">
+    No se encontraron insumos.
+    <button (click)="goNuevoInsumo()" class="btn-sm btn-primary">Crear nuevo</button>
+  </div>
+</div>
