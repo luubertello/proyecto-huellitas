@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormGroup, Validators, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router'; 
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-crear-animal',
@@ -21,17 +22,19 @@ export class CrearAnimal implements OnInit {
   especies: any[] = [];
   razas: any[] = [];
   public registroExitoso = false; 
+  public hasPermission: boolean = false;
 
   constructor(
     private fb: FormBuilder, 
     private http: HttpClient,
-    private router: Router 
+    private router: Router,
+    private authService: AuthService
   ) {
     this.registrarAnimalForm = this.fb.group({
       nombre: ['', Validators.required],
-      especie: ['', Validators.required],
-      raza: [{ value: '', disabled: true }, Validators.required],
-      sexo: ['', Validators.required],
+      especie: [null, Validators.required],
+      raza: [{ value: null, disabled: true }, Validators.required],
+      sexo: [null, Validators.required],
       fechaNacimiento: [''],
       descripcion: [''],
       foto: ['', Validators.required],
@@ -39,6 +42,14 @@ export class CrearAnimal implements OnInit {
   }
 
   ngOnInit() {
+    const requiredRoles = ['Admin General', 'Responsable de Animales'];
+    this.hasPermission = requiredRoles.some(role => this.authService.hasRole(role));
+
+    if (!this.hasPermission) {
+      console.warn('ACCESO DENEGADO: Usuario no es responsable de animales.');
+      this.router.navigate(['/admin/dashboard']); // Redirigimos si no tiene permiso
+      return; 
+    }
     this.loadEspecies();
   }
 

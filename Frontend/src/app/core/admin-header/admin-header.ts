@@ -52,7 +52,7 @@ export class AdminHeader {
   }
 
   goInventarioStock(): void {
-    this.router.navigate(['/admin/inventario']);
+    this.router.navigate(['/admin/inventario/stock']);
   }
 
   goRegistrarInsumo(): void {

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { AuthService } from '../../../auth/auth.service';
 
 export interface Especie {
   id: number;
@@ -36,6 +37,7 @@ export interface Animal {
 export class EditarAnimal implements OnInit {
   public animal?: Animal;
   private apiUrl = 'http://localhost:3000/animales';
+  public hasPermission: boolean = false;
 
   public animalForm: FormGroup;
   
@@ -46,7 +48,8 @@ export class EditarAnimal implements OnInit {
   constructor(
     private http: HttpClient,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.animalForm = new FormGroup({
       id: new FormControl(null),
@@ -61,6 +64,14 @@ export class EditarAnimal implements OnInit {
   }
 
   ngOnInit(): void {
+    const requiredRoles = ['Admin General', 'Responsable de Animales'];
+    this.hasPermission = requiredRoles.some(role => this.authService.hasRole(role));
+
+    if (!this.hasPermission) {
+      console.warn('ACCESO DENEGADO: Usuario no tiene permiso para editar animales.');
+      this.router.navigate(['/admin/dashboard']); // Bloqueamos antes de cargar datos
+      return;
+    }
     this.cargarEspecies();
 
     this.animalForm.get('especie')?.valueChanges.subscribe(especieId => {
@@ -146,7 +157,7 @@ export class EditarAnimal implements OnInit {
     const animalId = datosActualizados.id;
     const url = `${this.apiUrl}/${animalId}`;
 
-    this.http.put(url, datosActualizados).subscribe({
+    this.http.patch(url, datosActualizados).subscribe({
       next: (response) => {
         console.log('¡Animal actualizado con éxito!', response);
         alert('¡Cambios guardados con éxito!');

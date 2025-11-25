@@ -40,7 +40,7 @@ export class InicioAdmin {
   // --- Métodos de Navegación ---
 
   goAnimales() { this.router.navigate(['/admin/animales']); }
-  goRegistrarAnimal() { this.router.navigate(['/admin/animales/nuevo']); }
+  goRegistrarAnimal() { this.router.navigate(['/admin/animales/registrar']); }
   goSolicitudes() { this.router.navigate(['/admin/solicitudes']); }
   goInventario() { this.router.navigate(['/admin/inventario']); }
   goDonaciones() { this.router.navigate(['/admin/estadisticas/donaciones']); }
